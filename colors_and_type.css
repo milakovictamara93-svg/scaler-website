@@ -1,0 +1,336 @@
+/* ═══════════════════════════════════════════════════════════════
+   Scaler Marketing Design System — Foundations
+   Source: Figma Brand Guidelines (oXf4Mc7YyfUM6yC29uOAr3)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ───────── Webfonts ─────────
+   Beausite Classic is the canonical Scaler typeface (loaded locally from
+   /fonts). Inter is shipped alongside as a near-metric fallback in case
+   Beausite isn't licensed for a downstream surface; the var(--font-display)
+   / var(--font-body) stack lists Beausite first, then Inter. */
+
+/* ── Beausite Classic — canonical brand typeface ── */
+@font-face {
+  font-family: "Beausite Classic";
+  src: url("fonts/BeausiteClassic-Light.otf") format("opentype");
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Beausite Classic";
+  src: url("fonts/BeausiteClassic-LightItalic.otf") format("opentype");
+  font-weight: 300; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Beausite Classic";
+  src: url("fonts/BeausiteClassic-Regular.otf") format("opentype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Beausite Classic";
+  src: url("fonts/BeausiteClassic-RegularItalic.otf") format("opentype");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Beausite Classic";
+  src: url("fonts/BeausiteClassic-Medium.otf") format("opentype");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Beausite Classic";
+  src: url("fonts/BeausiteClassic-MediumItalic.otf") format("opentype");
+  font-weight: 500; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Beausite Classic";
+  src: url("fonts/BeausiteClassic-Semibold.otf") format("opentype");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Beausite Classic";
+  src: url("fonts/BeausiteClassic-SemiboldItalic.otf") format("opentype");
+  font-weight: 600; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Beausite Classic";
+  src: url("fonts/BeausiteClassic-Bold.otf") format("opentype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Beausite Classic";
+  src: url("fonts/BeausiteClassic-BoldItalic.otf") format("opentype");
+  font-weight: 700; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Beausite Classic";
+  src: url("fonts/BeausiteClassic-Black.otf") format("opentype");
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Beausite Classic";
+  src: url("fonts/BeausiteClassic-Ultrablack.otf") format("opentype");
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+
+/* ── Inter — near-metric fallback ── */
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-Regular.otf") format("opentype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-Italic.otf") format("opentype");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-Medium.otf") format("opentype");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-MediumItalic.otf") format("opentype");
+  font-weight: 500; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-SemiBold.otf") format("opentype");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-SemiBoldItalic.otf") format("opentype");
+  font-weight: 600; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-Bold.otf") format("opentype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-BoldItalic.otf") format("opentype");
+  font-weight: 700; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-ExtraBold.otf") format("opentype");
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-Black.otf") format("opentype");
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+
+/* Inter Tight — used for display sizes (slightly tighter metrics, closer to
+   Beausite Classic's display look). Exposed via --font-display-tight. */
+@font-face {
+  font-family: "Inter Tight";
+  src: url("fonts/InterTight-Bold.ttf") format("truetype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("fonts/InterTight-ExtraBold.ttf") format("truetype");
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("fonts/InterTight-Black.ttf") format("truetype");
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+
+:root {
+  /* ───────── COLOR — Foundation ───────── */
+  --color-full-black:        #000000;
+  --color-clean-white:       #FFFFFF;
+  --color-background-grey:   #DCDCDC;
+  --color-surface-light:     #F6F6F6;
+
+  /* ───────── COLOR — Brand (primary) ───── */
+  --color-energy-red:        #E23704; /* Primary brand accent */
+  --color-emission-yellow:   #FEC40A; /* GHG / Emissions data */
+  --color-engagement-orange: #FD8F01; /* Tenant engagement */
+
+  /* ───────── COLOR — Functional / Aspect ───────── */
+  --color-water-blue:          #2AA8DF; /* Water consumption */
+  --color-certifications-blue: #1E4FB3; /* Certifications & ratings */
+  --color-waste-green:         #037E50; /* Waste management */
+  --color-esg-green:           #56C55A; /* ESG performance */
+  --color-tech-purple:         #6961E4; /* Tech / AI */
+  --color-vibrant-pink:        #F48FBE; /* Tenant engagement (alt) */
+
+  /* ───────── COLOR — Semantic UI ───────── */
+  --fg1: #000000;        /* primary text — pure black */
+  --fg2: #6D6D6D;        /* secondary text — figma neutral 500 */
+  --fg3: #767676;        /* muted / caption text */
+  --fg-on-dark: #FFFFFF;
+  --bg1: #FFFFFF;        /* primary surface */
+  --bg2: #F6F6F6;        /* surface light */
+  --bg3: #F7F8F8;        /* surface alt */
+  --bg-inverse: #000000;
+  --border1: #DCDCDC;    /* default border */
+  --border2: #DCDCDC;    /* subtle border */
+
+  /* ───────── COLOR — State ───────── */
+  --state-success: #037E50;
+  --state-warning: #FD8F01;
+  --state-error:   #E23704;
+  --state-info:    #2AA8DF;
+
+  /* ───────── TYPE — Family ─────────
+     Beausite Classic is the brand typeface (François Rappo, neo-grotesque).
+     We use Inter as a near-metric proxy until the licensed files are dropped
+     into /fonts. Mono fallback is JetBrains Mono. */
+  --font-display: "Inter", "Beausite Classic", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body:    "Inter", "Beausite Classic", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono:    "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  /* ───────── TYPE — Sizes (raw scale) ───────── */
+  --size-display-xl:   180px;
+  --size-display-lg:    80px;
+  --size-display-sm:    32px;
+  --size-h1:            36px;
+  --size-h2:            24px;
+  --size-h3:            20px;
+  --size-h4:            16px;
+  --size-p-lg:          21px;
+  --size-p-md:          18px;
+  --size-p-sm:          14px;
+  --size-p-xs:          12px;
+  --size-cap-lg:        18px;
+  --size-cap-sm:        14px;
+  --size-cap-xs:        10px;
+
+  /* ───────── TYPE — Weights ───────── */
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  /* ───────── TYPE — Line height ───────── */
+  --lh-display:   1;     /* 100% — display text crops tight to cap-height */
+  --lh-heading:   1.2;   /* 120% */
+  --lh-paragraph: 1.45;  /* 145% */
+  --lh-caption:   1.2;
+
+  /* ───────── TYPE — Tracking ───────── */
+  --track-display:   -0.03em;
+  --track-heading:   -0.03em;
+  --track-paragraph:  0em;
+  --track-caption:    0.16em;
+
+  /* ───────── SPACING (4px base) ───────── */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-18: 72px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* ───────── RADIUS ─────────
+     Context dictates shape. Sharp = technical. Pill = playful. */
+  --radius-sharp:      0px;
+  --radius-card:       8px;
+  --radius-standalone: 24px;
+  --radius-pill:    9999px;
+
+  /* ───────── BORDER WIDTH ───────── */
+  --border-base: 2px;
+  --border-hair: 1px;
+
+  /* ───────── ELEVATION ─────────
+     Scaler is a flat, brutalist system. Use shadows sparingly — only
+     for floating UI (menus, popovers, lifted hover). */
+  --shadow-1: 0 1px 2px rgba(12,12,13,0.05), 0 1px 3px rgba(12,12,13,0.10);
+  --shadow-2: 0 2px 4px rgba(12,12,13,0.05), 0 4px 12px rgba(12,12,13,0.10);
+  --shadow-lift: 0 4px 16px rgba(0,0,0,0.08);
+
+  /* ───────── MOTION ───────── */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out:      cubic-bezier(0, 0, 0.2, 1);
+  --dur-fast:   120ms;
+  --dur-base:   180ms;
+  --dur-slow:   320ms;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SEMANTIC TYPE ROLES — apply with `class="ds-h1"` etc.
+   These are the canonical text styles. Don't override the base sizes;
+   wrap content in these classes (or use the same property values).
+   ═══════════════════════════════════════════════════════════════ */
+
+.ds-display-xl,
+.ds-display-lg,
+.ds-display-sm,
+h1, .ds-h1,
+h2, .ds-h2,
+h3, .ds-h3,
+h4, .ds-h4 {
+  font-family: var(--font-display);
+  letter-spacing: var(--track-heading);
+  color: var(--fg1);
+  text-wrap: balance;
+}
+
+.ds-display-xl { font-size: var(--size-display-xl); font-weight: var(--weight-bold);     line-height: var(--lh-display); letter-spacing: var(--track-display); }
+.ds-display-lg { font-size: var(--size-display-lg); font-weight: var(--weight-semibold); line-height: var(--lh-display); letter-spacing: var(--track-display); }
+.ds-display-sm { font-size: var(--size-display-sm); font-weight: var(--weight-semibold); line-height: var(--lh-display); letter-spacing: var(--track-display); }
+
+h1, .ds-h1 { font-size: var(--size-h1); font-weight: var(--weight-bold);     line-height: var(--lh-heading); }
+h2, .ds-h2 { font-size: var(--size-h2); font-weight: var(--weight-bold);     line-height: var(--lh-heading); }
+h3, .ds-h3 { font-size: var(--size-h3); font-weight: var(--weight-semibold); line-height: var(--lh-heading); }
+h4, .ds-h4 { font-size: var(--size-h4); font-weight: var(--weight-semibold); line-height: var(--lh-heading); }
+
+p, .ds-p, .ds-p-md {
+  font-family: var(--font-body);
+  font-size: var(--size-p-md);
+  font-weight: var(--weight-regular);
+  line-height: var(--lh-paragraph);
+  letter-spacing: var(--track-paragraph);
+  color: var(--fg2);
+  text-wrap: pretty;
+}
+.ds-p-lg { font-family: var(--font-body); font-size: var(--size-p-lg); line-height: var(--lh-paragraph); }
+.ds-p-sm { font-family: var(--font-body); font-size: var(--size-p-sm); line-height: var(--lh-paragraph); }
+.ds-p-xs { font-family: var(--font-body); font-size: var(--size-p-xs); line-height: var(--lh-paragraph); }
+
+.ds-caption-lg, .ds-caption-sm, .ds-caption-xs {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-caption);
+  line-height: var(--lh-caption);
+  text-transform: uppercase;
+  color: var(--fg3);
+}
+.ds-caption-lg { font-size: var(--size-cap-lg); }
+.ds-caption-sm { font-size: var(--size-cap-sm); }
+.ds-caption-xs { font-size: var(--size-cap-xs); }
+
+code, kbd, samp, pre, .ds-code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  color: var(--fg1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Brand shapes — geometric compositions built from chamfered
+   blocks (the same chamfer that defines the logo). Use as section
+   markers, full-bleed background tiles, or large inline ornaments.
+
+   Black on light, white on dark. Like the logo, brand shapes are
+   never colorised — they're identity, not data. (For colored
+   data marks, use the aspect color tokens directly with rectangles.)
+
+   In CSS, prefer `<img src="assets/shape-XX.svg">` so the shape's
+   own black fill renders. Don't use `background-image` with
+   `background-color` overrides — these aren't recolorable masks.
+   ═══════════════════════════════════════════════════════════════ */

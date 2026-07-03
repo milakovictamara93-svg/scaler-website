@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scaler — Brand book</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  :root {
+    --font-display: "Beausite Classic", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-body: "Beausite Classic", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+    --margin: clamp(24px, 6.6vw, 128px);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--font-body);
+    color: var(--fg1);
+    background: var(--color-clean-white);
+    -webkit-font-smoothing: antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+  img { display: block; }
+
+  /* The tokens file hardcodes black on headings and grey on paragraphs.
+     On dark surfaces, everything inherits the surface's text colour instead. */
+  .black h1, .black h2, .black h3, .black h4, .black p, .black blockquote,
+  .black .display, .black .eyebrow {
+    color: inherit;
+  }
+
+  .spread {
+    min-height: 100vh;
+    padding: 120px var(--margin) 96px;
+    position: relative;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .white { background: var(--color-clean-white); color: var(--fg1); }
+  .black { background: var(--color-full-black); color: var(--fg-on-dark); }
+  .grey  { background: var(--color-background-grey); color: var(--fg1); }
+
+  /* spread chrome */
+  .chrome {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 var(--margin);
+    border-bottom: 1px solid var(--border1);
+    font-size: var(--size-cap-sm);
+    letter-spacing: var(--track-caption);
+    text-transform: uppercase;
+    font-weight: var(--weight-medium);
+  }
+  .black .chrome { border-color: rgba(255,255,255,.2); }
+  .chrome .num { font-variant-numeric: tabular-nums; }
+
+  .eyebrow {
+    font-size: var(--size-cap-sm);
+    letter-spacing: var(--track-caption);
+    text-transform: uppercase;
+    font-weight: var(--weight-medium);
+  }
+  .display {
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--track-display);
+    line-height: 1.02;
+  }
+
+  /* ── 00 Cover ── */
+  .cover { justify-content: space-between; padding-top: 160px; }
+  .cover .mark { height: clamp(64px, 9vw, 128px); }
+  .cover h1 { font-size: clamp(96px, 15vw, 240px); font-weight: 800; letter-spacing: var(--track-display); line-height: .96; }
+  .cover .meta { display: flex; justify-content: space-between; align-items: flex-end; opacity: .55; }
+
+  /* ── 01 Doctrine ── */
+  .doctrine h2 { font-size: clamp(56px, 8.5vw, 140px); max-width: 11ch; }
+  .doctrine .laws {
+    margin-top: 88px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px;
+    border-top: 1px solid var(--border1); padding-top: 48px;
+  }
+  .doctrine .law .k { font-size: var(--size-cap-sm); letter-spacing: var(--track-caption); text-transform: uppercase; color: var(--fg3); margin-bottom: 16px; }
+  .doctrine .law p { font-size: var(--size-p-md); line-height: var(--lh-paragraph); }
+
+  /* ── 02 Logo ── */
+  .logospread .stage {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--border1); border: 1px solid var(--border1);
+    margin-top: 64px;
+  }
+  .logospread .cell { display: flex; align-items: center; justify-content: center; min-height: 38vh; }
+  .logospread .cell.on-light { background: var(--color-clean-white); }
+  .logospread .cell.on-dark { background: var(--color-full-black); }
+  .logospread .cell img { height: clamp(48px, 7vw, 96px); }
+  .logospread .rule { margin-top: 40px; font-size: var(--size-p-md); color: var(--fg2); max-width: 62ch; line-height: var(--lh-paragraph); }
+  .logospread .rule strong { color: var(--fg1); font-weight: var(--weight-semibold); }
+
+  /* ── 03 Type ── */
+  .typespread .specimen { font-size: clamp(72px, 12vw, 200px); font-weight: 800; letter-spacing: var(--track-display); line-height: .98; }
+  .typespread .weights {
+    margin-top: 72px; border-top: 1px solid rgba(255,255,255,.2);
+  }
+  .typespread .wrow {
+    display: grid; grid-template-columns: 200px 1fr 120px; gap: 32px; align-items: baseline;
+    padding: 22px 0; border-bottom: 1px solid rgba(255,255,255,.14);
+  }
+  .typespread .wrow .lbl { font-size: var(--size-cap-sm); letter-spacing: var(--track-caption); text-transform: uppercase; opacity: .5; }
+  .typespread .wrow .sample { font-size: clamp(20px, 2.4vw, 34px); letter-spacing: -0.02em; }
+  .typespread .wrow .trk { font-size: var(--size-cap-sm); letter-spacing: var(--track-caption); text-transform: uppercase; opacity: .5; text-align: right; }
+
+  /* ── 04 Color ── */
+  .colorspread .grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--border1); border: 1px solid var(--border1);
+    margin-top: 64px;
+  }
+  .swatch { min-height: 22vh; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; }
+  .swatch .nm { font-size: var(--size-cap-sm); letter-spacing: var(--track-caption); text-transform: uppercase; font-weight: var(--weight-medium); }
+  .swatch .hx { font-size: var(--size-p-sm); opacity: .7; }
+  .swatch .tag { font-size: var(--size-cap-xs); letter-spacing: var(--track-caption); text-transform: uppercase; opacity: .8; }
+  .colorspread .rules { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .colorspread .rules p { font-size: var(--size-p-md); line-height: var(--lh-paragraph); color: var(--fg2); }
+  .colorspread .rules strong { color: var(--fg1); font-weight: var(--weight-semibold); }
+
+  /* ── 05 Voice ── */
+  .voice .pairs { margin-top: 64px; border-top: 1px solid var(--border1); }
+  .voice .pair {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+    padding: 44px 0; border-bottom: 1px solid var(--border1);
+  }
+  .voice .side .k { font-size: var(--size-cap-sm); letter-spacing: var(--track-caption); text-transform: uppercase; margin-bottom: 18px; }
+  .voice .side.never .k { color: var(--color-energy-red); }
+  .voice .side.always .k { color: var(--fg3); }
+  .voice .side .t { font-size: clamp(20px, 2.2vw, 32px); font-weight: var(--weight-medium); letter-spacing: -0.02em; line-height: 1.3; }
+  .voice .side.never .t { color: var(--fg3); text-decoration: line-through; text-decoration-thickness: 1px; }
+
+  /* ── 06 Never ── */
+  .never-list { margin-top: 64px; }
+  .never-list .row {
+    display: grid; grid-template-columns: 80px 1fr; gap: 48px; align-items: baseline;
+    padding: 28px 0; border-bottom: 1px solid rgba(255,255,255,.16);
+    font-size: clamp(22px, 2.6vw, 40px);
+    font-weight: var(--weight-medium);
+    letter-spacing: -0.02em;
+  }
+  .never-list .row .n { font-size: var(--size-cap-sm); letter-spacing: var(--track-caption); opacity: .4; }
+  .never h2 .red { color: var(--color-energy-red); }
+
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 320ms var(--ease), transform 320ms var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .doctrine .laws, .colorspread .grid, .colorspread .rules, .voice .pair, .logospread .stage { grid-template-columns: 1fr; }
+    .typespread .wrow { grid-template-columns: 1fr; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── 00 · Cover ── -->
+<section class="spread black cover">
+  <div class="chrome"><span class="num">Scaler Global Inc.</span><span>Brand book — 2026</span></div>
+  <img class="mark" src="assets/logo-mark-light.svg" alt="Scaler mark">
+  <h1>Brand<br>book.</h1>
+  <div class="meta">
+    <span class="eyebrow">Evidence, not aspiration</span>
+    <span class="eyebrow">Ten pages. No exceptions.</span>
+  </div>
+</section>
+
+<!-- ── 01 · Doctrine ── -->
+<section class="spread white doctrine">
+  <div class="chrome"><span class="num">01</span><span>Doctrine</span></div>
+  <p class="eyebrow reveal" style="color:var(--fg3); margin-bottom:40px;">One filter for everything we make</p>
+  <h2 class="display reveal">The brand never claims. It counts.</h2>
+  <div class="laws">
+    <div class="law reveal">
+      <div class="k">Copy</div>
+      <p>No sentence ships that couldn't survive an audit. Real numbers, plain verbs, periods. If it sounds like a promise, rewrite it as a measurement.</p>
+    </div>
+    <div class="law reveal">
+      <div class="k">Image</div>
+      <p>If we didn't shoot it or measure it, it doesn't appear. No stock, no generated faces, no decorative illustration on marketing surfaces.</p>
+    </div>
+    <div class="law reveal">
+      <div class="k">Design</div>
+      <p>Black and white do the work. One accent, used once. Space is confidence; a crowded layout is a nervous one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── 02 · Logo ── -->
+<section class="spread grey logospread">
+  <div class="chrome"><span class="num">02</span><span>Logo</span></div>
+  <h2 class="display reveal" style="font-size:clamp(40px,5.5vw,88px); max-width:14ch;">Two colours. Two placements. Nothing else.</h2>
+  <div class="stage reveal">
+    <div class="cell on-light"><img src="assets/logo-full-dark.svg" alt="Scaler logo, black on light"></div>
+    <div class="cell on-dark"><img src="assets/logo-full-light.svg" alt="Scaler logo, white on dark"></div>
+  </div>
+  <p class="rule reveal"><strong>Black on light. White on dark.</strong> The mark is never colourised, never translucent, never set on a busy photograph without a protective plate. Twelve squares, four triangles, one 30° chamfer — the same chamfer builds every brand shape, so shapes and logo never share a surface.</p>
+</section>
+
+<!-- ── 03 · Typography ── -->
+<section class="spread black typespread">
+  <div class="chrome"><span class="num">03</span><span>Typography</span></div>
+  <p class="eyebrow reveal" style="opacity:.5; margin-bottom:40px;">Beausite Classic — the only typeface</p>
+  <div class="specimen reveal">Aa 0123456789</div>
+  <div class="weights reveal">
+    <div class="wrow"><span class="lbl">Display / 800</span><span class="sample" style="font-weight:800;">Protect value. Drive performance.</span><span class="trk">-0.03em</span></div>
+    <div class="wrow"><span class="lbl">Heading / 600</span><span class="sample" style="font-weight:600;">From complexity to clarity.</span><span class="trk">-0.03em</span></div>
+    <div class="wrow"><span class="lbl">Paragraph / 400</span><span class="sample" style="font-weight:400; font-size:18px; letter-spacing:0;">Body copy stays neutral and informative. The swagger lives in the display type.</span><span class="trk">0</span></div>
+    <div class="wrow"><span class="lbl">Caption / 500</span><span class="sample" style="font-weight:500; font-size:14px; letter-spacing:.16em; text-transform:uppercase;">Wide-tracked eyebrows label sections</span><span class="trk">+0.16em</span></div>
+  </div>
+</section>
+
+<!-- ── 04 · Colour ── -->
+<section class="spread white colorspread">
+  <div class="chrome"><span class="num">04</span><span>Colour</span></div>
+  <h2 class="display reveal" style="font-size:clamp(40px,5.5vw,88px); max-width:14ch;">Colour is data, not decoration.</h2>
+  <div class="grid reveal">
+    <div class="swatch" style="background:#000; color:#fff;"><span class="nm">Full black</span><span class="hx">#000000</span></div>
+    <div class="swatch" style="background:#fff;"><span class="nm">Clean white</span><span class="hx">#FFFFFF</span></div>
+    <div class="swatch" style="background:#DCDCDC;"><span class="nm">Background grey</span><span class="hx">#DCDCDC</span></div>
+    <div class="swatch" style="background:#F6F6F6;"><span class="nm">Surface light</span><span class="hx">#F6F6F6</span></div>
+    <div class="swatch" style="background:#E23704; color:#fff;"><span class="nm">Energy red</span><div><div class="hx">#E23704</div><div class="tag">The accent. 18px+ text only</div></div></div>
+    <div class="swatch" style="background:#FEC40A;"><span class="nm">Emission yellow</span><div><div class="hx">#FEC40A</div><div class="tag">Never carries text</div></div></div>
+    <div class="swatch" style="background:#2AA8DF; color:#fff;"><span class="nm">Water blue</span><div><div class="hx">#2AA8DF</div><div class="tag">Water content only</div></div></div>
+    <div class="swatch" style="background:#037E50; color:#fff;"><span class="nm">Waste green</span><div><div class="hx">#037E50</div><div class="tag">Waste content only</div></div></div>
+  </div>
+  <div class="rules">
+    <p class="reveal"><strong>Combination law.</strong> Any colour may sit on white or black. Colours never sit on other colours. Background grey never sits on a colour. One colour per surface — a second accent is a second opinion.</p>
+    <p class="reveal"><strong>Legibility law.</strong> Aspect colours appear only when the content is literally about that category. Emission yellow and ESG green never carry text at any size. Energy red carries text at 18px and above, on white only.</p>
+  </div>
+</section>
+
+<!-- ── 05 · Voice ── -->
+<section class="spread white voice">
+  <div class="chrome"><span class="num">05</span><span>Voice</span></div>
+  <h2 class="display reveal" style="font-size:clamp(40px,5.5vw,88px); max-width:14ch;">Every rule ships with its violation.</h2>
+  <div class="pairs">
+    <div class="pair reveal">
+      <div class="side never"><div class="k">Never</div><div class="t">We do the heavy lifting and get you ready to comply within minutes!</div></div>
+      <div class="side always"><div class="k">Always</div><div class="t">Audit-ready in minutes. We carry the workload.</div></div>
+    </div>
+    <div class="pair reveal">
+      <div class="side never"><div class="k">Never</div><div class="t">Our unique, holistic approach unlocks your portfolio's true potential.</div></div>
+      <div class="side always"><div class="k">Always</div><div class="t">Three problems. One platform. 25,000 buildings on it.</div></div>
+    </div>
+    <div class="pair reveal">
+      <div class="side never"><div class="k">Never</div><div class="t">Together, Building A Greener Tomorrow</div></div>
+      <div class="side always"><div class="k">Always</div><div class="t">100 million kg of CO2 saved in 2024. Counted, not estimated.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 06 · Never ── -->
+<section class="spread black never">
+  <div class="chrome"><span class="num">06</span><span>Things we never do</span></div>
+  <h2 class="display reveal" style="font-size:clamp(40px,6vw,96px);">Never. <span class="red">Not once.</span></h2>
+  <div class="never-list">
+    <div class="row reveal"><span class="n">01</span><span>Exclamation marks. Confidence doesn't shout.</span></div>
+    <div class="row reveal"><span class="n">02</span><span>Emoji. Anywhere. Use a Heroicon.</span></div>
+    <div class="row reveal"><span class="n">03</span><span>Gradients, noise, or frosted glass. The system is flat.</span></div>
+    <div class="row reveal"><span class="n">04</span><span>Stock photography or generated faces. Evidence only.</span></div>
+    <div class="row reveal"><span class="n">05</span><span>Title Case Headlines. Sentence case, always.</span></div>
+    <div class="row reveal"><span class="n">06</span><span>"Unlock", "supercharge", "revolutionize", "unique".</span></div>
+    <div class="row reveal"><span class="n">07</span><span>A colourised logo. Black on light, white on dark.</span></div>
+    <div class="row reveal"><span class="n">08</span><span>Two accent colours on one surface.</span></div>
+  </div>
+</section>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

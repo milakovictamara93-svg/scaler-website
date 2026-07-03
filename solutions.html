@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solutions — Scaler Global</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  :root {
+    --font-display: "Beausite Classic", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-body: "Beausite Classic", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --margin: clamp(24px, 6.6vw, 128px);
+
+    --ink: #0C0C0D;
+    --ink-2: #3D3D3D;
+    --ink-3: #505867;
+    --bg: #F5F5F5;
+    --white: #FFFFFF;
+
+    --accent: #FEC40A;               /* emission yellow — the Solutions page colour */
+    --accent-text: #D6A406;          /* yellow-700 — the only yellow that carries text */
+    --tech-purple: #6961E4;
+    --esg-green: #56C55A;
+    --waste-green: #037E50;
+    --energy-red: #E23704;
+    --water-blue: #2AA8DF;
+
+    --t-instant: 100ms; --t-fast: 200ms; --t-base: 300ms;
+    --t-default: 500ms; --t-slow: 700ms; --t-deliberate: 1500ms;
+    --ease-out: cubic-bezier(0, 0, 0.58, 1);
+    --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+    --spring-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --shadow-card: 0 1px 4px 0 rgba(12,12,13,0.10), 0 1px 4px 0 rgba(12,12,13,0.05);
+    --shadow-hover: 0 8px 16px 0 rgba(12,12,13,0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--white); color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; }
+
+  .eyebrow { font-size: 15px; font-weight: var(--weight-semibold); letter-spacing: 0.01em; color: var(--ink); display: flex; align-items: center; gap: 10px; }
+  .eyebrow::before { content: ''; width: 10px; height: 10px; background: var(--accent); flex-shrink: 0; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    border-radius: 9999px; padding: 12px 28px;
+    font-size: var(--size-p-sm); font-weight: var(--weight-semibold);
+    background: var(--ink); color: var(--white);
+    border: none; cursor: pointer; font-family: inherit;
+    transition: transform var(--t-fast) var(--ease-out), background var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out);
+  }
+  .pill:hover { background: #262626; transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+  .pill:active { transform: scale(.98); }
+  .pill .arr { display: inline-block; transition: transform var(--t-fast) var(--ease-out); }
+  .pill:hover .arr { transform: translateX(3px); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeInX { to { opacity: 1; transform: translateX(0); } }
+  @keyframes popIn { 0% { opacity: 0; transform: scale(0); } 60% { opacity: 1; transform: scale(1.04); } 100% { opacity: 1; transform: scale(1); } }
+  @keyframes scaleXGrow { to { transform: scaleX(1); } }
+  @keyframes pathDraw { to { stroke-dashoffset: 0; } }
+  @keyframes packetIntro { to { opacity: 1; } }
+  @keyframes packetFlow { to { stroke-dashoffset: 0; } }
+  @keyframes navIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ══ Header — shared ══ */
+  nav {
+    animation: navIn var(--t-default) var(--ease-out) both;
+    position: fixed; inset: 0 0 auto 0; z-index: 100; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 var(--margin);
+    background: rgba(255,255,255,.97);
+    border-bottom: 1px solid var(--color-background-grey);
+    transition: box-shadow var(--t-base) var(--ease-out), height var(--t-base) var(--ease-out);
+  }
+  nav.scrolled { height: 56px; box-shadow: 0 1px 4px rgba(12,12,13,.06), 0 4px 16px rgba(12,12,13,.06); border-bottom-color: transparent; }
+  nav .logo img { height: 22px; }
+  nav .links { display: flex; align-items: center; gap: 36px; }
+  nav .links > a, nav .drop > button {
+    font-size: var(--size-p-sm); font-weight: var(--weight-medium);
+    opacity: .85; transition: opacity var(--t-instant) var(--ease-out);
+    background: none; border: none; cursor: pointer; font-family: inherit; color: inherit;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  nav .links > a:hover, nav .drop > button:hover { opacity: 1; }
+  nav .links > a.active { opacity: 1; font-weight: var(--weight-semibold); }
+  .drop { position: relative; }
+  .drop .menu {
+    position: absolute; top: calc(100% + 14px); left: 50%; transform: translateX(-50%) translateY(4px);
+    background: var(--white); border: 1px solid var(--color-background-grey); border-radius: 11px;
+    box-shadow: var(--shadow-hover);
+    padding: 8px; min-width: 180px;
+    opacity: 0; pointer-events: none;
+    transition: opacity var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out);
+  }
+  .drop:hover .menu, .drop:focus-within .menu { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+  .drop .menu a { display: block; padding: 10px 14px; border-radius: 8px; font-size: var(--size-p-sm); font-weight: var(--weight-medium); }
+  .drop .menu a:hover { background: var(--bg); }
+  nav .actions { display: flex; align-items: center; gap: 28px; }
+  nav .actions .login { font-size: var(--size-p-sm); font-weight: var(--weight-medium); opacity: .85; }
+  nav .actions .login:hover { opacity: 1; }
+
+  /* ══ Hero — full yellow, with the numbered capabilities (Figma 4175:2916) ══ */
+  .hero {
+    background: var(--accent);
+    padding: 176px var(--margin) 96px;
+  }
+  .hero h1 { font-size: clamp(40px, 5vw, 84px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.04; color: var(--ink); max-width: 15ch; }
+  .hero h1 .line { display: block; opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  .hero h1 .line:nth-child(1) { animation-delay: .1s; }
+  .hero h1 .line:nth-child(2) { animation-delay: .25s; }
+  .hero .lede { margin-top: 28px; max-width: 46ch; font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: rgba(0,0,0,.8); }
+  .hero .cta { margin-top: 36px; }
+  .fade-up { opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+
+  .caps { display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(48px, 6vw, 96px); margin-top: 88px; }
+  .cap {
+    display: grid; grid-template-columns: 110px 1fr; gap: 24px; align-items: center;
+    padding: 28px 0 36px; border-top: 1px solid var(--ink);
+    opacity: 0; transform: translateX(-12px);
+  }
+  .caps.in .cap { animation: fadeInX var(--t-default) var(--ease-out-cubic) forwards; animation-delay: calc(var(--i) * 120ms); }
+  .cap .num { font-size: clamp(56px, 5.4vw, 88px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1; color: var(--ink); text-align: left; }
+  .cap h3 { font-size: 20px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; color: var(--ink); }
+  .cap p { margin-top: 8px; font-size: 14px; line-height: 1.5; color: rgba(0,0,0,.8); max-width: 40ch; }
+  .cap .tags { margin-top: 10px; font-size: 13px; font-weight: var(--weight-medium); color: var(--ink); }
+
+  /* ══ Stat band — full black (Figma 4175:2959) ══ */
+  .stat-band { background: var(--color-full-black); color: var(--white); padding: 72px var(--margin); }
+  .band { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(24px, 3vw, 48px); border-top: 1px solid rgba(255,255,255,.25); }
+  .band .b-stat { position: relative; padding-top: 40px; opacity: 0; transform: translateY(20px); }
+  .band.in .b-stat { animation: fadeUp var(--t-default) var(--ease-out) forwards; animation-delay: calc(var(--i) * 100ms); }
+  .b-stat .bar { position: absolute; top: -1.5px; left: 0; width: 100%; height: 2px; }
+  .b-stat .bar i { display: block; height: 100%; background: var(--white); transform: scaleX(0); transform-origin: left; }
+  .band.in .b-stat .bar i { animation: scaleXGrow 1500ms var(--ease-out-expo) .3s forwards; }
+  .band .b-num { font-size: clamp(36px, 3.6vw, 60px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1; color: var(--white); }
+  .band .b-label { margin-top: 12px; font-size: 13px; color: rgba(255,255,255,.75); }
+
+  /* ══ Sections ══ */
+  section { padding: 112px var(--margin); }
+  .light { background: var(--bg); }
+  .section-head { margin-bottom: 64px; }
+  .section-head .eyebrow { margin-bottom: 20px; }
+  .section-head h2 { font-size: clamp(32px, 4vw, 60px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.08; max-width: 20ch; color: var(--ink); }
+  .section-head .sub { margin-top: 18px; font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: var(--ink-3); max-width: 52ch; }
+
+  /* ══ AI analyst — three columns (Figma 4175:2989) ══ */
+  .approach-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(40px, 5vw, 72px); }
+  .acol { position: relative; padding-left: 24px; }
+  .acol::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--color-background-grey); }
+  .acol::after { content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 24px; background: var(--accent); }
+  .a-eyebrow { font-size: 16px; font-weight: var(--weight-medium); line-height: 1.4; color: var(--accent-text); margin-bottom: 16px; }
+  .acol h3, .quad h3 { font-size: 24px; font-weight: var(--weight-semibold); letter-spacing: -0.48px; line-height: 1.15; color: var(--ink); opacity: .9; }
+  .acol ul, .quad ul { list-style: disc; margin-top: 16px; padding-left: 24px; opacity: .9; }
+  .acol li, .quad li { font-size: 16px; line-height: 1.5; color: var(--ink); margin-bottom: 4px; }
+  .acol .result, .quad .result { margin-top: 16px; font-size: 16px; font-weight: var(--weight-medium); line-height: 1.4; color: var(--ink); opacity: .9; }
+
+  .mini-card {
+    margin-top: 32px; background: var(--white); border-radius: 11px;
+    min-height: 100px; padding: 12px 16px;
+    box-shadow: var(--shadow-card);
+    display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
+    opacity: 0; transform: translateY(20px);
+  }
+  .in .mini-card, .play .mini-card { animation: fadeUp var(--t-default) var(--ease-out) forwards; animation-delay: calc(var(--j, 0) * 200ms + .1s); }
+  .mc-head { display: flex; align-items: center; gap: 8px; font-size: 15.8px; font-weight: var(--weight-semibold); letter-spacing: -0.47px; color: var(--ink); }
+  .mc-head svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .mc-bubble {
+    align-self: flex-end;
+    background: #EAE8FF; border-radius: 8px 8px 0 8px;
+    padding: 8px 8px 5px; font-size: 12px; color: var(--ink); text-align: right;
+    opacity: 0; transform: scale(0); transform-origin: bottom right;
+  }
+  .in .mc-bubble { animation: popIn 500ms var(--spring-pop) 1.2s forwards; }
+  .mc-metric { display: flex; align-items: center; gap: 6px; width: 100%; flex-wrap: wrap; }
+  .mc-val { font-size: 24px; font-weight: var(--weight-semibold); letter-spacing: -0.48px; line-height: 1; color: var(--ink); }
+  .mc-lbl { font-size: 12px; color: var(--ink); flex: 1; }
+  .mc-note { font-size: 12px; color: var(--ink-3); }
+  .mc-count { font-size: 10.5px; font-weight: var(--weight-semibold); letter-spacing: -0.1px; }
+  .mc-track { height: 2.6px; width: 100%; background: #EDEEF1; margin-top: 6px; }
+  .mc-fill { height: 100%; transform: scaleX(0); transform-origin: left; }
+  .in .mc-fill { animation: scaleXGrow var(--t-deliberate) var(--ease-out-expo) 1s forwards; }
+  .mc-rows { display: flex; flex-direction: column; }
+  .mc-row { display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 1.3; color: var(--ink); padding: 1px 0; opacity: 0; transform: translateX(-12px); }
+  .mc-row b { font-weight: var(--weight-bold); }
+  .in .mc-row:nth-child(1) { animation: fadeInX 500ms var(--ease-out-cubic) .8s forwards; }
+  .in .mc-row:nth-child(2) { animation: fadeInX 500ms var(--ease-out-cubic) .95s forwards; }
+  .in .mc-row:nth-child(3) { animation: fadeInX 500ms var(--ease-out-cubic) 1.1s forwards; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    border-radius: 9999px; padding: 2px 8px;
+    font-size: 10px; font-weight: var(--weight-semibold);
+    opacity: 0; transform: scale(0); transform-origin: center;
+  }
+  .in .chip { animation: popIn 450ms var(--spring-pop) 1.6s forwards; }
+  .chip.warn { background: var(--accent); color: var(--ink); }
+  .chip.good { background: rgba(86,197,90,.16); color: var(--waste-green); }
+  .delta-up { font-size: 11px; font-weight: var(--weight-semibold); color: var(--waste-green); opacity: 0; }
+  .delta-down { font-size: 11px; font-weight: var(--weight-semibold); color: var(--waste-green); opacity: 0; }
+  .in .delta-up, .in .delta-down { animation: packetIntro 300ms var(--ease-out) 1.5s forwards; }
+  .squig { width: 34px; height: 14px; }
+  .squig path { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 60; }
+  .squig circle { opacity: 0; transform-origin: center; transform-box: fill-box; transform: scale(0); }
+  .in .squig path { animation: pathDraw 800ms var(--ease-in-out) 1.1s forwards; }
+  .in .squig circle { animation: popIn 400ms var(--spring-pop) 1.9s forwards; }
+
+  /* ══ Protect value — editorial split on black ══ */
+  .dark { background: var(--color-full-black); color: var(--white); }
+  .dark h2, .dark h3, .dark p { color: inherit; }
+  .dark .section-head h2 { color: var(--white); }
+  .dark .section-head .sub { color: rgba(255,255,255,.65); }
+  .dark .eyebrow { color: var(--white); }
+  .pv-split { display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(48px, 6vw, 112px); row-gap: 0; align-items: start; }
+  .pv-tag { font-size: 15px; font-weight: var(--weight-semibold); color: var(--accent); margin-bottom: 8px; align-self: end; }
+  .pv-entry { border-top: 1px solid rgba(255,255,255,.22); padding: 32px 0 40px; opacity: 0; transform: translateY(20px); }
+  .pv-split.in .pv-entry { animation: fadeUp var(--t-default) var(--ease-out) forwards; animation-delay: var(--d, 0s); }
+  .pv-entry .a-eyebrow { color: var(--accent); margin-bottom: 10px; }
+  .pv-entry h3 { font-size: 24px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; color: var(--white); }
+  .pv-entry ul { list-style: disc; margin-top: 14px; padding-left: 22px; }
+  .pv-entry li { font-size: 15px; line-height: 1.55; color: rgba(255,255,255,.8); margin-bottom: 4px; }
+  .pv-entry .pv-result { margin-top: 14px; font-size: 14px; font-weight: var(--weight-medium); color: rgba(255,255,255,.85); }
+  .pv-metric { display: flex; align-items: baseline; gap: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.12); flex-wrap: wrap; }
+  .pv-metric b { font-size: clamp(30px, 2.6vw, 44px); font-weight: var(--weight-semibold); letter-spacing: var(--track-display); line-height: 1; color: var(--white); }
+  .pv-metric .u { font-size: 13px; color: rgba(255,255,255,.6); }
+  .pv-delta { font-size: 13px; font-weight: var(--weight-semibold); color: var(--esg-green); }
+
+  /* ══ Data collection — 2×2 quadrants (4175:3213) ══ */
+  .quads { display: grid; grid-template-columns: 1fr 1fr; gap: 72px clamp(48px, 6vw, 96px); }
+  .quad { position: relative; padding-left: 24px; }
+  .quad::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--color-background-grey); }
+  .quad::after { content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 24px; background: var(--accent); }
+  .quad h3 { font-size: 22px; }
+  .quad li { font-size: 15px; }
+  .quad .cards { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+  .quad .mini-card { margin-top: 28px; }
+
+  /* ══ Investor-grade reports — accordion + INREV flow (4175:3392) ══ */
+  .rep-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: clamp(40px, 5vw, 88px); align-items: center; }
+  .acc-block {
+    background: var(--accent);
+    clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 40px, 100% 100%, 40px 100%, 0 calc(100% - 40px));
+    padding: 44px 48px; margin-bottom: 0;
+    cursor: pointer;
+    opacity: 0; transform: translateX(-12px);
+  }
+  .rep-grid.in .acc-block { animation: fadeInX 500ms var(--ease-out-cubic) forwards; animation-delay: calc(var(--i) * 150ms); }
+  .acc-head { display: flex; gap: 16px; align-items: flex-start; }
+  .acc-num {
+    width: 32px; height: 32px; border: 1.5px solid var(--ink); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: var(--weight-semibold); flex-shrink: 0;
+  }
+  .acc-block.open .acc-num { background: var(--ink); color: var(--accent); border-color: var(--ink); }
+  .acc-title { font-size: 19px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; line-height: 1.25; color: var(--ink); }
+  .acc-body { max-height: 0; overflow: hidden; transition: max-height var(--t-default) var(--ease-in-out); }
+  .acc-body li, .acc-body .result { opacity: 0; transform: translateX(-8px); transition: opacity var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out); }
+  .acc-block.open .acc-body li:nth-child(1) { transition-delay: .15s; }
+  .acc-block.open .acc-body li:nth-child(2) { transition-delay: .23s; }
+  .acc-block.open .acc-body li:nth-child(3) { transition-delay: .31s; }
+  .acc-block.open .acc-body .result { transition-delay: .4s; }
+  .acc-block.open .acc-body li, .acc-block.open .acc-body .result { opacity: 1; transform: none; }
+  .acc-num { transition: background var(--t-base) var(--ease-out), color var(--t-base) var(--ease-out); }
+  .acc-block.open .acc-body { max-height: 240px; }
+  .acc-body ul { list-style: disc; margin: 16px 0 0 48px; }
+  .acc-body li { font-size: 14px; line-height: 1.55; color: var(--ink); }
+  .acc-body .result { margin: 12px 0 4px 48px; font-size: 14px; font-weight: var(--weight-medium); color: var(--ink); }
+
+  .flow { position: relative; }
+  .viz-state { display: none; }
+  .viz-state.active { display: block; animation: fadeUp 400ms var(--ease-out); }
+
+  /* shared card shell */
+  .flow svg.wires { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+  .wires .guide { fill: none; stroke: #D7DAE0; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .wires .packet { fill: none; stroke: var(--esg-green); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+  .flow-grid { display: grid; grid-template-columns: 1.5fr .8fr; gap: 64px; align-items: center; }
+  .report-card { background: var(--white); border-radius: 12px; padding: 28px; box-shadow: var(--shadow-card); position: relative; z-index: 2; }
+  .rc-title { font-size: 22px; font-weight: var(--weight-bold); letter-spacing: -0.02em; color: var(--ink); }
+  .rc-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 14px; padding-bottom: 14px; border-bottom: 1px solid #EDEEF1; font-size: 13px; color: var(--ink-2); }
+  .rc-meta b { color: var(--ink); font-weight: var(--weight-semibold); }
+  .rc-label { font-size: 13px; color: var(--ink-2); margin-top: 14px; }
+  .rc-pct { font-size: 38px; font-weight: var(--weight-semibold); letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); margin-top: 2px; }
+  .rc-bar { height: 4px; background: #EDEEF1; margin-top: 12px; }
+  .rc-bar i { display: block; height: 100%; background: var(--esg-green); transform: scaleX(0); transform-origin: left; }
+  .rc-domains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; padding-top: 14px; border-top: 1px solid #EDEEF1; opacity: 0; transform: translateY(12px); }
+  .rc-dom .dl { font-size: 12px; color: var(--ink-2); }
+  .rc-dom .dv { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+  .rc-dom .dv b { font-size: 19px; font-weight: var(--weight-semibold); color: var(--ink); }
+  .rc-btn {
+    width: 100%; margin-top: 18px; border: none; cursor: pointer;
+    border-radius: 9999px; padding: 12px; font-family: inherit;
+    background: var(--ink); color: var(--white);
+    font-size: 14px; font-weight: var(--weight-semibold);
+    transition: background var(--t-fast) var(--ease-out);
+  }
+  .rc-btn:hover { background: #262626; }
+  .rc-a { opacity: 0; transform: translateY(12px); }
+  .out-cards { display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 2; }
+  .out-card {
+    background: var(--white); border-radius: 10px; padding: 18px;
+    box-shadow: var(--shadow-card);
+    font-size: 14px; font-weight: var(--weight-semibold); color: var(--ink);
+    display: flex; flex-direction: column; gap: 10px;
+    opacity: 0; transform: scale(0); transform-origin: left center;
+  }
+  .out-card svg { width: 18px; height: 18px; }
+
+  /* ── mode 2: multi-framework — one card, many outputs ── */
+  #flow.go .viz-state[data-mode="2"].active .rc-a { animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  #flow.go .viz-state[data-mode="2"].active .rc-meta.rc-a { animation-delay: .15s; }
+  #flow.go .viz-state[data-mode="2"].active .rc-label.rc-a { animation-delay: .3s; }
+  #flow.go .viz-state[data-mode="2"].active .rc-pct.rc-a { animation-delay: .4s; }
+  #flow.go .viz-state[data-mode="2"].active .rc-bar i { animation: scaleXGrow var(--t-deliberate) var(--ease-out-expo) .45s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .rc-domains { animation: fadeUp var(--t-default) var(--ease-out) .7s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .squig path { animation: pathDraw 800ms var(--ease-in-out) .9s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .squig circle { animation: popIn 400ms var(--spring-pop) 1.7s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .rc-btn.rc-a { animation-delay: .9s; }
+  #flow.go .viz-state[data-mode="2"].active .wires .guide { animation: pathDraw 800ms var(--ease-in-out) 1.3s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .wires .packet { animation: packetIntro .3s linear 2.1s forwards, packetFlow 2s linear 2.1s infinite; }
+  #flow.go .viz-state[data-mode="2"].active .out-card:nth-child(1) { animation: popIn 500ms var(--spring-pop) 2.1s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .out-card:nth-child(2) { animation: popIn 500ms var(--spring-pop) 2.25s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .out-card:nth-child(3) { animation: popIn 500ms var(--spring-pop) 2.4s forwards; }
+
+  /* ── mode 1: GHG inventory — scope bars build the total ── */
+  .ghg-card { max-width: 520px; }
+  .ghg-row { display: grid; grid-template-columns: 72px 1fr 64px; gap: 12px; align-items: center; margin-top: 16px; opacity: 0; transform: translateX(-12px); }
+  .ghg-row .gl { font-size: 13px; color: var(--ink-2); }
+  .ghg-row .gv { font-size: 14px; font-weight: var(--weight-semibold); color: var(--ink); text-align: right; }
+  .ghg-row .gbar { height: 10px; background: #F0F1F3; border-radius: 3px; overflow: hidden; }
+  .ghg-row .gbar i { display: block; height: 100%; border-radius: 3px; transform: scaleX(0); transform-origin: left; }
+  .ghg-total { display: flex; align-items: baseline; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #EDEEF1; opacity: 0; transform: translateY(12px); }
+  .ghg-total b { font-size: 32px; font-weight: var(--weight-semibold); letter-spacing: -0.03em; color: var(--ink); }
+  .ghg-total span { font-size: 13px; color: var(--ink-3); }
+  #flow.go .viz-state[data-mode="1"].active .ghg-row:nth-of-type(1) { animation: fadeInX 500ms var(--ease-out-cubic) .1s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .ghg-row:nth-of-type(2) { animation: fadeInX 500ms var(--ease-out-cubic) .25s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .ghg-row:nth-of-type(3) { animation: fadeInX 500ms var(--ease-out-cubic) .4s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .ghg-row:nth-of-type(1) .gbar i { animation: scaleXGrow 1s var(--ease-out-expo) .3s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .ghg-row:nth-of-type(2) .gbar i { animation: scaleXGrow 1s var(--ease-out-expo) .45s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .ghg-row:nth-of-type(3) .gbar i { animation: scaleXGrow 1s var(--ease-out-expo) .6s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .ghg-total { animation: fadeUp var(--t-default) var(--ease-out) .9s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .ghg-total .chip { animation: popIn 450ms var(--spring-pop) 1.6s forwards; }
+
+  /* ── mode 3: customization — toggles flip on ── */
+  .cfg-card { max-width: 520px; }
+  .cfg-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid #F0F1F3; opacity: 0; transform: translateX(-12px); }
+  .cfg-row .cl { font-size: 14px; color: var(--ink); }
+  .tog { width: 36px; height: 20px; border-radius: 9999px; background: #D7DAE0; position: relative; flex-shrink: 0; }
+  .tog i { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--white); box-shadow: 0 1px 2px rgba(12,12,13,.2); }
+  @keyframes togTrack { to { background: var(--esg-green); } }
+  @keyframes togKnob { to { transform: translateX(16px); } }
+  #flow.go .viz-state[data-mode="3"].active .cfg-row:nth-of-type(1) { animation: fadeInX 400ms var(--ease-out-cubic) .1s forwards; }
+  #flow.go .viz-state[data-mode="3"].active .cfg-row:nth-of-type(2) { animation: fadeInX 400ms var(--ease-out-cubic) .2s forwards; }
+  #flow.go .viz-state[data-mode="3"].active .cfg-row:nth-of-type(3) { animation: fadeInX 400ms var(--ease-out-cubic) .3s forwards; }
+  #flow.go .viz-state[data-mode="3"].active .cfg-row:nth-of-type(1) .tog { animation: togTrack 300ms var(--ease-out) .6s forwards; }
+  #flow.go .viz-state[data-mode="3"].active .cfg-row:nth-of-type(2) .tog { animation: togTrack 300ms var(--ease-out) .85s forwards; }
+  #flow.go .viz-state[data-mode="3"].active .cfg-row:nth-of-type(3) .tog { animation: togTrack 300ms var(--ease-out) 1.1s forwards; }
+  #flow.go .viz-state[data-mode="3"].active .cfg-row:nth-of-type(1) .tog i { animation: togKnob 300ms var(--spring-pop) .6s forwards; }
+  #flow.go .viz-state[data-mode="3"].active .cfg-row:nth-of-type(2) .tog i { animation: togKnob 300ms var(--spring-pop) .85s forwards; }
+  #flow.go .viz-state[data-mode="3"].active .cfg-row:nth-of-type(3) .tog i { animation: togKnob 300ms var(--spring-pop) 1.1s forwards; }
+  .cfg-preview { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #EDEEF1; }
+  .cfg-preview .cp-label { font-size: 12px; color: var(--ink-3); margin-right: 4px; }
+  .cp-chip {
+    border: 1px solid var(--color-background-grey); border-radius: 9999px;
+    padding: 5px 12px; font-size: 12px; font-weight: var(--weight-medium); color: var(--ink);
+    background: var(--white);
+    opacity: 0; transform: scale(0); transform-origin: center;
+  }
+  #flow.go .viz-state[data-mode="3"].active .cp-chip { animation: popIn 400ms var(--spring-pop) forwards; animation-delay: calc(var(--k) * 120ms + 1.3s); }
+  @keyframes cardPulse { 0% { transform: scale(1); } 40% { transform: scale(1.05); } 100% { transform: scale(1); } }
+  #flow.go .viz-state[data-mode="3"].active .rc-btn { animation: cardPulse 600ms var(--spring-pop) 2s; }
+
+  /* ══ Who it's for — persona rows (homepage pattern) ══ */
+  .persona-row { display: grid; grid-template-columns: 1fr 2fr; gap: 48px; align-items: baseline; padding: 44px 0; border-top: 1px solid var(--color-background-grey); }
+  .persona-row:last-of-type { border-bottom: 1px solid var(--color-background-grey); }
+  .persona-row .who { font-size: 15px; font-weight: var(--weight-medium); color: var(--ink-3); }
+  .persona-row .what { font-size: clamp(20px, 2.1vw, 30px); font-weight: var(--weight-medium); letter-spacing: -0.02em; line-height: 1.35; max-width: 32ch; color: var(--ink); }
+  .persona-row .what em { font-style: normal; font-weight: var(--weight-semibold); }
+
+  /* ══ Quote — spotlight (shared with homepage) ══ */
+  .quote { padding-top: 128px; padding-bottom: 128px; }
+  .quote blockquote {
+    margin-top: 56px;
+    font-size: clamp(32px, 4.2vw, 68px);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--track-display);
+    line-height: 1.15;
+    color: var(--ink);
+    max-width: 22ch;
+  }
+  .quote blockquote .qm { color: var(--accent-text); }
+  .quote blockquote .frag { display: block; opacity: 0; transform: translateY(20px); }
+  .quote blockquote.in .frag:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) 0s forwards; }
+  .quote blockquote.in .frag:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .15s forwards; }
+  .quote blockquote.in .frag:nth-child(3) { animation: fadeUp var(--t-default) var(--ease-out) .3s forwards; }
+  .quote .attr { margin-top: 48px; font-size: var(--size-p-md); font-weight: var(--weight-semibold); color: var(--ink); opacity: 0; transform: translateY(20px); }
+  .quote .attr.in { animation: fadeUp var(--t-default) var(--ease-out) .5s both; }
+  .quote .attr span { display: block; margin-top: 4px; color: var(--ink-3); font-weight: var(--weight-regular); font-size: var(--size-p-sm); }
+
+  /* ══ Closing — always the page colour ══ */
+  .closing { background: var(--accent); padding-top: 96px; padding-bottom: 96px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+  .closing h2 { font-size: clamp(34px, 4.4vw, 72px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.1; max-width: 22ch; color: var(--ink); }
+  .closing h2 .w { display: inline-block; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .w:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) 0s forwards; }
+  .closing .reveal.in .w:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .15s forwards; }
+  .closing .cta { margin-top: 12px; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .cta { animation: fadeUp var(--t-default) var(--ease-out) .4s both; }
+
+  /* ══ Footer — shared ══ */
+  footer { background: var(--white); border-top: 1px solid var(--color-background-grey); padding: 72px var(--margin) 24px; }
+  .f-grid { display: grid; grid-template-columns: minmax(140px, 220px) 1.4fr 1fr; gap: clamp(40px, 5vw, 88px); }
+  .f-mark { position: relative; width: fit-content; }
+  .f-mark img { height: clamp(240px, 24vw, 340px); width: auto; }
+  .f-mark .word { position: absolute; left: 50%; transform: translateX(-50%); bottom: 16px; color: var(--white); font-weight: var(--weight-bold); font-size: clamp(18px, 1.8vw, 26px); letter-spacing: -0.02em; }
+  .f-links { display: grid; grid-template-columns: 1fr 1fr; gap: 44px 48px; align-content: start; }
+  .f-group .k { font-size: 15px; font-weight: var(--weight-semibold); color: var(--ink); margin-bottom: 18px; }
+  .f-group a { display: block; font-size: 14px; color: var(--ink-2); margin-bottom: 12px; transition: color var(--t-instant) var(--ease-out); }
+  .f-group a:hover { color: var(--ink); }
+  .f-offices .office { border-top: 1px solid var(--ink); padding: 18px 0 30px; }
+  .f-offices .city { font-size: 22px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; color: var(--ink); margin-bottom: 14px; }
+  .f-offices .addr { font-size: 13px; line-height: 1.6; color: var(--ink-2); }
+  footer .legal { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--color-background-grey); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--ink-2); }
+  footer .legal a { margin-left: 32px; }
+  footer .legal a:hover { color: var(--ink); }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity var(--t-default) var(--ease-out), transform var(--t-default) var(--ease-out); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .fade-up, .cap, .b-stat, .mini-card, .mc-bubble, .mc-row, .chip, .pv-card, .acc-block, .out-card, .closing .w, .closing .cta, .report-card .rc-a, .rc-domains, .delta-up, .delta-down { opacity: 1 !important; transform: none !important; }
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+  @media (max-width: 960px) {
+    nav .links { display: none; }
+    .caps, .band, .approach-cols, .pv-split, .quads, .rep-grid, .flow-grid, .persona-row, .f-grid { grid-template-columns: 1fr; }
+    .pv-split .pv-tag, .pv-split .pv-entry { grid-area: auto !important; }
+    .caps .cap { grid-area: auto !important; }
+    .caps .cap:nth-child(1) { order: 3; } /* item 3 */
+    .caps .cap:nth-child(2) { order: 1; } /* item 1 */
+    .caps .cap:nth-child(3) { order: 4; } /* item 4 */
+    .caps .cap:nth-child(4) { order: 2; } /* item 2 */
+    .caps .cap:nth-child(5) { order: 5; } /* item 5 */
+    .cap { grid-template-columns: 72px 1fr; }
+    .flow svg.wires { display: none; }
+  }
+</style>
+<link rel="stylesheet" href="scaler-site.css">
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html"><img src="assets/logo-full-dark.svg" alt="Scaler"></a>
+  <div class="links">
+    <a class="active" href="solutions.html">Solutions</a>
+    <a href="https://scalerglobal.com/partnerships">Partnerships</a>
+    <a href="https://scalerglobal.com/articles/">Articles</a>
+    <a href="https://scalerglobal.com/about-us">About Us</a>
+    <div class="drop">
+      <button>Resources
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <div class="menu">
+        <a href="https://scalerglobal.com/sfdr">SFDR</a>
+        <a href="https://scalerglobal.com/benchmarking">Benchmarking</a>
+        <a href="https://scalerglobal.com/espm">ESPM</a>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <a class="login" href="https://app.scalerglobal.com">Login</a>
+    <button class="pill">Schedule a demo</button>
+  </div>
+</nav>
+
+<!-- ══ Hero — yellow, with numbered capabilities ══ -->
+<header class="hero">
+  <h1>
+    <span class="line">The end-to-end intelligence</span>
+    <span class="line">layer for real estate</span>
+  </h1>
+  <p class="lede fade-up" style="animation-delay:.4s">One platform for streamlined sustainability data collection, investment operations, trusted reports, and audit, with intuitive AI analytics at each step.</p>
+  <div class="cta fade-up" style="animation-delay:.55s">
+    <button class="pill">Schedule a demo <span class="arr">→</span></button>
+  </div>
+
+  <div class="caps" id="caps">
+    <div class="cap" style="--i:2; grid-area: 1 / 2;">
+      <div class="num">3</div>
+      <div>
+        <h3>Automated data ingestion</h3>
+        <p>Utility sync, bill scrape, surveys, and APIs — every source handled automatically.</p>
+        <div class="tags">Utility sync · Bill scrape · Data requests · Estimation</div>
+      </div>
+    </div>
+    <div class="cap" style="--i:0; grid-area: 2 / 1;">
+      <div class="num">1</div>
+      <div>
+        <h3>Intelligence</h3>
+        <p>Ask portfolio questions in plain English. Get charts, numbers, and answers in seconds.</p>
+        <div class="tags">Lumi AI · Investor DDQ · IC-ready charts</div>
+      </div>
+    </div>
+    <div class="cap" style="--i:3; grid-area: 2 / 2;">
+      <div class="num">4</div>
+      <div>
+        <h3>Reporting</h3>
+        <p>One engine. Every framework — GRESB, CSRD, SFDR, GRI, and more.</p>
+        <div class="tags">GHG accounting · Multi-framework · Roadmaps &amp; scenarios</div>
+      </div>
+    </div>
+    <div class="cap" style="--i:1; grid-area: 3 / 1;">
+      <div class="num">2</div>
+      <div>
+        <h3>Investment operations</h3>
+        <p>Price carbon risk, manage retrofits, and flag underperformers.</p>
+        <div class="tags">Due diligence · Opex efficiency · Decarb roadmaps · CapEx / ROI</div>
+      </div>
+    </div>
+    <div class="cap" style="--i:4; grid-area: 3 / 2;">
+      <div class="num">5</div>
+      <div>
+        <h3>Assurance</h3>
+        <p>Every data point versioned, attributed, and reproducible.</p>
+        <div class="tags">Data quality · PCAF scoring · Audit trail</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ Stat band — black ══ -->
+<div class="stat-band">
+  <div class="band" id="band">
+    <div class="b-stat" style="--i:0"><div class="bar"><i></i></div><div class="b-num"><span class="count" data-target="60">0</span>%</div><div class="b-label">Time back from data work</div></div>
+    <div class="b-stat" style="--i:1"><div class="bar"><i></i></div><div class="b-num"><span class="count" data-target="40">0</span>%</div><div class="b-label">Cost efficiency</div></div>
+    <div class="b-stat" style="--i:2"><div class="bar"><i></i></div><div class="b-num">2–4 hrs</div><div class="b-label">To answer an LP DDQ</div></div>
+    <div class="b-stat" style="--i:3"><div class="bar"><i></i></div><div class="b-num">8 weeks</div><div class="b-label">To first report</div></div>
+  </div>
+</div>
+
+<!-- ══ The AI analyst ══ -->
+<section class="light">
+  <div class="section-head reveal">
+    <h2>The AI analyst your team has been waiting for</h2>
+    <p class="sub">Auto-reads your portfolio, runs the analysis, and explains what it means.</p>
+  </div>
+  <div class="approach-cols" id="approach">
+    <div class="acol">
+      <div class="a-eyebrow">AI advisor</div>
+      <h3>Ask anything in plain English</h3>
+      <ul>
+        <li>Queries across funds, assets, and KPIs</li>
+        <li>Auto-generated, IC-ready charts</li>
+        <li>Answers grounded in your real data</li>
+      </ul>
+      <p class="result">Result: ~60% less analysis time</p>
+      <div class="mini-card" style="--j:0">
+        <div class="mc-head">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M14.7429 9.2572V24.0001H9.1875V18.7866L3.9452 24.0001H0V20.1145L5.36819 14.7761H0V9.2572H14.7429Z" fill="#6961E4"/>
+            <path d="M9.25714 9.2572V24.0001H14.8125V18.7866L20.0548 24.0001H24V20.1145L18.6318 14.7761H24V9.2572H9.25714Z" fill="#6961E4"/>
+            <path d="M9.25714 14.7428V0H14.8125V5.21344L20.0548 0H24V3.88554L18.6318 9.22394H24V14.7428H9.25714Z" fill="#6961E4"/>
+            <path d="M14.7429 14.7428V0H9.1875V5.21344L3.9452 0H0V3.88554L5.36819 9.22394H0V14.7428H14.7429Z" fill="#6961E4"/>
+            <path d="M12 5.14282L12.1563 6.87365C12.3947 9.51343 14.4865 11.6052 17.1263 11.8436L18.8571 12L17.1263 12.1563C14.4865 12.3947 12.3947 14.4865 12.1563 17.1263L12 18.8571L11.8436 17.1263C11.6052 14.4865 9.51343 12.3947 6.87365 12.1563L5.14282 12L6.87365 11.8436C9.51343 11.6052 11.6052 9.51343 11.8436 6.87365L12 5.14282Z" fill="#FFFFFF"/>
+          </svg>
+          AI advisor
+        </div>
+        <div class="mc-bubble">Why did GHG spike in March?</div>
+      </div>
+    </div>
+    <div class="acol">
+      <div class="a-eyebrow">AI edits</div>
+      <h3>Prompt-driven edits at scale</h3>
+      <ul>
+        <li>Direct edits from a plain-language prompt</li>
+        <li>Bulk review across assets and meters</li>
+        <li>Quality checks and drafting in one pass</li>
+      </ul>
+      <p class="result">Covers: Edit, review, quality check, write</p>
+      <div class="mini-card" style="--j:1">
+        <div class="mc-head">AI edits</div>
+        <div>
+          <div class="mc-metric">
+            <span class="mc-val"><span id="mcValidated">0</span>%</span>
+            <span class="mc-lbl">Validated</span>
+            <span class="mc-count" style="color:var(--tech-purple)">244 / 247</span>
+          </div>
+          <div class="mc-track"><div class="mc-fill" style="width:98%; background:var(--tech-purple)"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="acol">
+      <div class="a-eyebrow">AI reports</div>
+      <h3>Investor DDQ automation</h3>
+      <ul>
+        <li>Reads any LP questionnaire format</li>
+        <li>Drafts from real data and prior answers</li>
+        <li>Every claim traceable to source</li>
+      </ul>
+      <p class="result">Result: 2–4 hrs per DDQ</p>
+      <div class="mini-card" style="--j:2">
+        <div class="mc-head">AI reports</div>
+        <div class="mc-rows">
+          <div class="mc-row"><span class="dot" style="background:var(--tech-purple)"></span><b>32</b><span>DDQ responses drafted</span></div>
+          <div class="mc-row"><span class="dot" style="background:var(--tech-purple)"></span><b>18</b><span>Anomalies flagged</span></div>
+          <div class="mc-row"><span class="dot" style="background:var(--tech-purple)"></span><b>12</b><span>Report drafts ready</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Protect value and drive performance — editorial, on black ══ -->
+<section class="dark pv">
+  <div class="section-head reveal">
+    <h2>Protect value and drive performance</h2>
+    <p class="sub">Mitigate risk and improve performance from the same asset data.</p>
+  </div>
+  <div class="pv-split" id="pvSplit">
+    <div class="pv-tag" style="grid-area: 1 / 1;">Drive performance</div>
+    <div class="pv-tag" style="grid-area: 1 / 2;">Protect value</div>
+    <div class="pv-entry" style="--d:.1s; grid-area: 2 / 1;">
+      <div class="a-eyebrow">CapEx &amp; ROI</div>
+      <h3>Manage CapEx &amp; ROI</h3>
+      <ul>
+        <li>Due diligence analysis</li>
+        <li>Retrofit ROI modelled per asset</li>
+        <li>Project management for execution</li>
+      </ul>
+      <p class="pv-result">For: Acquisition and asset teams</p>
+      <div class="pv-metric"><b><span class="count" data-target="18">0</span></b><span class="u">tonnes CO2/year reduced</span><span class="pv-delta">↓ 12.6%</span></div>
+    </div>
+    <div class="pv-entry" style="--d:.25s; grid-area: 2 / 2;">
+      <div class="a-eyebrow">Transition risk</div>
+      <h3>Assess transition risk</h3>
+      <ul>
+        <li>Decarbonization roadmaps</li>
+        <li>CRREM, EPBD, BPS, NABERS pathways</li>
+        <li>Physical climate risk</li>
+      </ul>
+      <p class="pv-result">Per asset: Every pathway modelled</p>
+      <div class="pv-metric"><b><span class="count" data-target="83">0</span>%</b><span class="u">of assets on a net zero pathway</span><span class="pv-delta">↑ 4.1%</span></div>
+    </div>
+    <div class="pv-entry" style="--d:.4s; grid-area: 3 / 1;">
+      <div class="a-eyebrow">Opex</div>
+      <h3>Improve Opex efficiency</h3>
+      <ul>
+        <li>Flag underperformers in real time</li>
+        <li>Engage tenants</li>
+        <li>Inform hold and dispose decisions</li>
+      </ul>
+      <p class="pv-result">Turns: Utility data into savings</p>
+      <div class="pv-metric"><b>$<span class="count" data-target="45000">0</span></b><span class="u">annual OpEx savings</span><span class="pv-delta">↑ 5.8%</span></div>
+    </div>
+    <div class="pv-entry" style="--d:.55s; grid-area: 3 / 2;">
+      <div class="a-eyebrow">Compliance</div>
+      <h3>Reduce penalties</h3>
+      <ul>
+        <li>Building performance standard tracking</li>
+        <li>Local ordinance monitoring</li>
+        <li>Fines modelled before they hit</li>
+      </ul>
+      <p class="pv-result">Covers: BPS, EPBD, local rules</p>
+      <div class="pv-metric"><b><span class="count" data-target="125">0</span></b><span class="u">active assets</span><span class="chip warn">4 at stranding risk</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Data collection from any source ══ -->
+<section class="light">
+  <div class="section-head reveal">
+    <h2>Data collection from any source</h2>
+    <p class="sub">Automate collection so your team works on what the data means, not chasing it.</p>
+  </div>
+  <div class="quads">
+    <div class="quad" data-anim>
+      <div class="a-eyebrow">Auto-import</div>
+      <h3>Automate ingestion</h3>
+      <ul>
+        <li>Direct APIs to utilities and meters</li>
+        <li>PDF bill scrape where APIs don't exist</li>
+        <li>PMS and PCA connections included</li>
+      </ul>
+      <p class="result">First data: Week one</p>
+      <div class="cards">
+        <div class="mini-card" style="--j:0">
+          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M9.3 1 3 9h4l-.9 6L13 7H8.7l.6-6Z"/></svg>Auto-import</div>
+          <div class="mc-metric">
+            <span class="mc-val"><span class="count" data-target="847">0</span></span>
+            <span class="mc-lbl">readings · last 30d</span>
+            <span class="delta-up">↑ 5.8%</span>
+          </div>
+        </div>
+        <div class="mini-card" style="--j:1">
+          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 1h6l3 3v11H4V1Zm5 1v3h3"/></svg>PDF Scrape</div>
+          <div class="mc-note">Bills, PCAs, documents</div>
+        </div>
+      </div>
+    </div>
+    <div class="quad" data-anim>
+      <div class="a-eyebrow">Data requests</div>
+      <h3>Audit-proof requests</h3>
+      <ul>
+        <li>Tailored surveys per PM or tenant</li>
+        <li>Auto-reminders with live tracking</li>
+        <li>Full audit trail for CSRD</li>
+      </ul>
+      <p class="result">Cuts: ~60% of the back-and-forth</p>
+      <div class="cards">
+        <div class="mini-card" style="--j:0">
+          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 3h14v10H1V3Zm1 1.5 6 4 6-4"/></svg>Data requests</div>
+          <div class="mc-metric">
+            <span class="mc-val"><span class="count" data-target="82">0</span>%</span>
+            <span class="mc-lbl">Response rate</span>
+            <span class="chip warn">5 auto-reminders</span>
+          </div>
+        </div>
+        <div class="mini-card" style="--j:1">
+          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M15 1 1 7l5 2 2 5 7-13Z"/></svg>Send request</div>
+          <div class="mc-note">Auto-reminder on</div>
+        </div>
+      </div>
+    </div>
+    <div class="quad" data-anim>
+      <div class="a-eyebrow">Bulk upload</div>
+      <h3>Easy bulk templates</h3>
+      <ul>
+        <li>Scaler-formatted Excel templates</li>
+        <li>Row-level validation with inline flags</li>
+        <li>Estimation fills gaps automatically</li>
+      </ul>
+      <p class="result">Covers: Energy, water, waste, travel</p>
+      <div class="cards">
+        <div class="mini-card" style="--j:0">
+          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1 3 6h3v5h4V6h3L8 1ZM2 13h12v2H2v-2Z"/></svg>Bulk upload</div>
+          <div>
+            <div class="mc-metric">
+              <span class="mc-val"><span class="count" data-target="98">0</span>%</span>
+              <span class="mc-lbl">Validated</span>
+              <span class="mc-count" style="color:var(--waste-green)">244 / 247</span>
+            </div>
+            <div class="mc-track"><div class="mc-fill" style="width:98%; background:var(--esg-green)"></div></div>
+          </div>
+        </div>
+        <div class="mini-card" style="--j:1">
+          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 1h6l3 3v11H4V1Z"/></svg>Template</div>
+          <div class="mc-rows">
+            <div class="mc-row"><span class="dot" style="background:var(--esg-green)"></span><b>85</b><span>Gaps filled</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="quad" data-anim>
+      <div class="a-eyebrow">Lumi AI</div>
+      <h3>AI data insights</h3>
+      <ul>
+        <li>Spike, drop, and unit-error detection</li>
+        <li>Coverage and gap detection across meters</li>
+        <li>Alerts while there's time to fix</li>
+      </ul>
+      <p class="result">Governance: Every value versioned</p>
+      <div class="cards">
+        <div class="mini-card" style="--j:0">
+          <div class="mc-head"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 4 4"/></svg>Detect</div>
+          <div class="mc-metric" style="gap:10px;">
+            <span style="font-size:11px; color:var(--ink-3);">Energy</span><b style="font-size:16px;">92</b>
+            <svg class="squig" viewBox="0 0 34 14"><path d="M2 10 H8 L12 4 L18 7 L24 3 H29" stroke="#E23704"/><circle cx="31" cy="3" r="2.2" fill="#E23704"/></svg>
+            <span style="font-size:11px; color:var(--ink-3);">GHG</span><b style="font-size:16px;">45</b>
+            <svg class="squig" viewBox="0 0 34 14"><path d="M2 9 L8 9 L12 4 L18 6 L24 6 H29" stroke="#FEC40A"/><circle cx="31" cy="6" r="2.2" fill="#FEC40A"/></svg>
+          </div>
+        </div>
+        <div class="mini-card" style="--j:1">
+          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1 15 14H1L8 1Zm-.75 5h1.5v4h-1.5V6Zm0 5h1.5v1.5h-1.5V11Z"/></svg>Alerts</div>
+          <div class="mc-rows">
+            <div class="mc-row"><span class="dot" style="background:var(--accent)"></span><b>12</b><span>Assets underperforming</span></div>
+            <div class="mc-row"><span class="dot" style="background:var(--energy-red)"></span><b>4</b><span>Stranding risks</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ One-click investor-grade reports ══ -->
+<section class="white">
+  <div class="section-head reveal">
+    <h2>One-click investor-grade reports</h2>
+    <p class="sub">One calculation engine. Multi-framework. Backed by our expert team.</p>
+  </div>
+  <div class="rep-grid" id="repGrid">
+    <div>
+      <div class="acc-block" style="--i:0">
+        <div class="acc-head"><span class="acc-num">1</span><span class="acc-title">GHG accounting — Carbon numbers you can defend</span></div>
+        <div class="acc-body">
+          <ul>
+            <li>Scope 1, 2 and 3 from the same dataset</li>
+            <li>PCAF-aligned financed emissions</li>
+            <li>Assumptions documented per value</li>
+          </ul>
+        </div>
+      </div>
+      <div class="acc-block open" style="--i:1">
+        <div class="acc-head"><span class="acc-num">2</span><span class="acc-title">Multi-framework — One set of outputs</span></div>
+        <div class="acc-body">
+          <ul>
+            <li>GRESB, CSRD, SFDR, GRI, TCFD, EU Taxonomy, +</li>
+            <li>Export to your data warehouse</li>
+            <li>Pre-flight validation before submission</li>
+          </ul>
+          <p class="result">Per asset: Every pathway modelled</p>
+        </div>
+      </div>
+      <div class="acc-block" style="--i:2">
+        <div class="acc-head"><span class="acc-num">3</span><span class="acc-title">Customization — Configurable to your strategy</span></div>
+        <div class="acc-body">
+          <ul>
+            <li>Investor-specific formats and branding</li>
+            <li>Custom KPIs and benchmarks</li>
+            <li>Without rebuilding the numbers</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow" id="flow">
+      <!-- 1 · GHG accounting: the inventory builds scope by scope -->
+      <div class="viz-state" data-mode="1">
+        <article class="report-card ghg-card">
+          <div class="rc-title">GHG Inventory 2025</div>
+          <div class="rc-meta"><span>Scope 1 + 2 + 3</span><span>PCAF <b>5/5</b></span></div>
+          <div class="ghg-row"><span class="gl">Scope 1</span><span class="gbar"><i style="width:15%; background:#FFB246;"></i></span><span class="gv">412</span></div>
+          <div class="ghg-row"><span class="gl">Scope 2</span><span class="gbar"><i style="width:41%; background:#F97307;"></i></span><span class="gv">1,180</span></div>
+          <div class="ghg-row"><span class="gl">Scope 3</span><span class="gbar"><i style="width:44%; background:#DD4F02;"></i></span><span class="gv">1,255</span></div>
+          <div class="ghg-total"><b><span id="ghgTotal">0</span></b><span>tCO₂e total</span><span class="chip good">Assumptions documented</span></div>
+        </article>
+      </div>
+
+      <!-- 2 · Multi-framework: one card, many outputs -->
+      <div class="viz-state active" data-mode="2">
+        <svg class="wires">
+          <path class="guide"/><path class="guide"/><path class="guide"/>
+          <path class="packet"/><path class="packet"/><path class="packet"/>
+        </svg>
+        <div class="flow-grid">
+          <article class="report-card">
+            <div class="rc-title rc-a">INREV ESG SDDS</div>
+            <div class="rc-meta rc-a">
+              <span>Active assets <b id="rcAssets">0</b></span>
+              <span>Reporting year <b>2025</b></span>
+            </div>
+            <div class="rc-label rc-a">Data completion</div>
+            <div class="rc-pct rc-a"><span id="rcPct">0</span>%</div>
+            <div class="rc-bar"><i></i></div>
+            <div class="rc-domains">
+              <div class="rc-dom">
+                <div class="dl">Energy</div>
+                <div class="dv"><b>92</b>
+                  <svg class="squig" viewBox="0 0 34 14"><path d="M2 10 H8 L12 4 L18 7 L24 3 H29" stroke="#E23704"/><circle cx="31" cy="3" r="2.2" fill="#E23704"/></svg>
+                </div>
+              </div>
+              <div class="rc-dom">
+                <div class="dl">GHG</div>
+                <div class="dv"><b>45</b>
+                  <svg class="squig" viewBox="0 0 34 14"><path d="M2 9 L8 9 L12 4 L18 6 L24 6 H29" stroke="#FEC40A"/><circle cx="31" cy="6" r="2.2" fill="#FEC40A"/></svg>
+                </div>
+              </div>
+              <div class="rc-dom">
+                <div class="dl">Water</div>
+                <div class="dv"><b>62</b>
+                  <svg class="squig" viewBox="0 0 34 14"><path d="M2 11 H7 L11 7 L16 9 L21 3 H29" stroke="#2AA8DF"/><circle cx="31" cy="3" r="2.2" fill="#2AA8DF"/></svg>
+                </div>
+              </div>
+            </div>
+            <button class="rc-btn rc-a">Generate report</button>
+          </article>
+          <div class="out-cards">
+            <div class="out-card">
+              <svg viewBox="0 0 18 18" fill="currentColor"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="11" y="2" width="5" height="5" rx="1"/><rect x="2" y="11" width="5" height="5" rx="1"/><path d="M13.5 10.5v6M10.5 13.5h6" stroke="currentColor" stroke-width="1.6"/></svg>
+              Adapt
+            </div>
+            <div class="out-card">
+              <svg viewBox="0 0 18 18" fill="currentColor"><path d="M4 1h8l3 3v13H4V1Zm2 8 2 2 4-4-1-1-3 3-1-1-1 1Z"/></svg>
+              Verify
+            </div>
+            <div class="out-card">
+              <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 15V4M4.5 8.5 9 4l4.5 4.5"/></svg>
+              Export
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 · Customization: the report configures itself -->
+      <div class="viz-state" data-mode="3">
+        <article class="report-card cfg-card">
+          <div class="rc-title">Custom LP Report</div>
+          <div class="rc-meta"><span>Format <b>Investor PDF</b></span><span>Reporting year <b>2025</b></span></div>
+          <div class="cfg-row"><span class="cl">Include EU Taxonomy annex</span><span class="tog"><i></i></span></div>
+          <div class="cfg-row"><span class="cl">Custom KPIs &amp; benchmarks</span><span class="tog"><i></i></span></div>
+          <div class="cfg-row"><span class="cl">Investor-specific formatting</span><span class="tog"><i></i></span></div>
+          <div class="cfg-preview">
+            <span class="cp-label">Sections</span>
+            <span class="cp-chip" style="--k:0">Portfolio KPIs</span>
+            <span class="cp-chip" style="--k:1">Pathways</span>
+            <span class="cp-chip" style="--k:2">EU Taxonomy</span>
+            <span class="cp-chip" style="--k:3">Assurance</span>
+          </div>
+          <button class="rc-btn">Generate report</button>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Audit-ready by default ══ -->
+<section class="light">
+  <div class="section-head reveal">
+    <h2>Audit-ready by default, not at year-end</h2>
+    <p class="sub">Always be able to answer, "who changed this, when, and why?"</p>
+  </div>
+  <div class="quads" style="row-gap:0;">
+    <div class="quad" data-anim>
+      <div class="a-eyebrow">Data quality</div>
+      <h3>Validation &amp; PCAF scoring</h3>
+      <ul>
+        <li>Unit, outlier, and completeness checks</li>
+        <li>PCAF scoring (1–5) per asset</li>
+        <li>GRESB preferred-field tracking</li>
+      </ul>
+      <p class="result">Eliminates: The pre-reporting cleanup phase</p>
+      <div class="cards">
+        <div class="mini-card" style="--j:0">
+          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 13h2V7H1v6Zm4 0h2V3H5v10Zm4 0h2V5H9v8Zm4 0h2V9h-2v4Z"/></svg>Validation</div>
+          <div>
+            <div class="mc-metric">
+              <span class="mc-val"><span class="count" data-target="100">0</span>%</span>
+              <span class="mc-lbl">Data completion</span>
+            </div>
+            <div class="mc-track"><div class="mc-fill" style="width:100%; background:var(--esg-green)"></div></div>
+          </div>
+        </div>
+        <div class="mini-card" style="--j:1">
+          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 7 7H8V1Z"/><path d="M10 0v6h6a7 7 0 0 0-6-6Z" opacity=".4"/></svg>PCAF scoring</div>
+          <div class="mc-val" style="font-size:20px;">5/5</div>
+        </div>
+      </div>
+    </div>
+    <div class="quad" data-anim>
+      <div class="a-eyebrow">Audit trail</div>
+      <h3>Full version history</h3>
+      <ul>
+        <li>Source, time, and user on every value</li>
+        <li>Restatements tracked, not hidden</li>
+        <li>Reproduce last year's GRESB in one click</li>
+      </ul>
+      <p class="result">For: CSRD, GRESB, SFDR assurance</p>
+      <div class="cards">
+        <div class="mini-card" style="--j:0">
+          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-1.2 9.8L4 8l1-1 1.8 1.8L11 4.6l1 1-5.2 5.2Z"/></svg>Audit trail</div>
+          <div class="mc-metric">
+            <span class="mc-val"><span class="count" data-target="1247">0</span></span>
+            <span class="mc-lbl">Tracked changes</span>
+            <span class="chip good">✓</span>
+          </div>
+        </div>
+        <div class="mini-card" style="--j:1">
+          <div class="mc-head"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 14V3M3.5 7.5 8 3l4.5 4.5"/></svg>Report</div>
+          <div class="mc-note"><b style="color:var(--ink); font-weight:600;">Due date</b> 08-01-2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Who it's for ══ -->
+<section class="white">
+  <div class="section-head reveal">
+    <p class="eyebrow">Who it's for</p>
+    <h2>The most accessible tools for real estate teams.</h2>
+    <p class="sub">From the analyst reviewing live meters to the fund manager presenting to LPs.</p>
+  </div>
+  <div class="persona-row reveal">
+    <div class="who">Sustainability &amp; reporting</div>
+    <div class="what">Collect once, generate <em>every report</em>, and manage decarb roadmaps from one portal.</div>
+  </div>
+  <div class="persona-row reveal">
+    <div class="who">Asset &amp; fund managers</div>
+    <div class="what">Portfolio performance, retrofit ROI, and transition risk in <em>one view</em>.</div>
+  </div>
+  <div class="persona-row reveal">
+    <div class="who">Property managers</div>
+    <div class="what">Live meters, tenant requests, and <em>building-level alerts</em>, without the spreadsheet chase.</div>
+  </div>
+  <div class="persona-row reveal">
+    <div class="who">Finance &amp; marketing</div>
+    <div class="what">Investor-grade numbers and stories, straight from the source — <em>LP reporting</em> and DDQs in hours.</div>
+  </div>
+</section>
+
+<!-- ══ Quote — spotlight ══ -->
+<section class="light quote">
+  <p class="eyebrow reveal">Proven results from industry leaders</p>
+  <blockquote class="reveal">
+    <span class="frag"><span class="qm">"</span>The team helped us meet</span>
+    <span class="frag">tight deadlines and strengthened</span>
+    <span class="frag">the quality of our reporting.<span class="qm">"</span></span>
+  </blockquote>
+  <p class="attr reveal">Bozena Jankowska <span>Global Head of Responsible Investment, Slate Asset Management</span></p>
+</section>
+
+<!-- ══ Closing — page colour ══ -->
+<section class="closing">
+  <div class="reveal">
+    <h2><span class="w">One intelligence system for every layer</span> <span class="w">of your real estate portfolio.</span></h2>
+    <div class="cta"><button class="pill">Schedule a demo <span class="arr">→</span></button></div>
+  </div>
+</section>
+
+<!-- ══ Footer — shared ══ -->
+<footer>
+  <div class="f-grid">
+    <div class="f-mark">
+      <img src="assets/shape-01.svg" alt="">
+      <span class="word">scaler</span>
+    </div>
+    <div class="f-links">
+      <div class="f-group">
+        <div class="k">Products</div>
+        <a href="#">Data &amp; Analytics</a>
+        <a href="#">Roadmaps &amp; Targets</a>
+        <a href="#">Reporting &amp; Compliance</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Solutions</div>
+        <a href="solutions.html">Small teams</a>
+        <a href="solutions.html">Professionals</a>
+        <a href="solutions.html">Enterprise customers</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Pricing</div>
+        <a href="#">Pricing</a>
+        <a href="#">Book a demo</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Company</div>
+        <a href="https://scalerglobal.com/about-us">About</a>
+        <a href="https://jobs.ashbyhq.com/scaler">Careers</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Resources</div>
+        <a href="#">Webinar series</a>
+        <a href="#">Customer stories</a>
+        <a href="https://scalerglobal.com/articles/">Blog</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Social</div>
+        <a href="https://www.linkedin.com/company/scaler-global">Linkedin</a>
+        <a href="#">Twitter</a>
+      </div>
+    </div>
+    <div class="f-offices">
+      <div class="office">
+        <div class="city">New York</div>
+        <div class="addr">133 West 25th Street Suite 4W, 4th Floor<br>New York, NY 10001<br>United States</div>
+      </div>
+      <div class="office">
+        <div class="city">Amsterdam</div>
+        <div class="addr">Fred. Roeskestraat 109<br>1076 EE Amsterdam<br>The Netherlands</div>
+      </div>
+      <div class="office">
+        <div class="city">Sydney</div>
+        <div class="addr">Darling Park<br>201 Sussex St, Sydney NSW 2000<br>Australia</div>
+      </div>
+    </div>
+  </div>
+  <div class="legal">
+    <span>Copyright © Scaler Global Inc. 2026</span>
+    <span><a href="https://scalerglobal.com/privacy-statement">Privacy Statement</a><a href="https://scalerglobal.com/terms-and-conditions">Terms &amp; Conditions</a></span>
+  </div>
+</footer>
+
+<script>
+  function countUp(el, end, decimals = 0, duration = 1500) {
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const value = eased * end;
+      el.textContent = decimals ? value.toFixed(decimals) : Math.round(value).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      // any count-up inside an activated block starts slightly after its card lands
+      e.target.querySelectorAll('.count').forEach(el =>
+        setTimeout(() => countUp(el, +el.dataset.target, 0), 400));
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.reveal, #caps, #band, #approach, #pvSplit, .quad[data-anim], #repGrid').forEach(el => io.observe(el));
+
+  // AI edits count-up
+  const approach = document.getElementById('approach');
+  new IntersectionObserver((es, o) => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    setTimeout(() => countUp(document.getElementById('mcValidated'), 98, 0), 1000);
+    o.unobserve(approach);
+  }), { threshold: 0.25 }).observe(approach);
+
+  // Report flow — animations start when visible; counts run per state
+  const flow = document.getElementById('flow');
+  function runFlowCounts(mode) {
+    if (mode === 2) {
+      setTimeout(() => countUp(document.getElementById('rcAssets'), 125, 0, 800), 200);
+      setTimeout(() => countUp(document.getElementById('rcPct'), 100, 0), 450);
+    }
+    if (mode === 1) setTimeout(() => countUp(document.getElementById('ghgTotal'), 2847, 0), 400);
+  }
+  // orthogonal connectors (24px rounded corners) computed from real layout,
+  // so every wire ends exactly at its card
+  function buildWires() {
+    const state = flow.querySelector('.viz-state[data-mode="2"]');
+    if (!state.classList.contains('active')) return;
+    const svg = state.querySelector('.wires');
+    const fr = state.getBoundingClientRect();
+    if (!fr.width) return;
+    svg.setAttribute('viewBox', `0 0 ${fr.width} ${fr.height}`);
+    const card = state.querySelector('.report-card').getBoundingClientRect();
+    const outs = [...state.querySelectorAll('.out-card')].map(c => c.getBoundingClientRect());
+    const x1 = card.right - fr.left, y1 = card.top + card.height / 2 - fr.top;
+    const r = 24, k = 13.25;
+    const guides = [...svg.querySelectorAll('.guide')];
+    const packets = [...svg.querySelectorAll('.packet')];
+    outs.forEach((o, i) => {
+      const x2 = o.left - fr.left, y2 = o.top + o.height / 2 - fr.top;
+      let dPath;
+      if (Math.abs(y2 - y1) < 4) {
+        dPath = `M ${x1} ${y1} H ${x2}`;
+      } else {
+        const dir = y2 > y1 ? 1 : -1;
+        const ex = x1 + Math.min(56, (x2 - x1) / 2);
+        dPath = `M ${x1} ${y1} H ${ex - r}` +
+          ` C ${ex - r + k} ${y1}, ${ex} ${y1 + (r - k) * dir}, ${ex} ${y1 + r * dir}` +
+          ` V ${y2 - r * dir}` +
+          ` C ${ex} ${y2 - r * dir + k * dir}, ${ex + r - k} ${y2}, ${ex + r} ${y2}` +
+          ` H ${x2}`;
+      }
+      guides[i].setAttribute('d', dPath);
+      packets[i].setAttribute('d', dPath);
+      const len = guides[i].getTotalLength();
+      guides[i].style.strokeDasharray = len;
+      guides[i].style.strokeDashoffset = len;
+      packets[i].style.strokeDasharray = `16 ${len}`;
+      packets[i].style.strokeDashoffset = len + 16;
+    });
+  }
+  addEventListener('resize', buildWires, { passive: true });
+
+  new IntersectionObserver((es, o) => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    buildWires();
+    flow.classList.add('go');
+    runFlowCounts(2);
+    o.unobserve(flow);
+  }), { threshold: 0.3 }).observe(flow);
+
+  // Nav elevation
+  const navEl = document.querySelector('nav');
+  addEventListener('scroll', () => navEl.classList.toggle('scrolled', scrollY > 8), { passive: true });
+
+  // Reports accordion — each block swaps in its own illustration
+  const accBlocks = [...document.querySelectorAll('.acc-block')];
+  const vizStates = [...document.querySelectorAll('.viz-state')];
+  accBlocks.forEach((b, i) => {
+    b.addEventListener('click', () => {
+      accBlocks.forEach(x => x.classList.toggle('open', x === b));
+      vizStates.forEach(v => v.classList.toggle('active', +v.dataset.mode === i + 1));
+      if (i === 1) buildWires();
+      flow.classList.add('go');
+      runFlowCounts(i + 1);
+    });
+  });
+
+</script>
+</body>
+</html>

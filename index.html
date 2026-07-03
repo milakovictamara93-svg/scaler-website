@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scaler Global — Protect value. Drive performance. Stay ahead.</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  :root {
+    --font-display: "Beausite Classic", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-body: "Beausite Classic", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --margin: clamp(24px, 6.6vw, 128px);
+
+    /* ink palette — from the motion system examples */
+    --ink: #0C0C0D;
+    --ink-2: #3D3D3D;
+    --ink-3: #505867;
+    --grey-line: #B6B9C2;
+    --bg: #F5F5F5;
+    --white: #FFFFFF;
+
+    --accent: #2AA8DF;               /* water blue — this page's accent (yellow is reserved for Solutions) */
+    --tech-purple: #6961E4;          /* AI only */
+    --esg-green: #56C55A;
+
+    /* motion tokens */
+    --t-instant: 100ms; --t-fast: 200ms; --t-base: 300ms;
+    --t-default: 500ms; --t-slow: 700ms; --t-deliberate: 1500ms;
+    --ease-out: cubic-bezier(0, 0, 0.58, 1);
+    --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+    --spring-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --shadow-card: 0 1px 4px 0 rgba(12,12,13,0.10), 0 1px 4px 0 rgba(12,12,13,0.05);
+    --shadow-hover: 0 8px 16px 0 rgba(12,12,13,0.15);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--white);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; }
+
+  /* Colour thread: a water-blue block marker leads every eyebrow */
+  .eyebrow { font-size: 15px; font-weight: var(--weight-semibold); letter-spacing: 0.01em; color: var(--ink); display: flex; align-items: center; gap: 10px; }
+  .eyebrow::before { content: ''; width: 10px; height: 10px; background: var(--accent); flex-shrink: 0; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    border-radius: 9999px; padding: 12px 28px;
+    font-size: var(--size-p-sm); font-weight: var(--weight-semibold);
+    background: var(--ink); color: var(--white);
+    border: none; cursor: pointer; font-family: inherit;
+    transition: transform var(--t-fast) var(--ease-out), background var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out);
+  }
+  .pill:hover { background: #262626; transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+  .pill:active { transform: scale(.98); }
+  .pill .arr, .more .arr { display: inline-block; transition: transform var(--t-fast) var(--ease-out); }
+  .pill:hover .arr { transform: translateX(3px); }
+  .pill.inverse { background: var(--white); color: var(--ink); }
+  .pill.inverse:hover { background: #ececec; }
+  .pill.ghost { background: transparent; color: var(--ink); border: 1px solid var(--color-background-grey); }
+  .pill.ghost:hover { background: var(--bg); box-shadow: none; }
+
+  /* ══ Keyframes — named as in motion-tokens.css ══ */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes popIn { 0% { opacity: 0; transform: scale(0); } 60% { opacity: 1; transform: scale(1.04); } 100% { opacity: 1; transform: scale(1); } }
+  @keyframes scaleXGrow { to { transform: scaleX(1); } }
+  @keyframes pathDraw { to { stroke-dashoffset: 0; } }
+  @keyframes areaFade { to { opacity: 0.12; } }
+  @keyframes packetIntro { to { opacity: 1; } }
+  @keyframes packetFlow { to { stroke-dashoffset: 0; } }
+
+  /* ══ Header — original structure ══ */
+  @keyframes navIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  nav {
+    animation: navIn var(--t-default) var(--ease-out) both;
+    position: fixed; inset: 0 0 auto 0; z-index: 100; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 var(--margin);
+    background: rgba(255,255,255,.97);
+    border-bottom: 1px solid var(--color-background-grey);
+    transition: box-shadow var(--t-base) var(--ease-out), height var(--t-base) var(--ease-out);
+  }
+  nav.scrolled { height: 56px; box-shadow: 0 1px 4px rgba(12,12,13,.06), 0 4px 16px rgba(12,12,13,.06); border-bottom-color: transparent; }
+  nav .logo img { height: 22px; }
+  nav .links { display: flex; align-items: center; gap: 36px; }
+  nav .links > a, nav .drop > button {
+    font-size: var(--size-p-sm); font-weight: var(--weight-medium);
+    opacity: .85; transition: opacity var(--t-instant) var(--ease-out);
+    background: none; border: none; cursor: pointer; font-family: inherit; color: inherit;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  nav .links > a:hover, nav .drop > button:hover { opacity: 1; }
+  .drop { position: relative; }
+  .drop .menu {
+    position: absolute; top: calc(100% + 14px); left: 50%; transform: translateX(-50%) translateY(4px);
+    background: var(--white); border: 1px solid var(--color-background-grey); border-radius: 11px;
+    box-shadow: var(--shadow-hover);
+    padding: 8px; min-width: 180px;
+    opacity: 0; pointer-events: none;
+    transition: opacity var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out);
+  }
+  .drop:hover .menu, .drop:focus-within .menu { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+  .drop .menu a { display: block; padding: 10px 14px; border-radius: 8px; font-size: var(--size-p-sm); font-weight: var(--weight-medium); transition: background var(--t-instant) var(--ease-out); }
+  .drop .menu a:hover { background: var(--bg); }
+  nav .actions { display: flex; align-items: center; gap: 28px; }
+  nav .actions .login { font-size: var(--size-p-sm); font-weight: var(--weight-medium); opacity: .85; }
+  nav .actions .login:hover { opacity: 1; }
+
+  /* ══ Hero ══ */
+  .hero {
+    min-height: 100vh;
+    background: var(--bg);
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 64px; align-items: center;
+    padding: 140px var(--margin) 96px;
+    overflow: hidden;
+  }
+  .hero h1 { font-size: clamp(44px, 5.4vw, 88px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.04; color: var(--ink); }
+  /* staggered line reveal — each line is its own fadeUp, never wraps */
+  .hero h1 { font-size: clamp(38px, 4.5vw, 72px); }
+  .hero h1 .line { display: block; white-space: nowrap; opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  .hero h1 .line:nth-child(1) { animation-delay: .15s; }
+  .hero h1 .line:nth-child(2) { animation-delay: .3s; }
+  .hero h1 .line:nth-child(3) { animation-delay: .45s; }
+  .hero .lede { margin-top: 32px; max-width: 48ch; font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: var(--ink-2); }
+  .hero .cta { margin-top: 44px; display: flex; gap: 16px; align-items: center; }
+  .fade-up { opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+
+  /* ══ Hero scene — faithful port of example-data-flow.html ══ */
+  .scene-wrap { width: 100%; max-width: 700px; justify-self: end; }
+  .scene { position: relative; width: 700px; height: 400px; transform-origin: top left; }
+  .scene svg.connectors { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .connectors .guide { fill: none; stroke: var(--grey-line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .connectors .packet { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+
+  .source-card {
+    position: absolute; width: 184px; height: 100px;
+    background: var(--white); border-radius: 11px; padding: 16px;
+    box-shadow: var(--shadow-card);
+    display: flex; flex-direction: column; justify-content: space-between;
+    opacity: 0; transform: translateY(20px);
+    transition: transform var(--t-fast) var(--ease-in-out), box-shadow var(--t-fast) var(--ease-in-out);
+  }
+  .source-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+  .source-card .icon { width: 24px; height: 24px; color: var(--ink); }
+  .source-card .label { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; line-height: 1.1; color: var(--ink); }
+  .source-card .value { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+  .card-elec  { top: 30px;  left: 24px; }
+  .card-gas   { top: 150px; left: 24px; }
+  .card-water { top: 270px; left: 24px; }
+
+  .hub {
+    position: absolute; left: 440px; top: 140px; width: 220px; height: 120px;
+    background: var(--white); border-radius: 11px; padding: 18px 20px;
+    box-shadow: var(--shadow-card);
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+    opacity: 0; transform: scale(0);
+  }
+  .hub .hub-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+  .hub .figure { display: flex; align-items: baseline; gap: 6px; }
+  .hub .figure .number { font-size: 36px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; color: var(--ink); }
+  .hub .figure .unit { font-size: 13px; font-weight: 500; color: var(--ink-2); }
+  .hub .delta { font-size: 12px; color: var(--ink-3); margin-top: 8px; }
+
+  /* choreography — matches the source file exactly */
+  .play .card-elec  { animation: fadeUp var(--t-default) var(--ease-out) 0.0s forwards; }
+  .play .card-gas   { animation: fadeUp var(--t-default) var(--ease-out) 0.2s forwards; }
+  .play .card-water { animation: fadeUp var(--t-default) var(--ease-out) 0.4s forwards; }
+  .play .hub        { animation: popIn 600ms var(--spring-pop) 0.7s forwards; }
+  .play .guide-elec, .play .guide-gas, .play .guide-water { animation: pathDraw 800ms var(--ease-in-out) 1.1s forwards; }
+  .play .packet-elec, .play .packet-gas, .play .packet-water {
+    animation: packetIntro 0.3s linear 1.9s forwards, packetFlow 2s linear 1.9s infinite;
+  }
+  .play .hub-badge { animation: popIn 600ms var(--spring-pop) 3.4s forwards; }
+
+  /* hub confirmation badge — fires once the count has settled */
+  .hub-badge {
+    position: absolute; left: 440px; top: 272px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 9999px;
+    background: rgba(86,197,90,0.12); color: #2E8A32;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+    opacity: 0; transform: scale(0); transform-origin: top left;
+  }
+  .hub-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--esg-green); }
+
+  /* lane focus — hovering a source dims the other lanes (filter, so it
+     doesn't fight the opacity keyframes) */
+  .scene .guide, .scene .packet, .scene .source-card { transition: filter var(--t-fast) var(--ease-out); }
+  .scene:has(.card-elec:hover) :is(.guide-gas, .packet-gas, .card-gas, .guide-water, .packet-water, .card-water),
+  .scene:has(.card-gas:hover) :is(.guide-elec, .packet-elec, .card-elec, .guide-water, .packet-water, .card-water),
+  .scene:has(.card-water:hover) :is(.guide-elec, .packet-elec, .card-elec, .guide-gas, .packet-gas, .card-gas) {
+    filter: grayscale(1) opacity(.3);
+  }
+
+  /* ══ Sections ══ */
+  section { padding: 112px var(--margin); }
+  .light { background: var(--bg); }
+  .dark { background: var(--color-full-black); color: var(--white); }
+  /* tokens css hardcodes black headings / grey paragraphs — dark surfaces inherit instead */
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark p, .dark blockquote { color: inherit; }
+  .dark .eyebrow { color: rgba(255,255,255,.55); }
+  .dark .metric-copy h2, .dark .section-head h2 { color: var(--white); }
+  .dark .metric-copy p.body { color: rgba(255,255,255,.65); }
+  .dark .stats { border-top: 1px solid rgba(255,255,255,.25); }
+  .dark .stat .n { color: var(--white); }
+  .dark .stat .l { color: rgba(255,255,255,.55); }
+  .dark .stat .bar { background: rgba(255,255,255,.18); }
+  .dark .stat .bar i { background: var(--white); }
+  /* belt and braces: nothing inside a dark section may fall back to ink */
+  section.dark h2, section.dark h3, section.dark .n { color: var(--white); }
+  .section-head { margin-bottom: 64px; }
+  .section-head .eyebrow { margin-bottom: 20px; }
+  .section-head h2 { font-size: clamp(32px, 4vw, 60px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.08; max-width: 20ch; color: var(--ink); }
+  .section-head .sub { margin-top: 18px; font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: var(--ink-3); max-width: 52ch; }
+
+  /* ══ Clients — brutalist typographic index on black ══ */
+  .clients { background: var(--color-full-black); color: var(--white); padding: 112px var(--margin); }
+  .clients .eyebrow { color: rgba(255,255,255,.55); margin-bottom: 24px; }
+  .clients .statement { font-size: clamp(32px, 4vw, 60px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.08; color: var(--white); max-width: 20ch; margin-bottom: 72px; }
+  .client-index { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 48px; border-top: 1px solid rgba(255,255,255,.18); }
+  .client-name {
+    padding: 26px 0; border-bottom: 1px solid rgba(255,255,255,.18);
+    font-size: clamp(20px, 1.8vw, 28px); font-weight: var(--weight-medium);
+    letter-spacing: -0.02em; color: var(--white);
+    opacity: 0; transform: translateY(20px);
+    transition: color var(--t-fast) var(--ease-out);
+  }
+  .client-index.in .client-name { animation: fadeUp var(--t-default) var(--ease-out) forwards; animation-delay: calc(var(--i) * 80ms); }
+  .client-name:hover { color: var(--accent); }
+
+  /* ══ Our approach — Figma anatomy: full-height left rule with an
+     accent tick, disc bullets, separator, 100px product mini-card ══ */
+  .approach-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(40px, 5vw, 72px); }
+  .acol { position: relative; padding-left: 24px; }
+  .acol::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--color-background-grey); }
+  .acol::after { content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 24px; background: var(--accent); }
+  .acol .a-eyebrow { font-size: 16px; font-weight: var(--weight-medium); line-height: 1.4; color: #1878A8; margin-bottom: 16px; }
+  .acol h3 { font-size: 24px; font-weight: var(--weight-semibold); letter-spacing: -0.48px; line-height: 1.15; color: var(--ink); opacity: .9; }
+  .acol ul { list-style: disc; margin-top: 16px; padding-left: 24px; opacity: .9; }
+  .acol li { font-size: 16px; line-height: 1.5; color: var(--ink); margin-bottom: 4px; }
+  .acol .result { margin-top: 16px; font-size: 16px; font-weight: var(--weight-medium); line-height: 1.4; color: var(--ink); opacity: .9; }
+
+  .mini-card {
+    margin-top: 32px; background: var(--white); border-radius: 11px;
+    height: 100px; padding: 12px 16px;
+    box-shadow: var(--shadow-card);
+    display: flex; flex-direction: column; justify-content: space-between;
+    opacity: 0; transform: translateY(20px);
+  }
+  /* PATT-01: cards enter with the loose 200ms stagger */
+  .approach-cols.in .acol:nth-child(1) .mini-card { animation: fadeUp var(--t-default) var(--ease-out) .1s forwards; }
+  .approach-cols.in .acol:nth-child(2) .mini-card { animation: fadeUp var(--t-default) var(--ease-out) .3s forwards; }
+  .approach-cols.in .acol:nth-child(3) .mini-card { animation: fadeUp var(--t-default) var(--ease-out) .5s forwards; }
+  .mc-head { display: flex; align-items: center; gap: 8px; font-size: 15.8px; font-weight: var(--weight-semibold); letter-spacing: -0.47px; color: var(--ink); }
+  .mc-head svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* 01 — a question arrives for the AI engine: user bubble pops in
+     (PRIM-03 popIn; AI-attached moments get the spring) */
+  .mc-bubble {
+    align-self: flex-end;
+    background: #EAE8FF; border-radius: 8px 8px 0 8px;
+    padding: 8px 8px 5px; font-size: 12px; color: var(--ink); text-align: right;
+    opacity: 0; transform: scale(0); transform-origin: bottom right;
+  }
+  .approach-cols.in .mc-bubble { animation: popIn 500ms var(--spring-pop) 1.2s forwards; }
+
+  /* 02 — coverage metric: count-up and bar fill run as parallel tracks
+     (PRIM-07 countUp + PRIM-04 scaleXGrow, both --t-deliberate) */
+  .mc-bottom { width: 100%; }
+  .mc-metric { display: flex; align-items: center; gap: 4px; width: 100%; }
+  .mc-val { font-size: 24px; font-weight: var(--weight-semibold); letter-spacing: -0.48px; line-height: 1; color: var(--ink); }
+  .mc-lbl { font-size: 12px; color: var(--ink); flex: 1; }
+  .mc-count { font-size: 10.5px; font-weight: var(--weight-semibold); color: var(--accent); letter-spacing: -0.1px; }
+  .mc-track { height: 2.6px; width: 100%; background: rgba(42,168,223,.25); margin-top: 6px; }
+  .mc-fill { height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+  .approach-cols.in .mc-fill { animation: scaleXGrow var(--t-deliberate) var(--ease-out-expo) 1s forwards; }
+
+  /* 03 — report rows slide in (PRIM-02 fadeInX, 100ms stagger), numbers
+     count up as they land, then a status pill confirms (popIn) */
+  @keyframes fadeInX { to { opacity: 1; transform: translateX(0); } }
+  .mc-rows { display: flex; flex-direction: column; }
+  .mc-row { display: flex; align-items: center; gap: 4px; font-size: 12px; line-height: 13.4px; color: var(--ink); padding: 1px 0; opacity: 0; transform: translateX(-12px); }
+  .mc-row b { font-weight: var(--weight-bold); min-width: 14px; }
+  .mc-row::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-right: 2px; }
+  .approach-cols.in .mc-row:nth-child(1) { animation: fadeInX 500ms var(--ease-out-cubic) .7s forwards; }
+  .approach-cols.in .mc-row:nth-child(2) { animation: fadeInX 500ms var(--ease-out-cubic) .8s forwards; }
+  .approach-cols.in .mc-row:nth-child(3) { animation: fadeInX 500ms var(--ease-out-cubic) .9s forwards; }
+  .mc-status {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 8px; border-radius: 9999px;
+    background: rgba(86,197,90,.15); color: #037E50;
+    font-size: 10.5px; font-weight: var(--weight-semibold);
+    opacity: 0; transform: scale(0); transform-origin: center;
+  }
+  .mc-status .pulse { width: 5px; height: 5px; border-radius: 50%; background: var(--esg-green); }
+  .approach-cols.in .mc-status { animation: popIn 500ms var(--spring-pop) 1.5s forwards; }
+
+  .metric-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; align-items: center; }
+  .metric-copy { grid-column: 1 / 3; }
+  .metric-copy h2 { font-size: clamp(32px, 4vw, 60px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.08; color: var(--ink); }
+  .metric-copy p.body { font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: var(--ink-2); max-width: 46ch; margin-top: 24px; }
+  /* ══ Report card — fragmented domain data rolls up into one
+     insight (from the Illustrations - UI library), third-column width ══ */
+  .report-card {
+    grid-column: 3; align-self: center;
+    background: var(--white); border-radius: 12px;
+    padding: 28px; box-shadow: var(--shadow-card);
+  }
+  .report-card .rc-a { opacity: 0; transform: translateY(12px); }
+  .rc-title { font-size: 24px; font-weight: var(--weight-bold); letter-spacing: -0.02em; color: var(--ink); }
+  .rc-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 16px; padding-bottom: 16px; border-bottom: 1px solid #EDEEF1; font-size: 13px; color: var(--ink-2); }
+  .rc-meta b { color: var(--ink); font-weight: var(--weight-semibold); }
+  .rc-label { font-size: 13px; color: var(--ink-2); margin-top: 16px; }
+  .rc-pct { font-size: 40px; font-weight: var(--weight-semibold); letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); margin-top: 2px; }
+  .rc-bar { height: 4px; background: #EDEEF1; margin-top: 12px; }
+  .rc-bar i { display: block; height: 100%; background: var(--esg-green); transform: scaleX(0); transform-origin: left; }
+  .rc-domains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #EDEEF1; }
+  .rc-dom .dl { font-size: 12px; color: var(--ink-2); }
+  .rc-dom .dv { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+  .rc-dom .dv b { font-size: 20px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; color: var(--ink); }
+  .rc-dom svg { width: 36px; height: 16px; }
+  .rc-dom svg path { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 60; }
+  .rc-dom svg circle { opacity: 0; transform-origin: center; transform-box: fill-box; transform: scale(0); }
+  .rc-btn {
+    width: 100%; margin-top: 20px; border: none; cursor: pointer;
+    border-radius: 9999px; padding: 13px; font-family: inherit;
+    background: var(--ink); color: var(--white);
+    font-size: 14px; font-weight: var(--weight-semibold);
+    transition: background var(--t-fast) var(--ease-out);
+  }
+  .rc-btn:hover { background: #262626; }
+
+  /* choreography — parallel tracks, ~2.4s total */
+  .report-card.play .rc-title { animation: fadeUp var(--t-default) var(--ease-out) 0s forwards; }
+  .report-card.play .rc-meta { animation: fadeUp var(--t-default) var(--ease-out) .15s forwards; }
+  .report-card.play .rc-label { animation: fadeUp var(--t-default) var(--ease-out) .35s forwards; }
+  .report-card.play .rc-pct { animation: fadeUp var(--t-default) var(--ease-out) .45s forwards; }
+  .report-card.play .rc-bar i { animation: scaleXGrow var(--t-deliberate) var(--ease-out-expo) .5s forwards; }
+  .report-card.play .rc-dom:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) .8s forwards; }
+  .report-card.play .rc-dom:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .9s forwards; }
+  .report-card.play .rc-dom:nth-child(3) { animation: fadeUp var(--t-default) var(--ease-out) 1s forwards; }
+  .report-card.play .rc-dom:nth-child(1) path { animation: pathDraw 800ms var(--ease-in-out) 1s forwards; }
+  .report-card.play .rc-dom:nth-child(2) path { animation: pathDraw 800ms var(--ease-in-out) 1.1s forwards; }
+  .report-card.play .rc-dom:nth-child(3) path { animation: pathDraw 800ms var(--ease-in-out) 1.2s forwards; }
+  .report-card.play .rc-dom:nth-child(1) circle { animation: popIn 400ms var(--spring-pop) 1.8s forwards; }
+  .report-card.play .rc-dom:nth-child(2) circle { animation: popIn 400ms var(--spring-pop) 1.9s forwards; }
+  .report-card.play .rc-dom:nth-child(3) circle { animation: popIn 400ms var(--spring-pop) 2s forwards; }
+  .report-card.play .rc-btn { animation: fadeUp var(--t-default) var(--ease-out) 2.1s forwards; }
+
+  /* stats — each stat's segment of the divider draws in above its number */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; margin-top: 88px; border-top: 1px solid var(--color-background-grey); }
+  .stat { position: relative; padding-top: 56px; }
+  .stat .n { font-size: clamp(36px, 4vw, 64px); font-weight: var(--weight-semibold); letter-spacing: var(--track-display); line-height: 1; color: var(--ink); }
+  .stat .l { margin-top: 14px; color: var(--ink-3); font-size: var(--size-p-md); line-height: var(--lh-paragraph); }
+  .stat .bar { position: absolute; top: -1.5px; left: 0; width: 100%; height: 2px; }
+  .stat .bar i { display: block; height: 100%; background: var(--ink); transform: scaleX(0); transform-origin: left; }
+  .stat.in .bar i { animation: scaleXGrow 1500ms var(--ease-out-expo) .3s forwards; }
+
+  /* ══ Personas ══ */
+  .persona-row { display: grid; grid-template-columns: 1fr 2fr; gap: 48px; align-items: baseline; padding: 44px 0; border-top: 1px solid var(--color-background-grey); }
+  .persona-row:last-of-type { border-bottom: 1px solid var(--color-background-grey); }
+  .persona-row .who { font-size: 15px; font-weight: var(--weight-medium); color: var(--ink-3); }
+  .persona-row .what { font-size: clamp(20px, 2.1vw, 30px); font-weight: var(--weight-medium); letter-spacing: -0.02em; line-height: 1.35; max-width: 32ch; color: var(--ink); }
+  .persona-row .what em { font-style: normal; font-weight: var(--weight-semibold); }
+
+  /* ══ Quote — display-size spotlight: a statement, not a testimonial ══ */
+  .quote { padding-top: 128px; padding-bottom: 128px; }
+  .quote blockquote {
+    margin-top: 56px;
+    font-size: clamp(32px, 4.2vw, 68px);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--track-display);
+    line-height: 1.15;
+    color: var(--ink);
+    max-width: 22ch;
+  }
+  .quote blockquote .qm { color: var(--accent); }
+  .quote blockquote .frag { display: block; opacity: 0; transform: translateY(20px); }
+  .quote blockquote.in .frag:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) 0s forwards; }
+  .quote blockquote.in .frag:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .15s forwards; }
+  .quote blockquote.in .frag:nth-child(3) { animation: fadeUp var(--t-default) var(--ease-out) .3s forwards; }
+  .quote .attr { margin-top: 48px; font-size: var(--size-p-md); font-weight: var(--weight-semibold); color: var(--ink); opacity: 0; transform: translateY(20px); }
+  .quote .attr.in { animation: fadeUp var(--t-default) var(--ease-out) .5s both; }
+  .quote .attr span { display: block; margin-top: 4px; color: var(--ink-3); font-weight: var(--weight-regular); font-size: var(--size-p-sm); }
+  .quote .story-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 28px; font-size: 14px; font-weight: var(--weight-semibold); color: var(--ink); opacity: 0; transform: translateY(20px); }
+  .quote .story-link.in { animation: fadeUp var(--t-default) var(--ease-out) .65s both; }
+  .quote .story-link:hover .arr { transform: translateX(3px); }
+
+  /* ══ Compliance — title left, partner/standard groups right ══ */
+  .compliance-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(48px, 6vw, 96px); align-items: start; }
+  .compliance .section-head { margin-bottom: 0; }
+  .compliance .cols { display: flex; flex-direction: column; gap: 44px; }
+  .compliance .k { font-size: 15px; font-weight: var(--weight-medium); color: var(--ink-3); margin-bottom: 20px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 12px; }
+  .badge {
+    border: 1px solid var(--color-background-grey); border-radius: 9999px;
+    padding: 10px 22px; font-size: var(--size-p-sm); font-weight: var(--weight-medium);
+    background: var(--white); color: var(--ink);
+    transition: transform var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out);
+  }
+  .badge:hover { transform: translateY(-2px); box-shadow: var(--shadow-card); border-color: var(--ink); }
+
+  /* ══ Closing — current-site statement, on water blue, subtle motion ══ */
+  .closing {
+    min-height: 56vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    background: var(--accent);
+    position: relative; overflow: hidden;
+  }
+  .closing h2 { font-size: clamp(36px, 4.6vw, 76px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.12; color: var(--ink); position: relative; z-index: 1; }
+  .closing .cta { margin-top: 48px; position: relative; z-index: 1; opacity: 0; transform: translateY(20px); }
+  /* each statement fades up in sequence once the section is in view */
+  .closing .w { display: inline-block; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .w { animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  .closing .reveal.in .w:nth-child(1) { animation-delay: 0s; }
+  .closing .reveal.in .w:nth-child(2) { animation-delay: .15s; }
+  .closing .reveal.in .w:nth-child(4) { animation-delay: .3s; }
+  .closing .reveal.in .cta { animation: fadeUp var(--t-default) var(--ease-out) .5s forwards; }
+  /* the section wrapper itself shouldn't double-fade */
+  .closing .reveal { opacity: 1; transform: none; }
+
+  /* ══ Footer — per the Figma redesign: white, brand column left,
+     six link groups centre, office list right ══ */
+  footer { background: var(--white); border-top: 1px solid var(--color-background-grey); padding: 72px var(--margin) 24px; }
+  .f-grid { display: grid; grid-template-columns: minmax(140px, 220px) 1.4fr 1fr; gap: clamp(40px, 5vw, 88px); }
+  .f-mark { position: relative; width: fit-content; }
+  .f-mark img { height: clamp(240px, 24vw, 340px); width: auto; }
+  .f-mark .word { position: absolute; left: 50%; transform: translateX(-50%); bottom: 16px; color: var(--white); font-weight: var(--weight-bold); font-size: clamp(18px, 1.8vw, 26px); letter-spacing: -0.02em; }
+  .f-links { display: grid; grid-template-columns: 1fr 1fr; gap: 44px 48px; align-content: start; }
+  .f-group .k { font-size: 15px; font-weight: var(--weight-semibold); color: var(--ink); margin-bottom: 18px; }
+  .f-group a { display: block; font-size: 14px; color: var(--ink-2); margin-bottom: 12px; transition: color var(--t-instant) var(--ease-out); }
+  .f-group a:hover { color: var(--ink); }
+  .f-offices .office { border-top: 1px solid var(--ink); padding: 18px 0 30px; }
+  .f-offices .city { font-size: 22px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; color: var(--ink); margin-bottom: 14px; }
+  .f-offices .addr { font-size: 13px; line-height: 1.6; color: var(--ink-2); }
+  footer .legal { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--color-background-grey); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--ink-2); }
+  footer .legal a { margin-left: 32px; }
+  footer .legal a:hover { color: var(--ink); }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity var(--t-default) var(--ease-out), transform var(--t-default) var(--ease-out); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .source-card, .hub, .reveal, .fade-up, .mini-card, .mc-bubble, .mc-row { opacity: 1 !important; transform: none !important; }
+    .connectors .guide { stroke-dashoffset: 0 !important; }
+    .connectors .packet { opacity: 0 !important; }
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+  @media (max-width: 1200px) {
+    .scene { transform: scale(.8); }
+    .scene-wrap { max-width: 560px; height: 320px; }
+  }
+  @media (max-width: 960px) {
+    nav .links { display: none; }
+    .hero, .metric-wrap { grid-template-columns: 1fr; }
+    .metric-copy, .report-card { grid-column: auto; }
+    .scene-wrap { justify-self: start; }
+    .scene { transform: scale(.62); }
+    .scene-wrap { height: 260px; }
+    .hero h1 .line { white-space: normal; }
+    .approach-cols, .stats { grid-template-columns: 1fr; }
+    .client-index { grid-template-columns: 1fr; }
+    .topbar .selector, .topbar .nav-slash { display: none; }
+    .kpi-strip { flex-wrap: wrap; gap: 20px; }
+    .persona-row, .compliance-grid, .f-grid { grid-template-columns: 1fr; }
+    .closing { grid-template-columns: 1fr; }
+  }
+</style>
+<link rel="stylesheet" href="scaler-site.css">
+</head>
+<body>
+
+<!-- ══ Header ══ -->
+<nav>
+  <a class="logo" href="https://scalerglobal.com"><img src="assets/logo-full-dark.svg" alt="Scaler"></a>
+  <div class="links">
+    <a href="solutions.html">Solutions</a>
+    <a href="https://scalerglobal.com/partnerships">Partnerships</a>
+    <a href="https://scalerglobal.com/articles/">Articles</a>
+    <a href="https://scalerglobal.com/about-us">About Us</a>
+    <div class="drop">
+      <button>Resources
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <div class="menu">
+        <a href="https://scalerglobal.com/sfdr">SFDR</a>
+        <a href="https://scalerglobal.com/benchmarking">Benchmarking</a>
+        <a href="https://scalerglobal.com/espm">ESPM</a>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <a class="login" href="https://app.scalerglobal.com">Login</a>
+    <button class="pill">Schedule a demo</button>
+  </div>
+</nav>
+
+<!-- ══ Hero ══ -->
+<header class="hero">
+  <div>
+    <p class="eyebrow fade-up" style="animation-delay:0s">Sustainability intelligence for real estate</p>
+    <h1 style="margin-top:24px;"><span class="line">Protect value.</span><span class="line">Drive performance.</span><span class="line">Stay ahead.</span></h1>
+    <p class="lede fade-up" style="animation-delay:.7s">Scaler empowers real estate managers to protect investments, reduce operational costs, and meet reporting obligations — with faster decisions and audit-ready documentation across your entire portfolio.</p>
+    <div class="cta fade-up" style="animation-delay:.85s">
+      <button class="pill">Schedule a demo <span class="arr">→</span></button>
+      <button class="pill ghost">Explore the platform</button>
+    </div>
+  </div>
+
+  <!-- Data flow scene — ported from the canonical example-data-flow animation -->
+  <div class="scene-wrap">
+    <div class="scene play" id="scene">
+      <svg class="connectors" viewBox="0 0 700 400" preserveAspectRatio="none">
+        <path class="guide guide-elec"
+              d="M 208 80 H 300 C 322.09 80, 340 97.91, 340 120 V 160 C 340 182.09, 357.91 200, 380 200 H 440"
+              stroke-dasharray="320" stroke-dashoffset="320"/>
+        <path class="packet packet-elec" stroke="#E23704"
+              d="M 208 80 H 300 C 322.09 80, 340 97.91, 340 120 V 160 C 340 182.09, 357.91 200, 380 200 H 440"
+              stroke-dasharray="16 320" stroke-dashoffset="336"/>
+        <path class="guide guide-gas"
+              d="M 208 200 H 440"
+              stroke-dasharray="232" stroke-dashoffset="232"/>
+        <path class="packet packet-gas" stroke="#FEC40A"
+              d="M 208 200 H 440"
+              stroke-dasharray="16 232" stroke-dashoffset="248"/>
+        <path class="guide guide-water"
+              d="M 208 320 H 300 C 322.09 320, 340 302.09, 340 280 V 240 C 340 217.91, 357.91 200, 380 200 H 440"
+              stroke-dasharray="320" stroke-dashoffset="320"/>
+        <path class="packet packet-water" stroke="#2AA8DF"
+              d="M 208 320 H 300 C 322.09 320, 340 302.09, 340 280 V 240 C 340 217.91, 357.91 200, 380 200 H 440"
+              stroke-dasharray="16 320" stroke-dashoffset="336"/>
+      </svg>
+
+      <article class="source-card card-elec">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z" clip-rule="evenodd"/></svg>
+        </div>
+        <div>
+          <div class="label">Electricity</div>
+          <div class="value">2,810 kWh</div>
+        </div>
+      </article>
+
+      <article class="source-card card-gas">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z" clip-rule="evenodd"/></svg>
+        </div>
+        <div>
+          <div class="label">Gas</div>
+          <div class="value">1,029 m³</div>
+        </div>
+      </article>
+
+      <article class="source-card card-water">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.998 1.5a.75.75 0 0 1 .58.272c1.91 2.317 4.547 5.93 5.99 9.072 1.21 2.638 1.182 5.41-.547 7.339a6.75 6.75 0 0 1-12.04-2.736c-.4-1.7-.058-3.45.66-5.044 1.443-3.205 4.085-6.328 5.776-8.63a.75.75 0 0 1 .581-.273Z"/></svg>
+        </div>
+        <div>
+          <div class="label">Water</div>
+          <div class="value">623 m³</div>
+        </div>
+      </article>
+
+      <article class="hub">
+        <div class="hub-eyebrow">Total emissions</div>
+        <div class="figure">
+          <span class="number" id="hubNumber" data-target="1348" data-decimals="0">0</span>
+          <span class="unit">kgCO₂</span>
+        </div>
+        <div class="delta">↓ 12% vs last quarter</div>
+      </article>
+
+      <div class="hub-badge"><span class="dot"></span><span>Audit-ready · GRESB · SFDR · CSRD</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ Clients — typographic index ══ -->
+<div class="clients">
+  <p class="eyebrow reveal">Our clients</p>
+  <h2 class="statement reveal">30+ leading managers.<br>Four continents. One platform.</h2>
+  <div class="client-index" id="clientGrid">
+    <div class="client-name" style="--i:0">Patrizia</div>
+    <div class="client-name" style="--i:1">Jamestown</div>
+    <div class="client-name" style="--i:2">a.s.r. real estate</div>
+    <div class="client-name" style="--i:3">Bouwinvest</div>
+    <div class="client-name" style="--i:4">Achmea</div>
+    <div class="client-name" style="--i:5">Kajima</div>
+    <div class="client-name" style="--i:6">Slate Asset Management</div>
+    <div class="client-name" style="--i:7">Related Argent</div>
+    <div class="client-name" style="--i:8">Kayne Anderson</div>
+    <div class="client-name" style="--i:9">Wereldhave</div>
+    <div class="client-name" style="--i:10">NSI</div>
+    <div class="client-name" style="--i:11">Amvest</div>
+  </div>
+</div>
+
+<!-- ══ Our approach ══ -->
+<section class="light">
+  <div class="section-head reveal">
+    <p class="eyebrow">Our approach</p>
+    <h2>Three problems. One platform.</h2>
+    <p class="sub">Protect your investments, reduce operational costs, and simplify reporting.</p>
+  </div>
+  <div class="approach-cols" id="approach">
+    <div class="acol">
+      <div class="a-eyebrow">AI engine</div>
+      <h3>Augment data with our AI engine</h3>
+      <ul>
+        <li>Gaps filled automatically</li>
+        <li>Anomalies flagged for review</li>
+        <li>Estimates replaced with actuals</li>
+      </ul>
+      <p class="result">Result: a dataset you can put in front of an auditor</p>
+      <div class="mini-card">
+        <div class="mc-head">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M14.7429 9.2572V24.0001H9.1875V18.7866L3.9452 24.0001H0V20.1145L5.36819 14.7761H0V9.2572H14.7429Z" fill="#6961E4"/>
+            <path d="M9.25714 9.2572V24.0001H14.8125V18.7866L20.0548 24.0001H24V20.1145L18.6318 14.7761H24V9.2572H9.25714Z" fill="#6961E4"/>
+            <path d="M9.25714 14.7428V0H14.8125V5.21344L20.0548 0H24V3.88554L18.6318 9.22394H24V14.7428H9.25714Z" fill="#6961E4"/>
+            <path d="M14.7429 14.7428V0H9.1875V5.21344L3.9452 0H0V3.88554L5.36819 9.22394H0V14.7428H14.7429Z" fill="#6961E4"/>
+            <path d="M12 5.14282L12.1563 6.87365C12.3947 9.51343 14.4865 11.6052 17.1263 11.8436L18.8571 12L17.1263 12.1563C14.4865 12.3947 12.3947 14.4865 12.1563 17.1263L12 18.8571L11.8436 17.1263C11.6052 14.4865 9.51343 12.3947 6.87365 12.1563L5.14282 12L6.87365 11.8436C9.51343 11.6052 11.6052 9.51343 11.8436 6.87365L12 5.14282Z" fill="#FFFFFF"/>
+          </svg>
+          AI engine
+        </div>
+        <div class="mc-bubble">Why did EUI spike in March?</div>
+      </div>
+    </div>
+    <div class="acol">
+      <div class="a-eyebrow">Data collection</div>
+      <h3>Accelerate data collection</h3>
+      <ul>
+        <li>Automated meter connections</li>
+        <li>Tenant data requests</li>
+        <li>Invoice ingestion</li>
+      </ul>
+      <p class="result">Covers: whole-building data, without the chase</p>
+      <div class="mini-card">
+        <div class="mc-head">
+          <!-- Heroicons mini: square-2-stack -->
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M14 3a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-1v-3a4 4 0 0 0-4-4H6V5a2 2 0 0 1 2-2h6Z"/><path d="M4 7a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H4Z"/></svg>
+          Data coverage
+        </div>
+        <div class="mc-bottom">
+          <div class="mc-metric">
+            <span class="mc-val"><span id="mcCoverage">0</span>%</span>
+            <span class="mc-lbl">Meters connected</span>
+            <span class="mc-count">1,204 / 1,253</span>
+          </div>
+          <div class="mc-track"><div class="mc-fill" style="width:96%"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="acol">
+      <div class="a-eyebrow">Reporting</div>
+      <h3>Effectively plan &amp; report</h3>
+      <ul>
+        <li>Track against CRREM or custom pathways</li>
+        <li>Decarbonization roadmaps</li>
+        <li>GRESB, SFDR, CSRD and GRI</li>
+      </ul>
+      <p class="result">Result: audit-ready reports in one pass</p>
+      <div class="mini-card">
+        <div class="mc-head">
+          <!-- Heroicons mini: chart-bar -->
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M15.5 2A1.5 1.5 0 0 0 14 3.5v13a1.5 1.5 0 0 0 1.5 1.5h1a1.5 1.5 0 0 0 1.5-1.5v-13A1.5 1.5 0 0 0 16.5 2h-1ZM9.5 6A1.5 1.5 0 0 0 8 7.5v9A1.5 1.5 0 0 0 9.5 18h1a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 10.5 6h-1ZM3.5 10A1.5 1.5 0 0 0 2 11.5v5A1.5 1.5 0 0 0 3.5 18h1A1.5 1.5 0 0 0 6 16.5v-5A1.5 1.5 0 0 0 4.5 10h-1Z"/></svg>
+          This quarter
+          <span class="mc-status"><span class="pulse"></span>On track</span>
+        </div>
+        <div class="mc-rows">
+          <div class="mc-row"><b class="mc-num" data-target="47">0</b><span>assets benchmarked</span></div>
+          <div class="mc-row"><b class="mc-num" data-target="12">0</b><span>outliers identified</span></div>
+          <div class="mc-row"><b class="mc-num" data-target="3">0</b><span>reports ready to file</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ From complexity to clarity ══ -->
+<section class="dark">
+  <div class="metric-wrap">
+    <div class="metric-copy reveal">
+      <p class="eyebrow" style="margin-bottom:20px;">From complexity to clarity</p>
+      <h2>Fragmented data in. Actionable insight out.</h2>
+      <p class="body">Scaler converts fragmented sustainability data into actionable, real-time insights — from identifying underperforming properties to decarbonization roadmaps and streamlined reporting.</p>
+    </div>
+
+    <!-- Report card: fragmented domain data in, one insight out -->
+    <article class="report-card" id="reportCard">
+      <div class="rc-title rc-a">Report</div>
+      <div class="rc-meta rc-a">
+        <span>Active assets <b id="rcAssets">0</b></span>
+        <span>Reporting year <b>2025</b></span>
+      </div>
+      <div class="rc-label rc-a">Data completion</div>
+      <div class="rc-pct rc-a"><span id="rcPct">0</span>%</div>
+      <div class="rc-bar"><i></i></div>
+      <div class="rc-domains">
+        <div class="rc-dom rc-a">
+          <div class="dl">Energy</div>
+          <div class="dv"><b class="rc-num" data-target="92">0</b>
+            <svg viewBox="0 0 36 16"><path d="M2 12 H10 L14 6 L21 9 L27 4 H31" stroke="#E23704"/><circle cx="33" cy="4" r="2.5" fill="#E23704"/></svg>
+          </div>
+        </div>
+        <div class="rc-dom rc-a">
+          <div class="dl">GHG</div>
+          <div class="dv"><b class="rc-num" data-target="45">0</b>
+            <svg viewBox="0 0 36 16"><path d="M2 11 L8 11 L13 5 L20 7 L26 7 H31" stroke="#FEC40A"/><circle cx="33" cy="7" r="2.5" fill="#FEC40A"/></svg>
+          </div>
+        </div>
+        <div class="rc-dom rc-a">
+          <div class="dl">Water</div>
+          <div class="dv"><b class="rc-num" data-target="62">0</b>
+            <svg viewBox="0 0 36 16"><path d="M2 13 H8 L12 8 L18 10 L24 4 H31" stroke="#2AA8DF"/><circle cx="33" cy="4" r="2.5" fill="#2AA8DF"/></svg>
+          </div>
+        </div>
+      </div>
+      <button class="rc-btn rc-a">Generate report</button>
+    </article>
+  </div>
+
+  <div class="stats">
+    <div class="stat reveal"><div class="bar"><i></i></div><div class="n"><span class="count" data-target="100">0</span> million</div><p class="l">kg of CO<sub>2</sub> saved in 2024.</p></div>
+    <div class="stat reveal"><div class="bar"><i></i></div><div class="n">$<span class="count" data-target="1">0</span> billion</div><p class="l">In measures planned on the platform.</p></div>
+    <div class="stat reveal"><div class="bar"><i></i></div><div class="n">+<span class="count" data-target="25000">0</span></div><p class="l">Buildings monitored worldwide.</p></div>
+  </div>
+</section>
+
+<!-- ══ Personas ══ -->
+<section class="light">
+  <div class="section-head reveal">
+    <p class="eyebrow">Who it's for</p>
+    <h2>Built for performance-driven real estate teams.</h2>
+  </div>
+  <div class="persona-row reveal">
+    <div class="who">Asset &amp; fund managers</div>
+    <div class="what">Boost NOI by identifying outliers, optimizing retrofits, and tracking assets against <em>CRREM</em> or custom pathways.</div>
+  </div>
+  <div class="persona-row reveal">
+    <div class="who">Risk &amp; compliance officers</div>
+    <div class="what">Streamline data validation and generate audit-ready reports for <em>GRI, GRESB, SFDR, CSRD</em> and more.</div>
+  </div>
+  <div class="persona-row reveal">
+    <div class="who">Property &amp; portfolio managers</div>
+    <div class="what">Centralized dashboards, real-time alerts, and analytics that get you <em>credit</em> for the work you already do.</div>
+  </div>
+</section>
+
+<!-- ══ Quote — spotlight ══ -->
+<section class="white quote">
+  <p class="eyebrow reveal">Proven results from industry leaders</p>
+  <blockquote class="reveal">
+    <span class="frag"><span class="qm">"</span>The team helped us meet</span>
+    <span class="frag">tight deadlines and strengthened</span>
+    <span class="frag">the quality of our reporting.<span class="qm">"</span></span>
+  </blockquote>
+  <p class="attr reveal">Bozena Jankowska <span>Global Head of Responsible Investment, Slate Asset Management</span></p>
+</section>
+
+<!-- ══ Compliance & partners ══ -->
+<section class="light compliance">
+  <div class="compliance-grid">
+    <div class="section-head reveal">
+      <p class="eyebrow">Certified enterprise ready</p>
+      <h2>We carry the compliance workload.</h2>
+      <p class="sub">We do the heavy lifting and get you ready to comply within minutes.</p>
+    </div>
+    <div class="cols">
+      <div class="reveal">
+        <div class="k">Industry partners</div>
+        <div class="badges">
+          <span class="badge">ANREV</span><span class="badge">CRREM</span><span class="badge">Green Building Council Australia</span><span class="badge">ENERGY STAR Partner</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="k">Security standards</div>
+        <div class="badges">
+          <span class="badge">ISO 27001</span><span class="badge">SOC 2</span><span class="badge">ISAE 3000</span><span class="badge">GDPR</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Closing — as on the current site, on water blue ══ -->
+<section class="closing">
+  <div class="reveal">
+    <h2><span class="w">Transparency.</span> <span class="w">Actionability.</span><br><span class="w">Industry Expertise.</span></h2>
+    <div class="cta"><button class="pill">Schedule a demo <span class="arr">→</span></button></div>
+  </div>
+</section>
+
+<!-- ══ Footer — original structure ══ -->
+<footer>
+  <div class="f-grid">
+    <div class="f-mark">
+      <img src="assets/shape-01.svg" alt="">
+      <span class="word">scaler</span>
+    </div>
+    <div class="f-links">
+      <div class="f-group">
+        <div class="k">Products</div>
+        <a href="#">Data &amp; Analytics</a>
+        <a href="#">Roadmaps &amp; Targets</a>
+        <a href="#">Reporting &amp; Compliance</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Solutions</div>
+        <a href="#">Small teams</a>
+        <a href="#">Professionals</a>
+        <a href="#">Enterprise customers</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Pricing</div>
+        <a href="#">Pricing</a>
+        <a href="#">Book a demo</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Company</div>
+        <a href="https://scalerglobal.com/about-us">About</a>
+        <a href="https://jobs.ashbyhq.com/scaler">Careers</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Resources</div>
+        <a href="#">Webinar series</a>
+        <a href="#">Customer stories</a>
+        <a href="https://scalerglobal.com/articles/">Blog</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Social</div>
+        <a href="https://www.linkedin.com/company/scaler-global">Linkedin</a>
+        <a href="#">Twitter</a>
+      </div>
+    </div>
+    <div class="f-offices">
+      <div class="office">
+        <div class="city">New York</div>
+        <div class="addr">133 West 25th Street Suite 4W, 4th Floor<br>New York, NY 10001<br>United States</div>
+      </div>
+      <div class="office">
+        <div class="city">Amsterdam</div>
+        <div class="addr">Fred. Roeskestraat 109<br>1076 EE Amsterdam<br>The Netherlands</div>
+      </div>
+      <div class="office">
+        <div class="city">Sydney</div>
+        <div class="addr">Darling Park<br>201 Sussex St, Sydney NSW 2000<br>Australia</div>
+      </div>
+    </div>
+  </div>
+  <div class="legal">
+    <span>Copyright © Scaler Global Inc. 2026</span>
+    <span><a href="https://scalerglobal.com/privacy-statement">Privacy Statement</a><a href="https://scalerglobal.com/terms-and-conditions">Terms &amp; Conditions</a></span>
+  </div>
+</footer>
+
+<script>
+  // PRIM-07 count-up — exact formula from motion-presets.ts
+  function countUp(el, end, decimals = 0, duration = 1500) {
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const value = eased * end;
+      el.textContent = decimals
+        ? value.toFixed(decimals)
+        : Math.round(value).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Hero scene: hub count-up fires at t=1.9s, matching the CSS schedule.
+  // Clicking the scene replays the whole sequence (R works too).
+  const scene = document.getElementById('scene');
+  function playScene() {
+    scene.classList.remove('play');
+    void scene.offsetWidth;
+    scene.classList.add('play');
+    const n = document.getElementById('hubNumber');
+    n.textContent = '0';
+    setTimeout(() => countUp(n, parseFloat(n.dataset.target), 0), 1900);
+  }
+  scene.addEventListener('click', playScene);
+  document.addEventListener('keydown', e => {
+    if ((e.key === 'r' || e.key === 'R') && !e.metaKey && !e.ctrlKey) playScene();
+  });
+  setTimeout(() => {
+    const n = document.getElementById('hubNumber');
+    countUp(n, parseFloat(n.dataset.target), 0);
+  }, 2000);
+
+  // Scroll reveal — fadeUp 500ms easeOut, once.
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      e.target.querySelectorAll('.count').forEach(el => countUp(el, +el.dataset.target, +(el.dataset.decimals || 0)));
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.reveal, .stat').forEach(el => io.observe(el));
+
+  // Nav gains elevation once the page scrolls.
+  const navEl = document.querySelector('nav');
+  addEventListener('scroll', () => navEl.classList.toggle('scrolled', scrollY > 8), { passive: true });
+
+  // Approach mini-cards and the client index animate when visible.
+  function onceVisible(el, threshold, fn) {
+    const o = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      fn(); o.unobserve(el);
+    }), { threshold });
+    o.observe(el);
+  }
+  const approach = document.getElementById('approach');
+  onceVisible(approach, 0.25, () => {
+    approach.classList.add('in');
+    // PRIM-07: coverage count-up runs in parallel with the bar fill (1s in)
+    setTimeout(() => countUp(document.getElementById('mcCoverage'), 96, 0), 1000);
+    // report numbers count up as their rows land (short 600ms tween)
+    setTimeout(() => {
+      approach.querySelectorAll('.mc-num').forEach(el => countUp(el, +el.dataset.target, 0, 600));
+    }, 800);
+  });
+  const clientGrid = document.getElementById('clientGrid');
+  onceVisible(clientGrid, 0.2, () => clientGrid.classList.add('in'));
+
+  // Report card — parallel tracks: assets, completion %, domain values.
+  const reportCard = document.getElementById('reportCard');
+  onceVisible(reportCard, 0.35, () => {
+    reportCard.classList.add('play');
+    setTimeout(() => countUp(document.getElementById('rcAssets'), 125, 0, 800), 200);
+    setTimeout(() => countUp(document.getElementById('rcPct'), 100, 0), 500);
+    setTimeout(() => {
+      reportCard.querySelectorAll('.rc-num').forEach(el => countUp(el, +el.dataset.target, 0, 800));
+    }, 1000);
+  });
+
+  // Live data ticker — every few seconds a new reading arrives: one source
+  // value ticks up by 1, or the emissions total recalculates.
+  (function () {
+    const sources = [...document.querySelectorAll('.source-card .value')].map(el => {
+      const m = el.textContent.trim().match(/^([\d,]+)\s*(.*)$/);
+      return { el, val: parseInt(m[1].replace(/,/g, ''), 10), unit: m[2] };
+    });
+    const hub = document.getElementById('hubNumber');
+    setTimeout(() => {
+      setInterval(() => {
+        if (Math.random() < 0.6) {
+          const s = sources[Math.floor(Math.random() * sources.length)];
+          s.val += 1;
+          s.el.textContent = s.val.toLocaleString('en-US') + ' ' + s.unit;
+        } else {
+          const v = parseInt(hub.dataset.target, 10) + 1;
+          hub.dataset.target = v;
+          hub.textContent = v.toLocaleString('en-US');
+        }
+      }, 1400);
+    }, 3500); // start once the entrance choreography has settled
+  })();
+</script>
+</body>
+</html>
