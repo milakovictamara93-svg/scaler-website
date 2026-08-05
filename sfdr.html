@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SFDR Reporting — Scaler Global</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  :root {
+    --accent: #56C55A;               /* ESG green — the SFDR page colour */
+    --accent-text: #037E50;          /* waste green — the only green that carries text */
+    --waste-green: #037E50;
+    --esg-green: #56C55A;
+  }
+
+  /* ══ Hero — page colour, with the numbered capabilities (solutions pattern) ══ */
+  .hero {
+    background: var(--accent);
+    padding: 176px var(--margin) 96px;
+  }
+  .hero .lede { margin-top: 28px; max-width: 46ch; font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: rgba(0,0,0,.8); }
+  .hero .cta { margin-top: 36px; }
+
+  .caps { display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(48px, 6vw, 96px); margin-top: 88px; }
+  .cap {
+    display: grid; grid-template-columns: 110px 1fr; gap: 24px; align-items: center;
+    padding: 28px 0 36px; border-top: 1px solid var(--ink);
+    opacity: 0; transform: translateX(-12px);
+  }
+  .caps.in .cap { animation: fadeInX var(--t-default) var(--ease-out-cubic) forwards; animation-delay: calc(var(--i) * 120ms); }
+  .cap .num { font-size: clamp(56px, 5.4vw, 88px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1; color: var(--ink); text-align: left; }
+  .cap h3 { font-size: 20px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; color: var(--ink); }
+  .cap p { margin-top: 8px; font-size: 14px; line-height: 1.5; color: rgba(0,0,0,.8); max-width: 40ch; }
+
+  /* ══ Getting ESG data right — text + animated compliance card ══ */
+  .esg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(48px, 6vw, 96px); align-items: center; }
+  .esg-grid .body-copy p { font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: var(--ink-2); margin-bottom: 20px; max-width: 52ch; }
+  .timeline-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: var(--weight-semibold); color: var(--accent-text); }
+  .timeline-link .arr { display: inline-block; transition: transform var(--t-fast) var(--ease-out); }
+  .timeline-link:hover .arr { transform: translateX(3px); }
+
+  /* shared card shell — same as homepage / solutions report card */
+  .report-card { background: var(--white); border-radius: 12px; padding: 28px; box-shadow: var(--shadow-card); position: relative; z-index: 2; }
+  .rc-title { font-size: 22px; font-weight: var(--weight-bold); letter-spacing: -0.02em; color: var(--ink); }
+  .rc-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 14px; padding-bottom: 14px; border-bottom: 1px solid #EDEEF1; font-size: 13px; color: var(--ink-2); }
+  .rc-meta b { color: var(--ink); font-weight: var(--weight-semibold); }
+  .rc-label { font-size: 13px; color: var(--ink-2); margin-top: 14px; }
+  .rc-pct { font-size: 38px; font-weight: var(--weight-semibold); letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); margin-top: 2px; }
+  .rc-bar { height: 4px; background: #EDEEF1; margin-top: 12px; }
+  .rc-bar i { display: block; height: 100%; background: var(--esg-green); transform: scaleX(0); transform-origin: left; }
+  .rc-domains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; padding-top: 16px; border-top: 1px solid #EDEEF1; }
+  .rc-dom .dl { font-size: 12px; color: var(--ink-3); }
+  .rc-dom .dv { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+  .rc-dom .dv b { font-size: 20px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; color: var(--ink); }
+  .squig { width: 34px; height: 14px; }
+  .squig path { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 60; }
+  .squig circle { opacity: 0; transform-origin: center; transform-box: fill-box; transform: scale(0); }
+  .chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    border-radius: 9999px; padding: 2px 8px;
+    font-size: 10px; font-weight: var(--weight-semibold);
+    opacity: 0; transform: scale(0); transform-origin: center;
+  }
+  .chip.good { background: rgba(86,197,90,.16); color: var(--waste-green); }
+
+  /* the SFDR compliance card animates in when the section lands */
+  .esg-viz .report-card { max-width: 520px; }
+  .esg-viz .rc-a { opacity: 0; transform: translateY(12px); }
+  .esg-viz.in .rc-a { animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  .esg-viz.in .rc-meta.rc-a { animation-delay: .15s; }
+  .esg-viz.in .rc-label.rc-a { animation-delay: .3s; }
+  .esg-viz.in .rc-pct.rc-a { animation-delay: .4s; }
+  .esg-viz.in .rc-bar i { animation: scaleXGrow var(--t-deliberate) var(--ease-out-expo) .45s forwards; }
+  .esg-viz.in .rc-domains.rc-a { animation-delay: .7s; }
+  .esg-viz.in .squig path { animation: pathDraw 800ms var(--ease-in-out) .9s forwards; }
+  .esg-viz.in .squig circle { animation: popIn 400ms var(--spring-pop) 1.7s forwards; }
+  .esg-viz.in .chip { animation: popIn 450ms var(--spring-pop) 1.6s forwards; }
+
+  /* ══ We do the heavy lifting — approach columns (house list pattern) ══ */
+  .approach-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(40px, 5vw, 72px); }
+  .acol { position: relative; padding-left: 24px; opacity: 0; transform: translateY(20px); }
+  .approach-cols.in .acol { animation: fadeUp var(--t-default) var(--ease-out) forwards; animation-delay: calc(var(--i) * 150ms); }
+  .acol::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--color-background-grey); }
+  .acol::after { content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 24px; background: var(--accent); }
+  .acol .k { font-size: 15px; font-weight: var(--weight-semibold); color: var(--ink-3); margin-bottom: 12px; }
+  .acol h3 { font-size: 24px; font-weight: var(--weight-semibold); letter-spacing: -0.48px; line-height: 1.15; color: var(--ink); opacity: .9; }
+  .acol ul { list-style: disc; margin-top: 16px; padding-left: 24px; opacity: .9; }
+  .acol li { font-size: 16px; line-height: 1.5; color: var(--ink); margin-bottom: 4px; }
+
+  /* ══ How to comply — accordion + swapping built visuals (solutions pattern) ══ */
+  .rep-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: clamp(40px, 5vw, 88px); align-items: center; }
+  .acc-block {
+    background: var(--accent);
+    clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 40px, 100% 100%, 40px 100%, 0 calc(100% - 40px));
+    padding: 44px 48px; margin-bottom: 0;
+    cursor: pointer;
+    opacity: 0; transform: translateX(-12px);
+  }
+  .rep-grid.in .acc-block { animation: fadeInX 500ms var(--ease-out-cubic) forwards; animation-delay: calc(var(--i) * 150ms); }
+  .acc-head { display: flex; gap: 16px; align-items: flex-start; }
+  .acc-num {
+    width: 32px; height: 32px; border: 1.5px solid var(--ink); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: var(--weight-semibold); flex-shrink: 0;
+    transition: background var(--t-base) var(--ease-out), color var(--t-base) var(--ease-out);
+  }
+  .acc-block.open .acc-num { background: var(--ink); color: var(--accent); border-color: var(--ink); }
+  .acc-title { font-size: 19px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; line-height: 1.25; color: var(--ink); }
+  .acc-body { max-height: 0; overflow: hidden; transition: max-height var(--t-default) var(--ease-in-out); }
+  .acc-body p { margin: 16px 0 4px 48px; font-size: 14px; line-height: 1.55; color: var(--ink); opacity: 0; transform: translateX(-8px); transition: opacity var(--t-base) var(--ease-out) .15s, transform var(--t-base) var(--ease-out) .15s; }
+  .acc-block.open .acc-body p { opacity: 1; transform: none; }
+  .acc-block.open .acc-body { max-height: 280px; }
+
+  .flow { position: relative; }
+  .viz-state { display: none; }
+  .viz-state.active { display: block; animation: fadeUp 400ms var(--ease-out); }
+  .flow .report-card { max-width: 520px; margin: 0 auto; }
+
+  /* ── mode 1: PAI statement — indicator bars build the disclosure ── */
+  .pai-row { display: grid; grid-template-columns: 120px 1fr 72px; gap: 12px; align-items: center; margin-top: 16px; opacity: 0; transform: translateX(-12px); }
+  .pai-row .gl { font-size: 13px; color: var(--ink-2); }
+  .pai-row .gv { font-size: 14px; font-weight: var(--weight-semibold); color: var(--ink); text-align: right; }
+  .pai-row .gbar { height: 10px; background: #F0F1F3; border-radius: 3px; overflow: hidden; }
+  .pai-row .gbar i { display: block; height: 100%; border-radius: 3px; transform: scaleX(0); transform-origin: left; }
+  .pai-total { display: flex; align-items: baseline; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #EDEEF1; opacity: 0; transform: translateY(12px); }
+  .pai-total b { font-size: 32px; font-weight: var(--weight-semibold); letter-spacing: -0.03em; color: var(--ink); }
+  .pai-total span { font-size: 13px; color: var(--ink-3); }
+  #flow.go .viz-state[data-mode="1"].active .pai-row:nth-of-type(1) { animation: fadeInX 500ms var(--ease-out-cubic) .1s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .pai-row:nth-of-type(2) { animation: fadeInX 500ms var(--ease-out-cubic) .25s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .pai-row:nth-of-type(3) { animation: fadeInX 500ms var(--ease-out-cubic) .4s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .pai-row:nth-of-type(1) .gbar i { animation: scaleXGrow 1s var(--ease-out-expo) .3s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .pai-row:nth-of-type(2) .gbar i { animation: scaleXGrow 1s var(--ease-out-expo) .45s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .pai-row:nth-of-type(3) .gbar i { animation: scaleXGrow 1s var(--ease-out-expo) .6s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .pai-total { animation: fadeUp var(--t-default) var(--ease-out) .9s forwards; }
+  #flow.go .viz-state[data-mode="1"].active .pai-total .chip { animation: popIn 450ms var(--spring-pop) 1.6s forwards; }
+
+  /* ── mode 2: EU Taxonomy — alignment shares draw in ── */
+  .tax-row { margin-top: 18px; opacity: 0; transform: translateX(-12px); }
+  .tax-row .th { display: flex; justify-content: space-between; align-items: baseline; }
+  .tax-row .tl { font-size: 13px; color: var(--ink-2); }
+  .tax-row .tv { font-size: 16px; font-weight: var(--weight-semibold); color: var(--ink); }
+  .tax-row .tbar { height: 10px; background: #F0F1F3; border-radius: 3px; overflow: hidden; margin-top: 8px; }
+  .tax-row .tbar i { display: block; height: 100%; border-radius: 3px; background: var(--esg-green); transform: scaleX(0); transform-origin: left; }
+  .tax-foot { display: flex; align-items: center; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #EDEEF1; opacity: 0; transform: translateY(12px); }
+  .tax-foot span { font-size: 13px; color: var(--ink-3); }
+  #flow.go .viz-state[data-mode="2"].active .tax-row:nth-of-type(1) { animation: fadeInX 500ms var(--ease-out-cubic) .1s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .tax-row:nth-of-type(2) { animation: fadeInX 500ms var(--ease-out-cubic) .25s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .tax-row:nth-of-type(3) { animation: fadeInX 500ms var(--ease-out-cubic) .4s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .tax-row:nth-of-type(1) .tbar i { animation: scaleXGrow 1s var(--ease-out-expo) .3s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .tax-row:nth-of-type(2) .tbar i { animation: scaleXGrow 1s var(--ease-out-expo) .45s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .tax-row:nth-of-type(3) .tbar i { animation: scaleXGrow 1s var(--ease-out-expo) .6s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .tax-foot { animation: fadeUp var(--t-default) var(--ease-out) .9s forwards; }
+  #flow.go .viz-state[data-mode="2"].active .tax-foot .chip { animation: popIn 450ms var(--spring-pop) 1.4s forwards; }
+
+  /* ══ Who it's for — persona rows (homepage / solutions pattern) ══ */
+  .persona-row { display: grid; grid-template-columns: 1fr 2fr; gap: 48px; align-items: baseline; padding: 44px 0; border-top: 1px solid var(--color-background-grey); }
+  .persona-row:last-of-type { border-bottom: 1px solid var(--color-background-grey); }
+  .persona-row .who { font-size: 15px; font-weight: var(--weight-medium); color: var(--ink-3); }
+  .persona-row .what { font-size: clamp(20px, 2.1vw, 30px); font-weight: var(--weight-medium); letter-spacing: -0.02em; line-height: 1.35; max-width: 32ch; color: var(--ink); }
+  .persona-row .what em { font-style: normal; font-weight: var(--weight-semibold); }
+
+  /* ══ Closing — page colour ══ */
+  .closing { background: var(--accent); padding-top: 96px; padding-bottom: 96px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+  .closing h2 { font-size: clamp(34px, 4.4vw, 72px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.1; max-width: 22ch; color: var(--ink); }
+  .closing h2 .w { display: inline-block; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .w:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) 0s forwards; }
+  .closing .reveal.in .w:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .15s forwards; }
+  .closing .reveal.in .w:nth-child(3) { animation: fadeUp var(--t-default) var(--ease-out) .3s forwards; }
+  .closing .cta { margin-top: 24px; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .cta { animation: fadeUp var(--t-default) var(--ease-out) .5s both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .fade-up, .cap, .acol, .acc-block, .persona-row, .rc-a, .pai-row, .pai-total, .tax-row, .tax-foot, .chip, .closing .w, .closing .cta { opacity: 1 !important; transform: none !important; }
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+  @media (max-width: 960px) {
+    .caps, .esg-grid, .approach-cols, .rep-grid, .persona-row { grid-template-columns: 1fr; }
+    .caps .cap { grid-area: auto !important; }
+    .caps .cap:nth-child(1) { order: 3; }
+    .caps .cap:nth-child(2) { order: 1; }
+    .caps .cap:nth-child(3) { order: 4; }
+    .caps .cap:nth-child(4) { order: 2; }
+    .caps .cap:nth-child(5) { order: 5; }
+    .cap { grid-template-columns: 72px 1fr; }
+  }
+</style>
+<link rel="stylesheet" href="scaler-site.css">
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html"><img src="assets/logo-full-dark.svg" alt="Scaler"></a>
+  <div class="links">
+    <a href="solutions.html">Solutions</a>
+    <a href="partnerships.html">Partnerships</a>
+    <a href="articles.html">Articles</a>
+    <a href="about.html">About Us</a>
+    <div class="drop">
+      <button>Resources
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <div class="menu">
+        <a href="sfdr.html">SFDR</a>
+        <a href="https://scalerglobal.com/benchmarking">Benchmarking</a>
+        <a href="https://scalerglobal.com/espm">ESPM</a>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <a class="login" href="https://app.scalerglobal.com">Login</a>
+    <button class="pill">Schedule a demo</button>
+  </div>
+</nav>
+
+<!-- ══ Hero — green, with the five ways as numbered capabilities ══ -->
+<header class="hero">
+  <h1>
+    <span class="line">SFDR reporting made</span>
+    <span class="line">simple for real estate</span>
+  </h1>
+  <p class="lede fade-up" style="animation-delay:.4s">Optimized for real estate, our powerful tools and expertise take the burden out of compliance, getting you ready to report on time. We support your SFDR reporting process in five key ways.</p>
+  <div class="cta fade-up" style="animation-delay:.55s">
+    <button class="pill">Get started today <span class="arr">→</span></button>
+  </div>
+
+  <div class="caps" id="caps">
+    <div class="cap" style="--i:2; grid-area: 1 / 2;">
+      <div class="num">3</div>
+      <div>
+        <h3>Clear performance tracking</h3>
+        <p>Measure the performance of investments against relevant real estate PAI indicators.</p>
+      </div>
+    </div>
+    <div class="cap" style="--i:0; grid-area: 2 / 1;">
+      <div class="num">1</div>
+      <div>
+        <h3>Easy data input</h3>
+        <p>Input data directly or via Excel/CSV import and compute mandatory and voluntary PAIs at both the financial product and entity level.</p>
+      </div>
+    </div>
+    <div class="cap" style="--i:3; grid-area: 2 / 2;">
+      <div class="num">4</div>
+      <div>
+        <h3>Smart compliance monitoring</h3>
+        <p>Monitor SFDR compliance with our dynamic dashboard to gain actionable insights.</p>
+      </div>
+    </div>
+    <div class="cap" style="--i:1; grid-area: 3 / 1;">
+      <div class="num">2</div>
+      <div>
+        <h3>Fast validation &amp; generation</h3>
+        <p>Review data for accuracy and generate PAIs with the click of a button for website and pre-contractual disclosures.</p>
+      </div>
+    </div>
+    <div class="cap" style="--i:4; grid-area: 3 / 2;">
+      <div class="num">5</div>
+      <div>
+        <h3>Seamless EU Taxonomy calculation</h3>
+        <p>Calculate EU Taxonomy alignment within the same streamlined workflow.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ Getting ESG data right ══ -->
+<section class="light">
+  <div class="esg-grid">
+    <div class="body-copy reveal">
+      <p class="eyebrow" style="margin-bottom:20px;">Getting ESG data right</p>
+      <h2 style="font-size:clamp(32px,4vw,60px); font-weight:var(--weight-bold); letter-spacing:var(--track-display); line-height:1.08; color:var(--ink); max-width:16ch; margin-bottom:28px;">Transparency, without the greenwash.</h2>
+      <p>The Sustainable Finance Disclosure Regulation was introduced as part of the EU Sustainable Finance package to improve transparency and prevent greenwashing in the market for sustainable investment products.</p>
+      <p>Qualitative and quantitative metric requirements for the Principal Adverse Impact Statement (PAIs) expose industry-specific challenges around ESG data and the need for robust data management systems and reporting mechanisms.</p>
+      <a class="timeline-link" href="https://www.esma.europa.eu/sites/default/files/library/sustainable_finance_-_implementation_timeline.pdf">View the official SFDR timeline on the ESMA website <span class="arr">→</span></a>
+    </div>
+    <div class="esg-viz" id="esgViz">
+      <article class="report-card">
+        <div class="rc-title rc-a">SFDR Compliance</div>
+        <div class="rc-meta rc-a">
+          <span>Active assets <b id="rcAssets">0</b></span>
+          <span>Reporting year <b>2025</b></span>
+        </div>
+        <div class="rc-label rc-a">Data completion</div>
+        <div class="rc-pct rc-a"><span id="rcPct">0</span>%</div>
+        <div class="rc-bar"><i></i></div>
+        <div class="rc-domains rc-a">
+          <div class="rc-dom">
+            <div class="dl">Energy</div>
+            <div class="dv"><b>92</b>
+              <svg class="squig" viewBox="0 0 34 14"><path d="M2 10 H8 L12 4 L18 7 L24 3 H29" stroke="#E23704"/><circle cx="31" cy="3" r="2.2" fill="#E23704"/></svg>
+            </div>
+          </div>
+          <div class="rc-dom">
+            <div class="dl">GHG</div>
+            <div class="dv"><b>45</b>
+              <svg class="squig" viewBox="0 0 34 14"><path d="M2 9 L8 9 L12 4 L18 6 L24 6 H29" stroke="#FEC40A"/><circle cx="31" cy="6" r="2.2" fill="#FEC40A"/></svg>
+            </div>
+          </div>
+          <div class="rc-dom">
+            <div class="dl">Water</div>
+            <div class="dv"><b>62</b>
+              <svg class="squig" viewBox="0 0 34 14"><path d="M2 11 H7 L11 7 L16 9 L21 3 H29" stroke="#2AA8DF"/><circle cx="31" cy="3" r="2.2" fill="#2AA8DF"/></svg>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══ We do the heavy lifting — three columns ══ -->
+<section class="white">
+  <div class="section-head reveal">
+    <p class="eyebrow">We do the heavy lifting</p>
+    <h2>Ready to comply, without the scramble.</h2>
+    <p class="sub">Our team of experts and purpose-built tools carry your SFDR process end to end.</p>
+  </div>
+  <div class="approach-cols" id="approach">
+    <div class="acol" style="--i:0">
+      <div class="k">Collect</div>
+      <h3>One dataset, every input</h3>
+      <ul>
+        <li>ESG and financial data in one place</li>
+        <li>Direct input or Excel/CSV import</li>
+        <li>KPIs set for the environmental and social characteristics your funds promote</li>
+      </ul>
+    </div>
+    <div class="acol" style="--i:1">
+      <div class="k">Monitor</div>
+      <h3>Performance, portfolio-wide</h3>
+      <ul>
+        <li>Track performance across the portfolio</li>
+        <li>Calculate PAI indicator metrics</li>
+        <li>Dynamic dashboard flags gaps before they become findings</li>
+      </ul>
+    </div>
+    <div class="acol" style="--i:2">
+      <div class="k">Produce</div>
+      <h3>Disclosures, on time</h3>
+      <ul>
+        <li>PAIS for Article 8 and 9 funds</li>
+        <li>EU Taxonomy alignment reporting</li>
+        <li>Website and pre-contractual disclosures at the click of a button</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ How to comply — accordion + built visuals ══ -->
+<section class="light">
+  <div class="section-head reveal">
+    <p class="eyebrow">How to comply</p>
+    <h2>Two disclosures. One workflow.</h2>
+  </div>
+  <div class="rep-grid" id="repGrid">
+    <div>
+      <div class="acc-block open" style="--i:0">
+        <div class="acc-head"><span class="acc-num">1</span><span class="acc-title">Principal Adverse Impact Statement</span></div>
+        <div class="acc-body">
+          <p>The PAI Statement follows a mandatory reporting template covering climate, environment, social, and governance-related adverse impacts — with specific qualitative and quantitative metrics, and impact detailed year-on-year.</p>
+        </div>
+      </div>
+      <div class="acc-block" style="--i:1">
+        <div class="acc-head"><span class="acc-num">2</span><span class="acc-title">EU Taxonomy Alignment</span></div>
+        <div class="acc-body">
+          <p>In pre-contractual and periodic disclosures, financial market participants must disclose the Taxonomy-alignment of their products expressed as a share of turnover, capital expenditure, and operational expenditure.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow" id="flow">
+      <!-- 1 · PAI statement: indicators build the disclosure -->
+      <div class="viz-state active" data-mode="1">
+        <article class="report-card">
+          <div class="rc-title">PAI Statement 2025</div>
+          <div class="rc-meta"><span>Mandatory indicators</span><span>Computed <b>18/18</b></span></div>
+          <div class="pai-row"><span class="gl">GHG emissions</span><span class="gbar"><i style="width:64%; background:#FEC40A;"></i></span><span class="gv">2,847</span></div>
+          <div class="pai-row"><span class="gl">Energy consumption</span><span class="gbar"><i style="width:48%; background:#E23704;"></i></span><span class="gv">12.4 GWh</span></div>
+          <div class="pai-row"><span class="gl">Fossil fuel exposure</span><span class="gbar"><i style="width:12%; background:#FD8F01;"></i></span><span class="gv">8%</span></div>
+          <div class="pai-total"><b><span id="paiAssets">0</span></b><span>assets covered</span><span class="chip good">Impact tracked year-on-year</span></div>
+        </article>
+      </div>
+
+      <!-- 2 · EU Taxonomy: alignment shares draw in -->
+      <div class="viz-state" data-mode="2">
+        <article class="report-card">
+          <div class="rc-title">EU Taxonomy Alignment</div>
+          <div class="rc-meta"><span>Pre-contractual + periodic</span><span>Reporting year <b>2025</b></span></div>
+          <div class="tax-row"><div class="th"><span class="tl">Turnover</span><span class="tv">34%</span></div><div class="tbar"><i style="width:34%"></i></div></div>
+          <div class="tax-row"><div class="th"><span class="tl">Capital expenditure</span><span class="tv">41%</span></div><div class="tbar"><i style="width:41%"></i></div></div>
+          <div class="tax-row"><div class="th"><span class="tl">Operational expenditure</span><span class="tv">22%</span></div><div class="tbar"><i style="width:22%"></i></div></div>
+          <div class="tax-foot"><span class="chip good">Alignment computed per product</span><span>Illustrative data</span></div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Who needs to report ══ -->
+<section class="white">
+  <div class="section-head reveal">
+    <p class="eyebrow">Who needs to report?</p>
+    <h2>Financial market participants in the EU.</h2>
+    <p class="sub">SFDR applies to financial market participants and financial advisors in the EU — including those with EU shareholders and those promoting themselves within the EU.</p>
+  </div>
+  <div class="persona-row reveal">
+    <div class="who">Asset managers</div>
+    <div class="what">Fund-level PAIs and Taxonomy alignment for <em>Article 8 and 9</em> products, from one dataset.</div>
+  </div>
+  <div class="persona-row reveal">
+    <div class="who">Investment firms</div>
+    <div class="what">Entity and product-level disclosures that hold up to <em>investor scrutiny</em>.</div>
+  </div>
+  <div class="persona-row reveal">
+    <div class="who">Insurers</div>
+    <div class="what">Portfolio-wide ESG data collection without <em>the spreadsheet chase</em>.</div>
+  </div>
+  <div class="persona-row reveal">
+    <div class="who">Banks</div>
+    <div class="what">Real estate exposure, measured against <em>relevant PAI indicators</em>.</div>
+  </div>
+</section>
+
+<!-- ══ Closing — page colour ══ -->
+<section class="closing">
+  <div class="reveal">
+    <h2><span class="w">Close your data gaps.</span><br><span class="w">Master SFDR reporting.</span><br><span class="w">Do more with Scaler.</span></h2>
+    <div class="cta"><button class="pill">Request a demo <span class="arr">→</span></button></div>
+  </div>
+</section>
+
+<!-- ══ Footer — shared ══ -->
+<footer>
+  <div class="f-grid">
+    <div class="f-mark">
+      <img src="assets/shape-01.svg" alt="">
+      <span class="word">scaler</span>
+    </div>
+    <div class="f-links">
+      <div class="f-group">
+        <div class="k">Products</div>
+        <a href="#">Data &amp; Analytics</a>
+        <a href="#">Roadmaps &amp; Targets</a>
+        <a href="#">Reporting &amp; Compliance</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Solutions</div>
+        <a href="solutions.html">Small teams</a>
+        <a href="solutions.html">Professionals</a>
+        <a href="solutions.html">Enterprise customers</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Pricing</div>
+        <a href="#">Pricing</a>
+        <a href="#">Book a demo</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Company</div>
+        <a href="about.html">About</a>
+        <a href="https://jobs.ashbyhq.com/scaler">Careers</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Resources</div>
+        <a href="sfdr.html">SFDR</a>
+        <a href="#">Customer stories</a>
+        <a href="articles.html">Blog</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Social</div>
+        <a href="https://www.linkedin.com/company/scaler-global">Linkedin</a>
+        <a href="#">Twitter</a>
+      </div>
+    </div>
+    <div class="f-offices">
+      <div class="office">
+        <div class="city">New York</div>
+        <div class="addr">133 West 25th Street Suite 4W, 4th Floor<br>New York, NY 10001<br>United States</div>
+      </div>
+      <div class="office">
+        <div class="city">Amsterdam</div>
+        <div class="addr">Fred. Roeskestraat 109<br>1076 EE Amsterdam<br>The Netherlands</div>
+      </div>
+      <div class="office">
+        <div class="city">Sydney</div>
+        <div class="addr">Darling Park<br>201 Sussex St, Sydney NSW 2000<br>Australia</div>
+      </div>
+    </div>
+  </div>
+  <div class="legal">
+    <span>Copyright © Scaler Global Inc. 2026</span>
+    <span><a href="https://scalerglobal.com/privacy-statement">Privacy Statement</a><a href="https://scalerglobal.com/terms-and-conditions">Terms &amp; Conditions</a></span>
+  </div>
+</footer>
+
+<script>
+  // shared count-up (easeOutCubic), same as homepage / solutions
+  function countUp(el, target, from = 0, dur = 1200) {
+    if (!el) return;
+    const t0 = performance.now();
+    function tick(now) {
+      const p = Math.min((now - t0) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(from + (target - from) * e).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.reveal, #caps, #approach, #repGrid').forEach(el => io.observe(el));
+
+  // compliance card counts start when the card lands
+  const esgViz = document.getElementById('esgViz');
+  new IntersectionObserver((es, o) => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    esgViz.classList.add('in');
+    setTimeout(() => countUp(document.getElementById('rcAssets'), 125, 0, 800), 200);
+    setTimeout(() => countUp(document.getElementById('rcPct'), 100, 0), 450);
+    o.unobserve(esgViz);
+  }), { threshold: 0.3 }).observe(esgViz);
+
+  // comply flow — animations start when visible; counts run per state
+  const flow = document.getElementById('flow');
+  function runFlowCounts(mode) {
+    if (mode === 1) setTimeout(() => countUp(document.getElementById('paiAssets'), 125, 0), 400);
+  }
+  new IntersectionObserver((es, o) => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    flow.classList.add('go');
+    runFlowCounts(1);
+    o.unobserve(flow);
+  }), { threshold: 0.3 }).observe(flow);
+
+  // accordion — each block swaps in its own illustration
+  const accBlocks = [...document.querySelectorAll('.acc-block')];
+  const vizStates = [...document.querySelectorAll('.viz-state')];
+  accBlocks.forEach((b, i) => {
+    b.addEventListener('click', () => {
+      accBlocks.forEach(x => x.classList.toggle('open', x === b));
+      vizStates.forEach(v => v.classList.toggle('active', +v.dataset.mode === i + 1));
+      flow.classList.add('go');
+      runFlowCounts(i + 1);
+    });
+  });
+
+  // nav elevation
+  const navEl = document.querySelector('nav');
+  addEventListener('scroll', () => navEl.classList.toggle('scrolled', scrollY > 8), { passive: true });
+</script>
+</body>
+</html>

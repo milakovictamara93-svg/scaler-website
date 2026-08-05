@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Scaler cuts the cost of sustainability assurance — Scaler Global</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  :root {
+    --accent: #1E4FB3;               /* certifications blue — Articles */
+    --accent-text: #1E4FB3;
+    /* rule: the article header always matches the hero asset's background.
+       This article's illustration sits on tech purple. */
+    --hero-asset-bg: #6961E4;
+  }
+
+  /* reading progress */
+  .progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0; z-index: 200; }
+
+  /* ══ Article header — matches the asset background, image left / text right ══ */
+  .a-head { background: var(--hero-asset-bg, var(--accent)); padding: 160px var(--margin) 88px; }
+  .a-head .crumb { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: var(--weight-semibold); color: rgba(255,255,255,.7); margin-bottom: 28px; transition: color var(--t-fast) var(--ease-out); }
+  .a-head .crumb:hover { color: var(--white); }
+  .a-grid { display: grid; grid-template-columns: minmax(280px, 440px) 1fr; gap: clamp(40px, 5vw, 88px); align-items: center; }
+  .a-head .a-img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+  .a-head .meta { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; font-size: 14px; color: rgba(255,255,255,.7); margin-bottom: 24px; }
+  .a-head .meta .tag {
+    font-size: 11px; font-weight: var(--weight-semibold); letter-spacing: 0.02em;
+    border: 1px solid rgba(255,255,255,.4); border-radius: 9999px; padding: 4px 12px; color: var(--white);
+  }
+  .a-head h1 { font-size: clamp(30px, 3.6vw, 56px); font-weight: var(--weight-semibold); letter-spacing: var(--track-display); line-height: 1.1; color: var(--white); max-width: 22ch; }
+  .a-head .standfirst { margin-top: 28px; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.5; color: rgba(255,255,255,.75); max-width: 56ch; }
+  .a-head .byline { margin-top: 28px; font-size: 14px; color: rgba(255,255,255,.7); }
+  .a-head .byline b { color: var(--white); font-weight: var(--weight-semibold); }
+
+  /* ══ Body ══ */
+  .a-body { padding: 96px var(--margin); }
+  .a-col { max-width: 720px; margin: 0 auto; }
+  .a-col h2 { font-size: clamp(22px, 2vw, 30px); font-weight: var(--weight-semibold); letter-spacing: -0.02em; line-height: 1.2; color: var(--ink); margin: 56px 0 20px; }
+  .a-col h2:first-child { margin-top: 0; }
+  .a-col p { font-size: 18px; line-height: 1.65; color: var(--ink-2); margin-bottom: 22px; }
+  .a-col p em { font-style: italic; color: var(--ink); }
+  .a-col p strong { font-weight: var(--weight-semibold); color: var(--ink); }
+  .a-col ul { list-style: disc; padding-left: 26px; margin-bottom: 22px; }
+  .a-col li { font-size: 18px; line-height: 1.6; color: var(--ink-2); margin-bottom: 8px; }
+  .a-table { width: 100%; border-collapse: collapse; margin: 8px 0 28px; font-variant-numeric: tabular-nums; }
+  .a-table th { text-align: left; font-size: 13px; font-weight: var(--weight-semibold); color: var(--ink); padding: 0 16px 12px 0; border-bottom: 1px solid var(--ink); }
+  .a-table td { font-size: 15px; line-height: 1.5; color: var(--ink-2); padding: 14px 16px 14px 0; border-bottom: 1px solid var(--color-background-grey); vertical-align: top; }
+  .a-table td:first-child { font-weight: var(--weight-semibold); color: var(--ink); white-space: nowrap; }
+  .a-table td:last-child { color: var(--ink); }
+  .a-col p.kicker em { font-weight: var(--weight-semibold); font-style: normal; color: var(--ink); }
+  .a-col .outro {
+    margin-top: 56px; padding: 32px;
+    border-left: 3px solid var(--accent);
+    background: var(--bg);
+    font-size: 16px; line-height: 1.6; color: var(--ink);
+  }
+  .a-col .outro a { font-weight: var(--weight-semibold); color: var(--accent-text); }
+  .a-col .outro a:hover { text-decoration: underline; }
+
+  /* ══ More articles ══ */
+  .more-wrap { background: var(--bg); padding: 96px var(--margin); }
+  .more-wrap .section-head { margin-bottom: 48px; }
+  .m-row {
+    display: grid; grid-template-columns: 130px 1fr 24px; gap: clamp(16px, 3vw, 48px); align-items: baseline;
+    padding: 24px 0; border-bottom: 1px solid var(--color-background-grey);
+  }
+  .m-row:first-of-type { border-top: 1px solid var(--color-background-grey); }
+  .m-date { font-size: 13px; color: var(--ink-3); }
+  .m-title { font-size: clamp(18px, 1.6vw, 24px); font-weight: var(--weight-medium); letter-spacing: -0.02em; color: var(--ink); transition: color var(--t-fast) var(--ease-out); }
+  .m-row:hover .m-title { color: var(--accent-text); }
+  .m-arr { font-size: 18px; color: var(--ink-3); transition: transform var(--t-fast) var(--ease-out); }
+  .m-row:hover .m-arr { transform: translateX(3px); }
+  .more-wrap .all-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 36px; font-size: 14px; font-weight: var(--weight-semibold); color: var(--ink); }
+  .more-wrap .all-link:hover .arr { transform: translateX(3px); }
+  .all-link .arr { display: inline-block; transition: transform var(--t-fast) var(--ease-out); }
+
+  /* ══ Closing — page colour ══ */
+  .closing { background: var(--accent); padding-top: 96px; padding-bottom: 96px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+  .closing h2 { font-size: clamp(34px, 4.4vw, 72px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.1; max-width: 22ch; color: var(--white); }
+  .closing h2 .w { display: inline-block; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .w:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) 0s forwards; }
+  .closing .reveal.in .w:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .15s forwards; }
+  .closing .cta { margin-top: 24px; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .cta { animation: fadeUp var(--t-default) var(--ease-out) .35s both; }
+  .closing .pill { background: var(--white); color: var(--ink); }
+  .closing .pill:hover { background: #ececec; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .fade-up, .closing .w, .closing .cta { opacity: 1 !important; transform: none !important; }
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+  @media (max-width: 960px) {
+    .a-grid { grid-template-columns: 1fr; }
+    .a-head .a-img { max-width: 320px; }
+    .m-row { grid-template-columns: 1fr; gap: 6px; }
+    .m-arr { display: none; }
+  }
+</style>
+<link rel="stylesheet" href="scaler-site.css">
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<nav>
+  <a class="logo" href="index.html"><img src="assets/logo-full-dark.svg" alt="Scaler"></a>
+  <div class="links">
+    <a href="solutions.html">Solutions</a>
+    <a href="partnerships.html">Partnerships</a>
+    <a class="active" href="articles.html">Articles</a>
+    <a href="about.html">About Us</a>
+    <div class="drop">
+      <button>Resources
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <div class="menu">
+        <a href="sfdr.html">SFDR</a>
+        <a href="https://scalerglobal.com/benchmarking">Benchmarking</a>
+        <a href="https://scalerglobal.com/espm">ESPM</a>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <a class="login" href="https://app.scalerglobal.com">Login</a>
+    <button class="pill">Schedule a demo</button>
+  </div>
+</nav>
+
+<!-- ══ Article header ══ -->
+<header class="a-head">
+  <div class="a-grid">
+    <img class="a-img fade-up" style="animation-delay:.05s" src="https://a.storyblok.com/f/334867/1728x1728/773322196e/blog-how-ai-powered-data-verification-cuts-the-cost-of-sustainability-assurance-1.jpg/m/800x800" alt="">
+    <div>
+      <a class="crumb fade-up" href="articles.html">← All articles</a>
+      <div class="meta fade-up" style="animation-delay:.1s">
+        <span class="tag">Insights</span>
+        <span>April 15, 2026</span>
+        <span>·</span>
+        <span>3 min read</span>
+      </div>
+      <h1 class="fade-up" style="animation-delay:.2s">How Scaler cuts the cost of sustainability assurance.</h1>
+      <p class="standfirst fade-up" style="animation-delay:.35s">Catch the issues before auditors do. Reduce the weeks your team spends preparing for external verification.</p>
+      <p class="byline fade-up" style="animation-delay:.45s">By <b>Luc van de Boom</b></p>
+    </div>
+  </div>
+</header>
+
+<!-- ══ Body ══ -->
+<article class="a-body">
+  <div class="a-col">
+    <h2>The assurance problem is getting worse</h2>
+    <p>CSRD, California climate disclosure laws, ASRS, and IFRS S2 are making sustainability data assurance mandatory for thousands of companies. GRESB already requires third-party verification for top scores. Institutional investors want independent assurance before they allocate capital.</p>
+    <p>For real estate investment managers, this means weeks of preparation before auditors even arrive: chasing property managers for evidence, cross-checking meter readings, compiling audit trails from fragmented systems. It is expensive, it delays fund reporting, and it creates real risk when data quality issues surface late.</p>
+
+    <h2>AI analysis: portfolio-wide data quality in seconds</h2>
+    <p>Scaler's AI verification analyses your entire portfolio's sustainability data, identifying outliers, anomalies, and systemic issues that manual review would miss.</p>
+    <p>It catches:</p>
+    <ul>
+      <li>Systematic data entry errors repeated across assets.</li>
+      <li>Incomplete data coverage where assets below 90% pollute portfolio averages.</li>
+      <li>Anomalous consumption patterns like a consumption spike paired with a cost drop.</li>
+      <li>Missing GRESB preferred fields, flagged per asset so your team can fill gaps before submission.</li>
+    </ul>
+    <p>The analysis understands property types, climate zones, occupancy patterns, and hemisphere-specific seasonal logic. A heating fuel spike in July is normal in Melbourne but suspicious in Amsterdam.</p>
+
+    <h2>Report readiness: know where you stand before the audit</h2>
+    <p>Scaler's report preparation dashboard shows data quality across three dimensions before you enter an audit cycle.</p>
+    <p><strong>Data readiness</strong> shows whether all required fields are complete, with actionable drill-downs for assets that need attention.</p>
+    <p><strong>Data coverage</strong> shows what percentage of floor area is covered by metered data. An asset reporting 100% readiness but only 52% coverage is producing extrapolated numbers, not measured ones. Auditors will question that.</p>
+    <p><strong>Data reliability based on PCAF Quality Scores</strong> breaks down the source mix: smart meters, invoices, standard estimates, manual entries. An asset relying on postal code estimates is not in the same league as one with 93% meter and invoice coverage.</p>
+    <p>Auditors assess both accuracy and completeness. Scaler surfaces the distinction before you submit.</p>
+
+    <h2>Full audit trail: built in, not bolted on</h2>
+    <p>Every modification in Scaler is logged automatically: who changed what, when, and how (manual entry, file upload, or API). The log is filterable by event type and changes can be reversed with a full record of the correction.</p>
+    <p>This extends into reporting. Every generated report includes a toggleable audit trail with:</p>
+    <ul>
+      <li>Calculation methodology and standards referenced.</li>
+      <li>Unit conversion factors for energy, water, and waste metrics.</li>
+      <li>Emissions factors with version numbers and sources.</li>
+      <li>Asset-level data exports behind every aggregated number.</li>
+    </ul>
+    <p>The evidence lives in the deliverable itself. No more "can you provide the source data for page 14?" back-and-forth.</p>
+
+    <h2>What this saves</h2>
+    <p>For a typical institutional portfolio of 50 to 100 assets, external verification costs €5,000 to €50,000+ annually. But the hidden cost is larger: 2 to 6 weeks of internal preparation. That is time not spent on actual sustainability improvement.</p>
+    <p>Scaler does not replace external assurance. But it dramatically reduces what your team needs to do before auditors arrive:</p>
+    <table class="a-table">
+      <thead>
+        <tr><th></th><th>Before</th><th>With Scaler</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Data quality review</td><td>Manual cross-checking of meter readings</td><td>AI verification across the portfolio, in seconds</td></tr>
+        <tr><td>Evidence gathering</td><td>Chasing property managers for weeks</td><td>Audit trail built into every report</td></tr>
+        <tr><td>Issue discovery</td><td>Late, under audit pressure</td><td>Continuous, throughout the year</td></tr>
+        <tr><td>Preparation time</td><td>2–6 weeks per cycle</td><td>Days, not weeks</td></tr>
+      </tbody>
+    </table>
+    <p>The shift: from reactive audit preparation to continuous data quality management. Issues caught throughout the year, not discovered under pressure during verification season.</p>
+
+    <h2>Security</h2>
+    <p>All AI analysis runs within Scaler's secure infrastructure. No portfolio data leaves the platform. No data is used for model training. Full prompt logging and audit trails for AI interactions.</p>
+  </div>
+</article>
+
+<!-- ══ More articles ══ -->
+<section class="more-wrap">
+  <div class="section-head reveal">
+    <p class="eyebrow">Keep reading</p>
+    <h2>More articles &amp; insights.</h2>
+  </div>
+  <a class="m-row reveal" href="https://scalerglobal.com/articles/why-sustainability-belongs-at-the-centre-of-asset-management-not-on-its-margins">
+    <span class="m-date">March 2, 2026</span><span class="m-title">Why sustainability belongs at the centre of asset management, not on its margins</span><span class="m-arr">→</span>
+  </a>
+  <a class="m-row reveal" href="https://scalerglobal.com/articles/new-york-joins-climate-disclosure-party">
+    <span class="m-date">February 26, 2026</span><span class="m-title">New York joins the climate disclosure party</span><span class="m-arr">→</span>
+  </a>
+  <a class="m-row reveal" href="https://scalerglobal.com/articles/data-request-integration">
+    <span class="m-date">April 8, 2026</span><span class="m-title">The backend magic behind the data requests template</span><span class="m-arr">→</span>
+  </a>
+  <a class="all-link reveal" href="articles.html">All articles <span class="arr">→</span></a>
+</section>
+
+<!-- ══ Closing — page colour ══ -->
+<section class="closing">
+  <div class="reveal">
+    <h2><span class="w">Transparency. Actionability.</span><br><span class="w">Industry Expertise.</span></h2>
+    <div class="cta"><button class="pill">Schedule a demo <span class="arr">→</span></button></div>
+  </div>
+</section>
+
+<!-- ══ Footer — shared ══ -->
+<footer>
+  <div class="f-grid">
+    <div class="f-mark">
+      <img src="assets/shape-01.svg" alt="">
+      <span class="word">scaler</span>
+    </div>
+    <div class="f-links">
+      <div class="f-group">
+        <div class="k">Products</div>
+        <a href="#">Data &amp; Analytics</a>
+        <a href="#">Roadmaps &amp; Targets</a>
+        <a href="#">Reporting &amp; Compliance</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Solutions</div>
+        <a href="solutions.html">Small teams</a>
+        <a href="solutions.html">Professionals</a>
+        <a href="solutions.html">Enterprise customers</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Pricing</div>
+        <a href="#">Pricing</a>
+        <a href="#">Book a demo</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Company</div>
+        <a href="about.html">About</a>
+        <a href="https://jobs.ashbyhq.com/scaler">Careers</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Resources</div>
+        <a href="#">Webinar series</a>
+        <a href="#">Customer stories</a>
+        <a href="articles.html">Blog</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Social</div>
+        <a href="https://www.linkedin.com/company/scaler-global">Linkedin</a>
+        <a href="#">Twitter</a>
+      </div>
+    </div>
+    <div class="f-offices">
+      <div class="office">
+        <div class="city">New York</div>
+        <div class="addr">133 West 25th Street Suite 4W, 4th Floor<br>New York, NY 10001<br>United States</div>
+      </div>
+      <div class="office">
+        <div class="city">Amsterdam</div>
+        <div class="addr">Fred. Roeskestraat 109<br>1076 EE Amsterdam<br>The Netherlands</div>
+      </div>
+      <div class="office">
+        <div class="city">Sydney</div>
+        <div class="addr">Darling Park<br>201 Sussex St, Sydney NSW 2000<br>Australia</div>
+      </div>
+    </div>
+  </div>
+  <div class="legal">
+    <span>Copyright © Scaler Global Inc. 2026</span>
+    <span><a href="https://scalerglobal.com/privacy-statement">Privacy Statement</a><a href="https://scalerglobal.com/terms-and-conditions">Terms &amp; Conditions</a></span>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const navEl = document.querySelector('nav');
+  const bar = document.getElementById('progress');
+  addEventListener('scroll', () => {
+    navEl.classList.toggle('scrolled', scrollY > 8);
+    const h = document.documentElement;
+    bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+  }, { passive: true });
+</script>
+</body>
+</html>

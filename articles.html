@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Articles &amp; Insights — Scaler Global</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  :root {
+    --accent: #1E4FB3;               /* certifications blue — the Articles page colour */
+    --accent-text: #1E4FB3;          /* dark enough to carry its own text */
+  }
+
+  /* ══ Hero — grey, editorial ══ */
+  .hero {
+    background: var(--bg);
+    padding: 200px var(--margin) 96px;
+  }
+  .hero .lede { margin-top: 24px; max-width: 50ch; font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: var(--ink-2); }
+
+  /* ══ Featured ══ */
+  .featured { border-bottom: 1px solid var(--color-background-grey); padding-top: 80px; padding-bottom: 80px; }
+  .featured .f-grid { display: grid; grid-template-columns: 1.6fr .8fr; gap: clamp(48px, 6vw, 96px); align-items: center; }
+  .featured .f-img {
+    width: 100%; max-width: 360px; height: auto; justify-self: end;
+  }
+  .featured .f-tag { font-size: 13px; font-weight: var(--weight-semibold); color: var(--accent-text); }
+  .featured h2 {
+    margin-top: 20px;
+    font-size: clamp(28px, 3.2vw, 50px);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--track-display);
+    line-height: 1.12;
+    color: var(--ink);
+    max-width: 24ch;
+  }
+  .featured h2 a { transition: color var(--t-fast) var(--ease-out); }
+  .featured h2 a:hover { color: var(--accent-text); }
+  .featured .f-meta { margin-top: 24px; font-size: var(--size-p-md); color: var(--ink-3); display: flex; align-items: center; gap: 16px; }
+  .featured .f-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: var(--weight-semibold); color: var(--ink); }
+  .featured .f-link:hover .arr { transform: translateX(3px); }
+  .f-link .arr { display: inline-block; transition: transform var(--t-fast) var(--ease-out); }
+
+  /* ══ Filters ══ */
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 48px; }
+  .filter {
+    border: 1px solid var(--color-background-grey); border-radius: 9999px;
+    padding: 9px 20px; font-size: var(--size-p-sm); font-weight: var(--weight-medium);
+    background: var(--white); color: var(--ink); cursor: pointer; font-family: inherit;
+    transition: background var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out);
+  }
+  .filter:hover { border-color: var(--ink); }
+  .filter.on { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+  /* ══ Article index ══ */
+  .article-index { border-top: 1px solid var(--color-background-grey); }
+  .a-row {
+    display: grid; grid-template-columns: 130px 1fr auto 24px; gap: clamp(16px, 3vw, 48px); align-items: baseline;
+    padding: 26px 0; border-bottom: 1px solid var(--color-background-grey);
+    opacity: 0; transform: translateX(-12px);
+  }
+  .article-index.in .a-row { animation: fadeInX var(--t-default) var(--ease-out-cubic) forwards; animation-delay: calc(var(--i) * 60ms); }
+  .a-row.hidden { display: none; }
+  .a-date { font-size: 13px; color: var(--ink-3); }
+  .a-title { font-size: clamp(19px, 1.8vw, 26px); font-weight: var(--weight-medium); letter-spacing: -0.02em; line-height: 1.3; color: var(--ink); transition: color var(--t-fast) var(--ease-out); }
+  .a-row:hover .a-title { color: var(--accent-text); }
+  .a-tag {
+    font-size: 11px; font-weight: var(--weight-semibold); letter-spacing: 0.02em;
+    border: 1px solid var(--color-background-grey); border-radius: 9999px; padding: 4px 12px;
+    color: var(--ink-2); white-space: nowrap;
+  }
+  .a-arr { font-size: 18px; color: var(--ink-3); transition: transform var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out); }
+  .a-row:hover .a-arr { transform: translateX(3px); color: var(--accent-text); }
+
+  /* ══ Pagination ══ */
+  .pages { display: flex; gap: 10px; margin-top: 56px; }
+  .page-n {
+    width: 44px; height: 44px; border-radius: 9999px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: var(--weight-semibold);
+    border: 1px solid var(--color-background-grey); color: var(--ink);
+    transition: background var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out);
+  }
+  .page-n:hover { border-color: var(--ink); }
+  .page-n.on { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+  /* ══ Closing — page colour ══ */
+  .closing { background: var(--accent); padding-top: 96px; padding-bottom: 96px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+  .closing h2 { font-size: clamp(34px, 4.4vw, 72px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.1; max-width: 22ch; color: var(--white); }
+  .closing h2 .w { display: inline-block; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .w:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) 0s forwards; }
+  .closing .reveal.in .w:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .15s forwards; }
+  .closing .cta { margin-top: 24px; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .cta { animation: fadeUp var(--t-default) var(--ease-out) .35s both; }
+  .closing .pill { background: var(--white); color: var(--ink); }
+  .closing .pill:hover { background: #ececec; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .fade-up, .a-row, .closing .w, .closing .cta { opacity: 1 !important; transform: none !important; }
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+  @media (max-width: 960px) {
+    .featured .f-grid { grid-template-columns: 1fr; }
+    .a-row { grid-template-columns: 1fr auto; }
+    .a-date { order: 3; }
+    .a-arr { display: none; }
+  }
+</style>
+<link rel="stylesheet" href="scaler-site.css">
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html"><img src="assets/logo-full-dark.svg" alt="Scaler"></a>
+  <div class="links">
+    <a href="solutions.html">Solutions</a>
+    <a href="partnerships.html">Partnerships</a>
+    <a class="active" href="articles.html">Articles</a>
+    <a href="about.html">About Us</a>
+    <div class="drop">
+      <button>Resources
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <div class="menu">
+        <a href="sfdr.html">SFDR</a>
+        <a href="https://scalerglobal.com/benchmarking">Benchmarking</a>
+        <a href="https://scalerglobal.com/espm">ESPM</a>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <a class="login" href="https://app.scalerglobal.com">Login</a>
+    <button class="pill">Schedule a demo</button>
+  </div>
+</nav>
+
+<!-- ══ Hero ══ -->
+<header class="hero">
+  <h1>
+    <span class="line">Articles &amp; insights.</span>
+  </h1>
+  <p class="lede fade-up" style="animation-delay:.3s">Reporting deadlines, regulation, product, and the people building Scaler — what we're learning, in the open.</p>
+</header>
+
+<!-- ══ Featured ══ -->
+<section class="white featured">
+  <div class="f-grid">
+    <div>
+      <p class="f-tag reveal">Featured · Insights</p>
+      <h2 class="reveal"><a href="https://scalerglobal.com/articles/why-sustainability-belongs-at-the-centre-of-asset-management-not-on-its-margins">Why sustainability belongs at the centre of asset management, not on its margins.</a></h2>
+      <p class="f-meta reveal">March 2, 2026 · 7 min read
+        <a class="f-link" href="https://scalerglobal.com/articles/why-sustainability-belongs-at-the-centre-of-asset-management-not-on-its-margins">Read the article <span class="arr">→</span></a>
+      </p>
+    </div>
+    <img class="f-img reveal" src="https://a.storyblok.com/f/334867/1728x1728/b6e78b680c/why-sustainability-belongs-at-the-centre-of-asset-management-not-on-its-margins.jpg/m/900x900" alt="">
+  </div>
+</section>
+
+<!-- ══ Index ══ -->
+<section class="light">
+  <div class="filters reveal" id="filters">
+    <button class="filter on" data-f="all">All</button>
+    <button class="filter" data-f="insights">Insights</button>
+    <button class="filter" data-f="product">Product</button>
+    <button class="filter" data-f="partnerships">Partnerships</button>
+    <button class="filter" data-f="team">Team</button>
+  </div>
+  <div class="article-index" id="articleIndex">
+    <a class="a-row" data-cat="team" style="--i:0" href="https://scalerglobal.com/articles/meet-sacha">
+      <span class="a-date">May 12, 2026</span><span class="a-title">Meet Sacha</span><span class="a-tag">Team</span><span class="a-arr">→</span>
+    </a>
+    <a class="a-row" data-cat="team" style="--i:1" href="https://scalerglobal.com/articles/meet-helen">
+      <span class="a-date">April 30, 2026</span><span class="a-title">Meet Helen</span><span class="a-tag">Team</span><span class="a-arr">→</span>
+    </a>
+    <a class="a-row" data-cat="insights" style="--i:2" href="article.html">
+      <span class="a-date">April 15, 2026</span><span class="a-title">How Scaler cuts the cost of sustainability assurance</span><span class="a-tag">Insights</span><span class="a-arr">→</span>
+    </a>
+    <a class="a-row" data-cat="product" style="--i:3" href="https://scalerglobal.com/articles/data-request-integration">
+      <span class="a-date">April 8, 2026</span><span class="a-title">The backend magic behind the data requests template</span><span class="a-tag">Product</span><span class="a-arr">→</span>
+    </a>
+    <a class="a-row" data-cat="partnerships" style="--i:4" href="https://scalerglobal.com/articles/nanogrid-x-scaler-parnership">
+      <span class="a-date">March 18, 2026</span><span class="a-title">Scaler x NanoGrid partnership</span><span class="a-tag">Partnerships</span><span class="a-arr">→</span>
+    </a>
+    <a class="a-row" data-cat="partnerships" style="--i:5" href="https://scalerglobal.com/articles/scaler-optiml-partnership">
+      <span class="a-date">March 10, 2026</span><span class="a-title">Scaler x Optiml partnership</span><span class="a-tag">Partnerships</span><span class="a-arr">→</span>
+    </a>
+    <a class="a-row" data-cat="team" style="--i:6" href="https://scalerglobal.com/articles/meet-aurelien">
+      <span class="a-date">March 5, 2026</span><span class="a-title">Meet Aurelien</span><span class="a-tag">Team</span><span class="a-arr">→</span>
+    </a>
+    <a class="a-row" data-cat="insights" style="--i:7" href="article.html">
+      <span class="a-date">March 2, 2026</span><span class="a-title">Why sustainability belongs at the centre of asset management, not on its margins</span><span class="a-tag">Insights</span><span class="a-arr">→</span>
+    </a>
+    <a class="a-row" data-cat="insights" style="--i:8" href="https://scalerglobal.com/articles/new-york-joins-climate-disclosure-party">
+      <span class="a-date">February 26, 2026</span><span class="a-title">New York joins the climate disclosure party</span><span class="a-tag">Insights</span><span class="a-arr">→</span>
+    </a>
+    <a class="a-row" data-cat="partnerships" style="--i:9" href="https://scalerglobal.com/articles/scaler-x-next-sense">
+      <span class="a-date">February 4, 2026</span><span class="a-title">Scaler x Next Sense partnership</span><span class="a-tag">Partnerships</span><span class="a-arr">→</span>
+    </a>
+    <a class="a-row" data-cat="partnerships" style="--i:10" href="https://scalerglobal.com/articles/climatex-x-scalee">
+      <span class="a-date">February 3, 2026</span><span class="a-title">Scaler x ClimateX partnership</span><span class="a-tag">Partnerships</span><span class="a-arr">→</span>
+    </a>
+    <a class="a-row" data-cat="product" style="--i:11" href="https://scalerglobal.com/articles/redesigning-navigation">
+      <span class="a-date">January 21, 2026</span><span class="a-title">Redesigning navigation</span><span class="a-tag">Product</span><span class="a-arr">→</span>
+    </a>
+  </div>
+  <div class="pages reveal">
+    <a class="page-n on" href="https://scalerglobal.com/articles">1</a>
+    <a class="page-n" href="https://scalerglobal.com/articles/page/2">2</a>
+    <a class="page-n" href="https://scalerglobal.com/articles/page/3">3</a>
+    <a class="page-n" href="https://scalerglobal.com/articles/page/4">4</a>
+  </div>
+</section>
+
+<!-- ══ Closing — page colour ══ -->
+<section class="closing">
+  <div class="reveal">
+    <h2><span class="w">Transparency. Actionability.</span><br><span class="w">Industry Expertise.</span></h2>
+    <div class="cta"><button class="pill">Schedule a demo <span class="arr">→</span></button></div>
+  </div>
+</section>
+
+<!-- ══ Footer — shared ══ -->
+<footer>
+  <div class="f-grid">
+    <div class="f-mark">
+      <img src="assets/shape-01.svg" alt="">
+      <span class="word">scaler</span>
+    </div>
+    <div class="f-links">
+      <div class="f-group">
+        <div class="k">Products</div>
+        <a href="#">Data &amp; Analytics</a>
+        <a href="#">Roadmaps &amp; Targets</a>
+        <a href="#">Reporting &amp; Compliance</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Solutions</div>
+        <a href="solutions.html">Small teams</a>
+        <a href="solutions.html">Professionals</a>
+        <a href="solutions.html">Enterprise customers</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Pricing</div>
+        <a href="#">Pricing</a>
+        <a href="#">Book a demo</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Company</div>
+        <a href="about.html">About</a>
+        <a href="https://jobs.ashbyhq.com/scaler">Careers</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Resources</div>
+        <a href="#">Webinar series</a>
+        <a href="#">Customer stories</a>
+        <a href="articles.html">Blog</a>
+      </div>
+      <div class="f-group">
+        <div class="k">Social</div>
+        <a href="https://www.linkedin.com/company/scaler-global">Linkedin</a>
+        <a href="#">Twitter</a>
+      </div>
+    </div>
+    <div class="f-offices">
+      <div class="office">
+        <div class="city">New York</div>
+        <div class="addr">133 West 25th Street Suite 4W, 4th Floor<br>New York, NY 10001<br>United States</div>
+      </div>
+      <div class="office">
+        <div class="city">Amsterdam</div>
+        <div class="addr">Fred. Roeskestraat 109<br>1076 EE Amsterdam<br>The Netherlands</div>
+      </div>
+      <div class="office">
+        <div class="city">Sydney</div>
+        <div class="addr">Darling Park<br>201 Sussex St, Sydney NSW 2000<br>Australia</div>
+      </div>
+    </div>
+  </div>
+  <div class="legal">
+    <span>Copyright © Scaler Global Inc. 2026</span>
+    <span><a href="https://scalerglobal.com/privacy-statement">Privacy Statement</a><a href="https://scalerglobal.com/terms-and-conditions">Terms &amp; Conditions</a></span>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal, #articleIndex').forEach(el => io.observe(el));
+
+  const navEl = document.querySelector('nav');
+  addEventListener('scroll', () => navEl.classList.toggle('scrolled', scrollY > 8), { passive: true });
+
+  // filters — hide non-matching rows, re-run the cascade on the rest
+  const index = document.getElementById('articleIndex');
+  const rows = [...index.querySelectorAll('.a-row')];
+  document.querySelectorAll('.filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter').forEach(b => b.classList.toggle('on', b === btn));
+      const f = btn.dataset.f;
+      let i = 0;
+      index.classList.remove('in');
+      void index.offsetWidth;
+      rows.forEach(r => {
+        const show = f === 'all' || r.dataset.cat === f;
+        r.classList.toggle('hidden', !show);
+        if (show) r.style.setProperty('--i', i++);
+      });
+      index.classList.add('in');
+    });
+  });
+</script>
+</body>
+</html>
