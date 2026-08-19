@@ -115,7 +115,7 @@ nav .actions .login { font-size: var(--size-p-sm); font-weight: var(--weight-med
 nav .actions .login:hover { opacity: 1; }
 
 /* section anatomy — every page uses the same head */
-section { padding: 112px var(--margin); }
+section { padding: 128px var(--margin); }
 .light { background: var(--bg); }
 .section-head { margin-bottom: 64px; }
 .section-head .eyebrow { margin-bottom: 20px; }

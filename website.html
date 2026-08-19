@@ -116,93 +116,78 @@
 
   /* ══ Hero ══ */
   .hero {
-    min-height: 100vh;
-    background: var(--bg);
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 64px; align-items: center;
-    padding: 140px var(--margin) 96px;
+    background: var(--accent);
+    padding: 140px 48px 0;
     overflow: hidden;
   }
-  .hero h1 { font-size: clamp(44px, 5.4vw, 88px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.04; color: var(--ink); }
-  /* staggered line reveal — each line is its own fadeUp, never wraps */
-  .hero h1 { font-size: clamp(38px, 4.5vw, 72px); }
-  .hero h1 .line { display: block; white-space: nowrap; opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  .hero-top {
+    display: grid; grid-template-columns: 1.4fr 1fr;
+    gap: 88px; align-items: flex-end;
+    max-width: 1440px; margin: 0 auto; padding: 0 80px;
+  }
+  .hero h1 { font-size: 72px; font-weight: 600; letter-spacing: -2.88px; line-height: 1; color: #000; padding-bottom: 48px; }
+  .hero h1 .line { display: block; opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
   .hero h1 .line:nth-child(1) { animation-delay: .15s; }
   .hero h1 .line:nth-child(2) { animation-delay: .3s; }
   .hero h1 .line:nth-child(3) { animation-delay: .45s; }
-  .hero .lede { margin-top: 32px; max-width: 48ch; font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: var(--ink-2); }
-  .hero .cta { margin-top: 44px; display: flex; gap: 16px; align-items: center; }
+  .hero-side { max-width: 440px; }
+  .hero-side .lede { font-size: 16px; line-height: 1.5; color: #000; }
+  .hero-side .cta { margin-top: 20px; }
   .fade-up { opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
 
-  /* ══ Hero scene — faithful port of example-data-flow.html ══ */
-  .scene-wrap { width: 100%; max-width: 700px; justify-self: end; }
-  .scene { position: relative; width: 700px; height: 400px; transform-origin: top left; }
-  .scene svg.connectors { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-  .connectors .guide { fill: none; stroke: var(--grey-line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .connectors .packet { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
-
-  .source-card {
-    position: absolute; width: 184px; height: 100px;
-    background: var(--white); border-radius: 11px; padding: 16px;
-    box-shadow: var(--shadow-card);
-    display: flex; flex-direction: column; justify-content: space-between;
+  /* ══ Hero dashboard cards ══ */
+  .hero-dash {
+    max-width: 1030px; margin: 88px auto 0; padding-bottom: 48px;
+    position: relative;
+    display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px;
+  }
+  .hero-dash::before {
+    content: ''; position: absolute; inset: 48px 0; z-index: 0;
+    background: #2286B2; border-radius: 0;
+  }
+  .hero-dash .dash-col { display: flex; flex-direction: column; gap: 24px; position: relative; z-index: 1; }
+  .hero-dash .dash-row { display: flex; gap: 24px; }
+  .dash-card {
+    background: #fff; border-radius: 8px; padding: 32px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.05);
     opacity: 0; transform: translateY(20px);
-    transition: transform var(--t-fast) var(--ease-in-out), box-shadow var(--t-fast) var(--ease-in-out);
   }
-  .source-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
-  .source-card .icon { width: 24px; height: 24px; color: var(--ink); }
-  .source-card .label { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; line-height: 1.1; color: var(--ink); }
-  .source-card .value { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
-  .card-elec  { top: 30px;  left: 24px; }
-  .card-gas   { top: 150px; left: 24px; }
-  .card-water { top: 270px; left: 24px; }
+  .hero-dash.in .dash-card { animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  .hero-dash.in .dash-card:nth-child(1) { animation-delay: .2s; }
+  .hero-dash.in .dash-card:nth-child(2) { animation-delay: .35s; }
+  .hero-dash.in .dash-row .dash-card:first-child { animation-delay: .3s; }
+  .hero-dash.in .dash-row .dash-card:last-child { animation-delay: .4s; }
+  .dc-title { font-size: 28px; font-weight: 600; letter-spacing: -0.55px; color: #000; margin-bottom: 8px; }
+  .dc-title-sm { font-size: 17px; font-weight: 600; letter-spacing: -0.17px; color: #000; }
+  .dc-num { font-size: 42px; font-weight: 600; letter-spacing: -1.25px; line-height: 1; color: #000; }
+  .dc-delta { font-size: 16px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+  .dc-delta.down { color: var(--energy-red); }
+  .dc-delta.up { color: #00C11F; }
+  .dc-legend { display: flex; gap: 16px; font-size: 15px; color: #000; margin-bottom: 16px; }
+  .dc-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dc-legend span::before { content: ''; width: 12px; height: 12px; border-radius: 3px; }
+  .dc-legend .l-port::before { background: var(--accent); }
+  .dc-legend .l-crrem::before { background: #FEC40A; }
+  .dc-chart svg { width: 100%; height: 200px; }
+  .dc-chart .x-labels { display: flex; justify-content: space-between; font-size: 14px; color: #000; margin-top: 8px; }
 
-  .hub {
-    position: absolute; left: 440px; top: 140px; width: 220px; height: 120px;
-    background: var(--white); border-radius: 11px; padding: 18px 20px;
-    box-shadow: var(--shadow-card);
-    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
-    opacity: 0; transform: scale(0);
-  }
-  .hub .hub-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
-  .hub .figure { display: flex; align-items: baseline; gap: 6px; }
-  .hub .figure .number { font-size: 36px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; color: var(--ink); }
-  .hub .figure .unit { font-size: 13px; font-weight: 500; color: var(--ink-2); }
-  .hub .delta { font-size: 12px; color: var(--ink-3); margin-top: 8px; }
+  /* GHG bar chart */
+  .ghg-bars { display: flex; gap: 8px; height: 200px; align-items: flex-end; margin-top: 16px; }
+  .ghg-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: stretch; height: 100%; }
+  .ghg-bar-bg { flex: 1; background: rgba(0,0,0,.05); display: flex; flex-direction: column; justify-content: flex-end; }
+  .ghg-bar { background: #FEC40A; transition: height var(--t-deliberate) var(--ease-out-expo); }
+  .ghg-bar-label { font-size: 11px; color: #000; margin-top: 6px; line-height: 1.2; }
+  .ghg-bar-label small { display: block; color: rgba(0,0,0,.3); font-size: 10px; }
 
-  /* choreography — matches the source file exactly */
-  .play .card-elec  { animation: fadeUp var(--t-default) var(--ease-out) 0.0s forwards; }
-  .play .card-gas   { animation: fadeUp var(--t-default) var(--ease-out) 0.2s forwards; }
-  .play .card-water { animation: fadeUp var(--t-default) var(--ease-out) 0.4s forwards; }
-  .play .hub        { animation: popIn 600ms var(--spring-pop) 0.7s forwards; }
-  .play .guide-elec, .play .guide-gas, .play .guide-water { animation: pathDraw 800ms var(--ease-in-out) 1.1s forwards; }
-  .play .packet-elec, .play .packet-gas, .play .packet-water {
-    animation: packetIntro 0.3s linear 1.9s forwards, packetFlow 2s linear 1.9s infinite;
-  }
-  .play .hub-badge { animation: popIn 600ms var(--spring-pop) 3.4s forwards; }
-
-  /* hub confirmation badge — fires once the count has settled */
-  .hub-badge {
-    position: absolute; left: 440px; top: 272px;
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 5px 10px; border-radius: 9999px;
-    background: rgba(86,197,90,0.12); color: #2E8A32;
-    font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
-    opacity: 0; transform: scale(0); transform-origin: top left;
-  }
-  .hub-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--esg-green); }
-
-  /* lane focus — hovering a source dims the other lanes (filter, so it
-     doesn't fight the opacity keyframes) */
-  .scene .guide, .scene .packet, .scene .source-card { transition: filter var(--t-fast) var(--ease-out); }
-  .scene:has(.card-elec:hover) :is(.guide-gas, .packet-gas, .card-gas, .guide-water, .packet-water, .card-water),
-  .scene:has(.card-gas:hover) :is(.guide-elec, .packet-elec, .card-elec, .guide-water, .packet-water, .card-water),
-  .scene:has(.card-water:hover) :is(.guide-elec, .packet-elec, .card-elec, .guide-gas, .packet-gas, .card-gas) {
-    filter: grayscale(1) opacity(.3);
-  }
+  /* City Roots card */
+  .city-roots { display: flex; align-items: center; gap: 22px; }
+  .city-roots .cr-img { width: 106px; height: 106px; border-radius: 50%; overflow: hidden; background: #c9a96e; flex-shrink: 0; }
+  .city-roots .cr-label { font-size: 15px; font-weight: 600; color: #000; }
+  .city-roots .cr-name { font-size: 26px; font-weight: 600; letter-spacing: -0.53px; color: #000; margin: 4px 0; }
+  .city-roots .cr-count { font-size: 15px; color: #000; }
 
   /* ══ Sections ══ */
-  section { padding: 112px var(--margin); }
+  section { padding: 128px var(--margin); }
   .light { background: var(--bg); }
   .dark { background: var(--color-full-black); color: var(--white); }
   /* tokens css hardcodes black headings / grey paragraphs — dark surfaces inherit instead */
@@ -222,27 +207,27 @@
   .section-head h2 { font-size: clamp(32px, 4vw, 60px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.08; max-width: 20ch; color: var(--ink); }
   .section-head .sub { margin-top: 18px; font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: var(--ink-3); max-width: 52ch; }
 
-  /* ══ Clients — brutalist typographic index on black ══ */
-  .clients { background: var(--color-full-black); color: var(--white); padding: 112px var(--margin); }
-  .clients .eyebrow { color: rgba(255,255,255,.55); margin-bottom: 24px; }
-  .clients .statement { font-size: clamp(32px, 4vw, 60px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.08; color: var(--white); max-width: 20ch; margin-bottom: 72px; }
-  .client-index { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 48px; border-top: 1px solid rgba(255,255,255,.18); }
+  /* ══ Clients — typographic index on white ══ */
+  .clients { background: var(--white); color: var(--ink); padding: 128px var(--margin); }
+  .clients .statement { font-size: 48px; font-weight: 600; letter-spacing: -1.44px; line-height: 1; color: var(--ink); margin-bottom: 80px; }
+  .client-index { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 24px; }
   .client-name {
-    padding: 26px 0; border-bottom: 1px solid rgba(255,255,255,.18);
-    font-size: clamp(20px, 1.8vw, 28px); font-weight: var(--weight-medium);
-    letter-spacing: -0.02em; color: var(--white);
+    padding: 24px 0 0; border-top: 1px solid var(--ink);
+    font-size: 24px; font-weight: 500;
+    letter-spacing: -0.72px; line-height: 1; color: var(--ink); opacity: 0.9;
+    margin-bottom: 24px;
     opacity: 0; transform: translateY(20px);
-    transition: color var(--t-fast) var(--ease-out);
   }
-  .client-index.in .client-name { animation: fadeUp var(--t-default) var(--ease-out) forwards; animation-delay: calc(var(--i) * 80ms); }
+  .client-index.in .client-name { animation: fadeUp var(--t-default) var(--ease-out) forwards; animation-delay: calc(var(--i) * 60ms); }
+  .client-name { transition: color var(--t-fast) var(--ease-out); }
   .client-name:hover { color: var(--accent); }
 
   /* ══ Our approach — Figma anatomy: full-height left rule with an
      accent tick, disc bullets, separator, 100px product mini-card ══ */
   .approach-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(40px, 5vw, 72px); }
   .acol { position: relative; padding-left: 24px; }
-  .acol::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--color-background-grey); }
-  .acol::after { content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 24px; background: var(--accent); }
+  .acol::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--ink); }
+  .acol::after { content: none; }
   .acol .a-eyebrow { font-size: 16px; font-weight: var(--weight-medium); line-height: 1.4; color: #1878A8; margin-bottom: 16px; }
   .acol h3 { font-size: 24px; font-weight: var(--weight-semibold); letter-spacing: -0.48px; line-height: 1.15; color: var(--ink); opacity: .9; }
   .acol ul { list-style: disc; margin-top: 16px; padding-left: 24px; opacity: .9; }
@@ -482,7 +467,7 @@
 
 <!-- ══ Header ══ -->
 <nav>
-  <a class="logo" href="https://scalerglobal.com"><img src="assets/logo-full-dark.svg" alt="Scaler"></a>
+  <a class="logo" href="index.html"><img src="assets/logo-full-dark.svg" alt="Scaler"></a>
   <div class="links">
     <a href="solutions.html">Solutions</a>
     <a href="partnerships.html">Partnerships</a>
@@ -494,8 +479,8 @@
       </button>
       <div class="menu">
         <a href="sfdr.html">SFDR</a>
-        <a href="https://scalerglobal.com/benchmarking">Benchmarking</a>
-        <a href="https://scalerglobal.com/espm">ESPM</a>
+        <a href="benchmarking.html">Benchmarking</a>
+        <a href="espm.html">ESPM</a>
       </div>
     </div>
   </div>
@@ -507,101 +492,118 @@
 
 <!-- ══ Hero ══ -->
 <header class="hero">
-  <div>
-    <p class="eyebrow fade-up" style="animation-delay:0s">Sustainability intelligence for real estate</p>
-    <h1 style="margin-top:24px;"><span class="line">Protect value.</span><span class="line">Drive performance.</span><span class="line">Stay ahead.</span></h1>
-    <p class="lede fade-up" style="animation-delay:.7s">Scaler empowers real estate managers to protect investments, reduce operational costs, and meet reporting obligations — with faster decisions and audit-ready documentation across your entire portfolio.</p>
-    <div class="cta fade-up" style="animation-delay:.85s">
-      <button class="pill">Schedule a demo <span class="arr">→</span></button>
-      <button class="pill ghost">Explore the platform</button>
+  <div class="hero-top">
+    <div>
+      <h1><span class="line">Protect Value.</span><span class="line">Drive Performance.</span><span class="line">Stay Ahead.</span></h1>
+    </div>
+    <div class="hero-side">
+      <p class="lede fade-up" style="animation-delay:.6s">Scaler empowers real estate managers to protect investments, reduce operational costs, and meet reporting obligations. Our best-in-class tech delivers faster decisions, smarter strategies, and audit-ready documentation across your entire real estate portfolio.</p>
+      <div class="cta fade-up" style="animation-delay:.75s">
+        <button class="pill">Schedule a demo</button>
+      </div>
     </div>
   </div>
 
-  <!-- Data flow scene — ported from the canonical example-data-flow animation -->
-  <div class="scene-wrap">
-    <div class="scene play" id="scene">
-      <svg class="connectors" viewBox="0 0 700 400" preserveAspectRatio="none">
-        <path class="guide guide-elec"
-              d="M 208 80 H 300 C 322.09 80, 340 97.91, 340 120 V 160 C 340 182.09, 357.91 200, 380 200 H 440"
-              stroke-dasharray="320" stroke-dashoffset="320"/>
-        <path class="packet packet-elec" stroke="#E23704"
-              d="M 208 80 H 300 C 322.09 80, 340 97.91, 340 120 V 160 C 340 182.09, 357.91 200, 380 200 H 440"
-              stroke-dasharray="16 320" stroke-dashoffset="336"/>
-        <path class="guide guide-gas"
-              d="M 208 200 H 440"
-              stroke-dasharray="232" stroke-dashoffset="232"/>
-        <path class="packet packet-gas" stroke="#FEC40A"
-              d="M 208 200 H 440"
-              stroke-dasharray="16 232" stroke-dashoffset="248"/>
-        <path class="guide guide-water"
-              d="M 208 320 H 300 C 322.09 320, 340 302.09, 340 280 V 240 C 340 217.91, 357.91 200, 380 200 H 440"
-              stroke-dasharray="320" stroke-dashoffset="320"/>
-        <path class="packet packet-water" stroke="#2AA8DF"
-              d="M 208 320 H 300 C 322.09 320, 340 302.09, 340 280 V 240 C 340 217.91, 357.91 200, 380 200 H 440"
-              stroke-dasharray="16 320" stroke-dashoffset="336"/>
-      </svg>
-
-      <article class="source-card card-elec">
-        <div class="icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z" clip-rule="evenodd"/></svg>
+  <!-- Dashboard cards -->
+  <div class="hero-dash" id="heroDash">
+    <div class="dash-col">
+      <!-- Energy roadmap -->
+      <div class="dash-card" style="flex:1">
+        <div class="dc-title">Energy roadmap</div>
+        <div class="dc-legend">
+          <span class="l-port">Portfolio projection</span>
+          <span class="l-crrem">CRREM 1.5 (Paris)</span>
         </div>
-        <div>
-          <div class="label">Electricity</div>
-          <div class="value">2,810 kWh</div>
+        <div class="dc-chart">
+          <svg viewBox="0 0 460 200" preserveAspectRatio="none">
+            <line x1="46" y1="20" x2="450" y2="20" stroke="#eee" stroke-width="1"/>
+            <line x1="46" y1="65" x2="450" y2="65" stroke="#eee" stroke-width="1"/>
+            <line x1="46" y1="110" x2="450" y2="110" stroke="#eee" stroke-width="1"/>
+            <line x1="46" y1="155" x2="450" y2="155" stroke="#eee" stroke-width="1"/>
+            <line x1="46" y1="195" x2="450" y2="195" stroke="#ccc" stroke-width="1"/>
+            <text x="36" y="24" text-anchor="end" fill="#000" font-size="13">20</text>
+            <text x="36" y="69" text-anchor="end" fill="#000" font-size="13">15</text>
+            <text x="36" y="114" text-anchor="end" fill="#000" font-size="13">10</text>
+            <text x="36" y="159" text-anchor="end" fill="#000" font-size="13">5</text>
+            <text x="36" y="199" text-anchor="end" fill="#000" font-size="13">0</text>
+            <!-- CRREM yellow line -->
+            <path d="M50,22 C100,22 140,30 200,60 S350,140 450,155" fill="none" stroke="#FEC40A" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Portfolio blue dashed -->
+            <path d="M50,130 C80,115 100,105 130,100 Q180,92 250,100 S380,115 450,125" fill="none" stroke="#2AA8DF" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 5"/>
+            <circle cx="130" cy="100" r="5" fill="#2AA8DF"/>
+          </svg>
+          <div class="x-labels"><span>2022</span><span>2032</span><span>2042</span><span>2052</span></div>
         </div>
-      </article>
-
-      <article class="source-card card-gas">
-        <div class="icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z" clip-rule="evenodd"/></svg>
+      </div>
+      <!-- City Roots -->
+      <div class="dash-card">
+        <div class="city-roots">
+          <div class="cr-img"></div>
+          <div>
+            <div class="cr-label">Portfolio</div>
+            <div class="cr-name">City Roots</div>
+            <div class="cr-count">2732 Assets</div>
+          </div>
         </div>
-        <div>
-          <div class="label">Gas</div>
-          <div class="value">1,029 m³</div>
+      </div>
+    </div>
+    <div class="dash-col">
+      <!-- ESG Score + Data Coverage row -->
+      <div class="dash-row">
+        <div class="dash-card" style="flex:1">
+          <div class="dc-title-sm">Scaler ESG Score</div>
+          <div style="margin-top:24px;display:flex;align-items:baseline;gap:8px;">
+            <span class="dc-num"><span class="count" data-target="74.8" data-decimals="1">0</span></span>
+            <span class="dc-delta down">&#x2193; 1.3%</span>
+          </div>
         </div>
-      </article>
-
-      <article class="source-card card-water">
-        <div class="icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.998 1.5a.75.75 0 0 1 .58.272c1.91 2.317 4.547 5.93 5.99 9.072 1.21 2.638 1.182 5.41-.547 7.339a6.75 6.75 0 0 1-12.04-2.736c-.4-1.7-.058-3.45.66-5.044 1.443-3.205 4.085-6.328 5.776-8.63a.75.75 0 0 1 .581-.273Z"/></svg>
+        <div class="dash-card" style="flex:1">
+          <div class="dc-title-sm">Data coverage</div>
+          <div style="margin-top:24px;display:flex;align-items:baseline;gap:8px;">
+            <span class="dc-num"><span class="count" data-target="94.9" data-decimals="1">0</span></span>
+            <span class="dc-delta up">&#x2191; 1.2%</span>
+          </div>
         </div>
-        <div>
-          <div class="label">Water</div>
-          <div class="value">623 m³</div>
+      </div>
+      <!-- GHG Emissions bar chart -->
+      <div class="dash-card" style="flex:1">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <div style="width:44px;height:44px;border-radius:50%;background:#FEC40A;display:flex;align-items:center;justify-content:center;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#000"><path d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248Z"/></svg>
+          </div>
+          <div>
+            <div style="font-size:23px;font-weight:600;letter-spacing:-0.46px;color:#000;">GHG Emissions</div>
+            <div style="font-size:15px;color:rgba(0,0,0,.6);">Asset distribution</div>
+          </div>
         </div>
-      </article>
-
-      <article class="hub">
-        <div class="hub-eyebrow">Total emissions</div>
-        <div class="figure">
-          <span class="number" id="hubNumber" data-target="1348" data-decimals="0">0</span>
-          <span class="unit">kgCO₂</span>
+        <div class="ghg-bars" id="ghgBars">
+          <div class="ghg-bar-wrap"><div class="ghg-bar-bg"><div class="ghg-bar" style="height:66%"></div></div><div class="ghg-bar-label">Rathaus<small>Office</small></div></div>
+          <div class="ghg-bar-wrap"><div class="ghg-bar-bg"><div class="ghg-bar" style="height:60%"></div></div><div class="ghg-bar-label">Martin Place<small>Residential</small></div></div>
+          <div class="ghg-bar-wrap"><div class="ghg-bar-bg"><div class="ghg-bar" style="height:49%"></div></div><div class="ghg-bar-label">Atomium<small>Office</small></div></div>
+          <div class="ghg-bar-wrap"><div class="ghg-bar-bg"><div class="ghg-bar" style="height:38%"></div></div><div class="ghg-bar-label">Rathaus<small>Office</small></div></div>
+          <div class="ghg-bar-wrap"><div class="ghg-bar-bg"><div class="ghg-bar" style="height:30%"></div></div><div class="ghg-bar-label">Autograph House<small>Industrial</small></div></div>
         </div>
-        <div class="delta">↓ 12% vs last quarter</div>
-      </article>
-
-      <div class="hub-badge"><span class="dot"></span><span>Audit-ready · GRESB · SFDR · CSRD</span></div>
+      </div>
     </div>
   </div>
 </header>
 
 <!-- ══ Clients — typographic index ══ -->
 <div class="clients">
-  <p class="eyebrow reveal">Our clients</p>
   <h2 class="statement reveal">30+ leading managers.<br>Four continents. One platform.</h2>
   <div class="client-index" id="clientGrid">
     <div class="client-name" style="--i:0">Patrizia</div>
     <div class="client-name" style="--i:1">Jamestown</div>
     <div class="client-name" style="--i:2">a.s.r. real estate</div>
     <div class="client-name" style="--i:3">Bouwinvest</div>
-    <div class="client-name" style="--i:4">Achmea</div>
-    <div class="client-name" style="--i:5">Kajima</div>
-    <div class="client-name" style="--i:6">Slate Asset Management</div>
-    <div class="client-name" style="--i:7">Related Argent</div>
-    <div class="client-name" style="--i:8">Kayne Anderson</div>
-    <div class="client-name" style="--i:9">Wereldhave</div>
-    <div class="client-name" style="--i:10">NSI</div>
-    <div class="client-name" style="--i:11">Amvest</div>
+    <div class="client-name" style="--i:4">Kayne Anderson</div>
+    <div class="client-name" style="--i:5">Wereldhave</div>
+    <div class="client-name" style="--i:6">NSI</div>
+    <div class="client-name" style="--i:7">Amvest</div>
+    <div class="client-name" style="--i:8">Achmea</div>
+    <div class="client-name" style="--i:9">Kajima</div>
+    <div class="client-name" style="--i:10">Slate Asset Management</div>
+    <div class="client-name" style="--i:11">Related Argent</div>
   </div>
 </div>
 
@@ -688,7 +690,7 @@
 </section>
 
 <!-- ══ From complexity to clarity ══ -->
-<section class="dark">
+<section class="white" style="background:#fff">
   <div class="metric-wrap">
     <div class="metric-copy reveal">
       <p class="eyebrow" style="margin-bottom:20px;">From complexity to clarity</p>
@@ -881,25 +883,14 @@
     requestAnimationFrame(tick);
   }
 
-  // Hero scene: hub count-up fires at t=1.9s, matching the CSS schedule.
-  // Clicking the scene replays the whole sequence (R works too).
-  const scene = document.getElementById('scene');
-  function playScene() {
-    scene.classList.remove('play');
-    void scene.offsetWidth;
-    scene.classList.add('play');
-    const n = document.getElementById('hubNumber');
-    n.textContent = '0';
-    setTimeout(() => countUp(n, parseFloat(n.dataset.target), 0), 1900);
-  }
-  scene.addEventListener('click', playScene);
-  document.addEventListener('keydown', e => {
-    if ((e.key === 'r' || e.key === 'R') && !e.metaKey && !e.ctrlKey) playScene();
-  });
+  // Hero dashboard cards — fadeUp + countUp on load
+  const heroDash = document.getElementById('heroDash');
   setTimeout(() => {
-    const n = document.getElementById('hubNumber');
-    countUp(n, parseFloat(n.dataset.target), 0);
-  }, 2000);
+    heroDash.classList.add('in');
+    heroDash.querySelectorAll('.count').forEach(el =>
+      countUp(el, +el.dataset.target, +(el.dataset.decimals || 0), 1200)
+    );
+  }, 600);
 
   // Scroll reveal — fadeUp 500ms easeOut, once.
   const io = new IntersectionObserver(entries => {
@@ -948,28 +939,6 @@
     }, 1000);
   });
 
-  // Live data ticker — every few seconds a new reading arrives: one source
-  // value ticks up by 1, or the emissions total recalculates.
-  (function () {
-    const sources = [...document.querySelectorAll('.source-card .value')].map(el => {
-      const m = el.textContent.trim().match(/^([\d,]+)\s*(.*)$/);
-      return { el, val: parseInt(m[1].replace(/,/g, ''), 10), unit: m[2] };
-    });
-    const hub = document.getElementById('hubNumber');
-    setTimeout(() => {
-      setInterval(() => {
-        if (Math.random() < 0.6) {
-          const s = sources[Math.floor(Math.random() * sources.length)];
-          s.val += 1;
-          s.el.textContent = s.val.toLocaleString('en-US') + ' ' + s.unit;
-        } else {
-          const v = parseInt(hub.dataset.target, 10) + 1;
-          hub.dataset.target = v;
-          hub.textContent = v.toLocaleString('en-US');
-        }
-      }, 1400);
-    }, 2200); // start as soon as the packets are flowing — visible in the first fold
-  })();
 </script>
 </body>
 </html>

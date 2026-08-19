@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Solutions — Scaler Global</title>
 <link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="scaler-site.css">
 <style>
   :root {
     --font-display: "Beausite Classic", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -46,6 +47,8 @@
   }
   a { color: inherit; text-decoration: none; }
   img { display: block; }
+  h2 { font-size: 48px; font-weight: 600; letter-spacing: -1.44px; line-height: 1; color: var(--ink); }
+  h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); }
 
   .eyebrow { font-size: 15px; font-weight: var(--weight-semibold); letter-spacing: 0.01em; color: var(--ink); display: flex; align-items: center; gap: 10px; }
   .eyebrow::before { content: ''; width: 10px; height: 10px; background: var(--accent); flex-shrink: 0; }
@@ -114,50 +117,50 @@
     background: var(--accent);
     padding: 176px var(--margin) 96px;
   }
-  .hero h1 { font-size: clamp(40px, 5vw, 84px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.04; color: var(--ink); max-width: 15ch; }
+  .hero h1 { font-size: 72px; font-weight: 600; letter-spacing: -2.88px; line-height: 1; color: #000; max-width: 15ch; }
   .hero h1 .line { display: block; opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
   .hero h1 .line:nth-child(1) { animation-delay: .1s; }
   .hero h1 .line:nth-child(2) { animation-delay: .25s; }
-  .hero .lede { margin-top: 28px; max-width: 46ch; font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: rgba(0,0,0,.8); }
+  p.lede { font-size: 20px !important; font-weight: 500 !important; line-height: 1 !important; letter-spacing: -0.6px !important; color: #000 !important; }
+  .hero .lede { margin-top: 28px; max-width: 46ch; }
   .hero .cta { margin-top: 36px; }
   .fade-up { opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
 
   .caps { display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(48px, 6vw, 96px); margin-top: 88px; }
   .cap {
-    display: grid; grid-template-columns: 110px 1fr; gap: 24px; align-items: center;
-    padding: 28px 0 36px; border-top: 1px solid var(--ink);
+    display: grid; grid-template-columns: 88px 1fr; gap: 24px; align-items: start;
+    padding: 32px 0 36px; border-top: 1px solid var(--ink);
     opacity: 0; transform: translateX(-12px);
   }
   .caps.in .cap { animation: fadeInX var(--t-default) var(--ease-out-cubic) forwards; animation-delay: calc(var(--i) * 120ms); }
-  .cap .num { font-size: clamp(56px, 5.4vw, 88px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1; color: var(--ink); text-align: left; }
-  .cap h3 { font-size: 20px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; color: var(--ink); }
-  .cap p { margin-top: 8px; font-size: 14px; line-height: 1.5; color: rgba(0,0,0,.8); max-width: 40ch; }
-  .cap .tags { margin-top: 10px; font-size: 13px; font-weight: var(--weight-medium); color: var(--ink); }
+  .cap .num { font-size: 120px; font-weight: 400; letter-spacing: -3.6px; line-height: 1; color: var(--ink); text-align: center; }
+  .cap h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); opacity: 0.9; }
+  .cap p { margin-top: 8px; font-size: 16px; font-weight: 400; line-height: 1.45; color: var(--ink); max-width: 40ch; }
+  .cap .tags { margin-top: 8px; font-size: 16px; font-weight: 500; line-height: 1.4; color: var(--ink); }
 
   /* ══ Stat band — full black (Figma 4175:2959) ══ */
-  .stat-band { background: var(--color-full-black); color: var(--white); padding: 72px var(--margin); }
-  .band { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(24px, 3vw, 48px); border-top: 1px solid rgba(255,255,255,.25); }
-  .band .b-stat { position: relative; padding-top: 40px; opacity: 0; transform: translateY(20px); }
+  .stat-band { background: var(--color-full-black); color: var(--white); padding: 48px var(--margin); }
+  .band { display: flex; flex-wrap: wrap; gap: 24px; }
+  .band .b-stat { flex: 1 1 0; min-width: 0; display: flex; gap: 24px; align-items: start; opacity: 0; transform: translateY(20px); }
   .band.in .b-stat { animation: fadeUp var(--t-default) var(--ease-out) forwards; animation-delay: calc(var(--i) * 100ms); }
-  .b-stat .bar { position: absolute; top: -1.5px; left: 0; width: 100%; height: 2px; }
-  .b-stat .bar i { display: block; height: 100%; background: var(--white); transform: scaleX(0); transform-origin: left; }
-  .band.in .b-stat .bar i { animation: scaleXGrow 1500ms var(--ease-out-expo) .3s forwards; }
-  .band .b-num { font-size: clamp(36px, 3.6vw, 60px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1; color: var(--white); }
-  .band .b-label { margin-top: 12px; font-size: 13px; color: rgba(255,255,255,.75); }
+  .b-stat .bar { width: 1px; align-self: stretch; background: var(--white); flex-shrink: 0; }
+  .b-stat .bar i { display: none; }
+  .band .b-num { font-size: 72px; font-weight: 600; letter-spacing: -2.16px; line-height: 1; color: var(--white); }
+  .band .b-label { font-size: 20px; font-weight: 400; color: var(--white); }
 
   /* ══ Sections ══ */
-  section { padding: 112px var(--margin); }
+  section { padding: 128px var(--margin); }
   .light { background: var(--bg); }
   .section-head { margin-bottom: 64px; }
   .section-head .eyebrow { margin-bottom: 20px; }
-  .section-head h2 { font-size: clamp(32px, 4vw, 60px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.08; max-width: 20ch; color: var(--ink); }
-  .section-head .sub { margin-top: 18px; font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: var(--ink-3); max-width: 52ch; }
+  .section-head h2 { font-size: 48px; font-weight: 600; letter-spacing: -1.44px; line-height: 1; max-width: 20ch; color: var(--ink); }
+  .section-head .sub { margin-top: 16px; font-size: 20px; font-weight: 500; letter-spacing: -0.6px; line-height: 1; color: var(--ink); max-width: 52ch; }
 
   /* ══ AI analyst — three columns (Figma 4175:2989) ══ */
   .approach-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(40px, 5vw, 72px); }
   .acol { position: relative; padding-left: 24px; }
-  .acol::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--color-background-grey); }
-  .acol::after { content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 24px; background: var(--accent); }
+  .acol::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--ink); }
+  .acol::after { content: none; }
   .a-eyebrow { font-size: 16px; font-weight: var(--weight-medium); line-height: 1.4; color: var(--accent-text); margin-bottom: 16px; }
   .acol h3, .quad h3 { font-size: 24px; font-weight: var(--weight-semibold); letter-spacing: -0.48px; line-height: 1.15; color: var(--ink); opacity: .9; }
   .acol ul, .quad ul { list-style: disc; margin-top: 16px; padding-left: 24px; opacity: .9; }
@@ -216,38 +219,57 @@
 
   /* ══ Protect value — editorial split on black ══ */
   .dark { background: var(--color-full-black); color: var(--white); }
-  .dark h2, .dark h3, .dark p { color: inherit; }
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark p, .dark blockquote { color: inherit; }
+  .dark .eyebrow { color: rgba(255,255,255,.55); }
   .dark .section-head h2 { color: var(--white); }
   .dark .section-head .sub { color: rgba(255,255,255,.65); }
-  .dark .eyebrow { color: var(--white); }
-  .pv-split { display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(48px, 6vw, 112px); row-gap: 0; align-items: start; }
-  .pv-tag { font-size: 15px; font-weight: var(--weight-semibold); color: var(--accent); margin-bottom: 8px; align-self: end; }
-  .pv-entry { border-top: 1px solid rgba(255,255,255,.22); padding: 32px 0 40px; opacity: 0; transform: translateY(20px); }
-  .pv-split.in .pv-entry { animation: fadeUp var(--t-default) var(--ease-out) forwards; animation-delay: var(--d, 0s); }
-  .pv-entry .a-eyebrow { color: var(--accent); margin-bottom: 10px; }
-  .pv-entry h3 { font-size: 24px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; color: var(--white); }
-  .pv-entry ul { list-style: disc; margin-top: 14px; padding-left: 22px; }
-  .pv-entry li { font-size: 15px; line-height: 1.55; color: rgba(255,255,255,.8); margin-bottom: 4px; }
-  .pv-entry .pv-result { margin-top: 14px; font-size: 14px; font-weight: var(--weight-medium); color: rgba(255,255,255,.85); }
-  .pv-metric { display: flex; align-items: baseline; gap: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.12); flex-wrap: wrap; }
-  .pv-metric b { font-size: clamp(30px, 2.6vw, 44px); font-weight: var(--weight-semibold); letter-spacing: var(--track-display); line-height: 1; color: var(--white); }
-  .pv-metric .u { font-size: 13px; color: rgba(255,255,255,.6); }
-  .pv-delta { font-size: 13px; font-weight: var(--weight-semibold); color: var(--esg-green); }
+  section.dark h2, section.dark h3 { color: var(--white); }
+  .pv-group { display: grid; grid-template-columns: 180px 1fr 1fr; gap: 0 72px; margin-bottom: 56px; align-items: start; }
+  .pv-group:last-child { margin-bottom: 0; }
+  .pv-row-label { font-size: 15px; font-weight: var(--weight-medium); color: var(--ink-3); padding-top: 4px; }
+  .pv-card { border-top: 1px solid var(--ink); padding-top: 24px; display: flex; flex-direction: column; gap: 16px; opacity: 0; transform: translateY(20px); }
+  .pv-group.in .pv-card { animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  .pv-group.in .pv-card:nth-child(2) { animation-delay: .1s; }
+  .pv-group.in .pv-card:nth-child(3) { animation-delay: .25s; }
+  .pv-card .pv-tag { font-size: 16px; font-weight: 600; line-height: 1.45; color: var(--accent-text); }
+  .pv-card h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); opacity: 0.9; }
+  .pv-card ul { list-style: none; padding: 0; margin: 0; }
+  .pv-card li { font-size: 16px; font-weight: 400; line-height: 1.45; color: var(--ink); opacity: 0.9; }
+  .pv-card .pv-result { font-size: 16px; font-weight: 500; line-height: 1.45; color: var(--ink); opacity: 0.9; }
 
-  /* ══ Data collection — 2×2 quadrants (4175:3213) ══ */
+  /* ══ Quads — 2×2 layout (audit-ready section) ══ */
   .quads { display: grid; grid-template-columns: 1fr 1fr; gap: 72px clamp(48px, 6vw, 96px); }
   .quad { position: relative; padding-left: 24px; }
-  .quad::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--color-background-grey); }
-  .quad::after { content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 24px; background: var(--accent); }
-  .quad h3 { font-size: 22px; }
+  .quad::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--ink); }
+  .quad h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); opacity: .9; }
   .quad li { font-size: 15px; }
   .quad .cards { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
   .quad .mini-card { margin-top: 28px; }
 
+  /* ══ Data collection — 4 yellow cards ══ */
+  .dc-cards-row { display: flex; gap: 24px; }
+  .dc-card {
+    flex: 1 1 0; min-width: 0; position: relative;
+    background: var(--accent);
+    clip-path: polygon(0 0, calc(100% - 56px) 0, 100% 56px, 100% 100%, 0 100%);
+    padding: 40px 28px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .dc-tag { font-size: 16px; font-weight: 600; line-height: 1.45; color: var(--ink); }
+  .dc-card h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); opacity: 0.9; }
+  .dc-card p { font-size: 14px; line-height: 1.45; color: var(--ink); opacity: 0.9; }
+  .dc-result { font-size: 14px; font-weight: 500; line-height: 1.45; color: var(--ink); opacity: 0.9; }
+  .dc-card.reveal { opacity: 0; transform: translateY(20px); }
+  .dc-card.reveal.in { opacity: 1; transform: none; }
+  .dc-card:nth-child(1) { transition-delay: 0s; }
+  .dc-card:nth-child(2) { transition-delay: .1s; }
+  .dc-card:nth-child(3) { transition-delay: .2s; }
+  .dc-card:nth-child(4) { transition-delay: .3s; }
+
   /* ══ Investor-grade reports — accordion + INREV flow (4175:3392) ══ */
   .rep-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: clamp(40px, 5vw, 88px); align-items: center; }
   .acc-block {
-    background: var(--accent);
+    background: #1E4FB3;
     clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 40px, 100% 100%, 40px 100%, 0 calc(100% - 40px));
     padding: 44px 48px; margin-bottom: 0;
     cursor: pointer;
@@ -256,12 +278,13 @@
   .rep-grid.in .acc-block { animation: fadeInX 500ms var(--ease-out-cubic) forwards; animation-delay: calc(var(--i) * 150ms); }
   .acc-head { display: flex; gap: 16px; align-items: flex-start; }
   .acc-num {
-    width: 32px; height: 32px; border: 1.5px solid var(--ink); border-radius: 50%;
+    width: 40px; height: 40px; border: 1.5px solid var(--white); border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: var(--weight-semibold); flex-shrink: 0;
+    font-size: 16px; font-weight: var(--weight-semibold); flex-shrink: 0; color: var(--white);
+    transition: background var(--t-base) var(--ease-out), color var(--t-base) var(--ease-out);
   }
-  .acc-block.open .acc-num { background: var(--ink); color: var(--accent); border-color: var(--ink); }
-  .acc-title { font-size: 19px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; line-height: 1.25; color: var(--ink); }
+  .acc-block.open .acc-num { background: var(--white); color: #1E4FB3; border-color: var(--white); }
+  .acc-title { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--white); }
   .acc-body { max-height: 0; overflow: hidden; transition: max-height var(--t-default) var(--ease-in-out); }
   .acc-body li, .acc-body .result { opacity: 0; transform: translateX(-8px); transition: opacity var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out); }
   .acc-block.open .acc-body li:nth-child(1) { transition-delay: .15s; }
@@ -272,8 +295,8 @@
   .acc-num { transition: background var(--t-base) var(--ease-out), color var(--t-base) var(--ease-out); }
   .acc-block.open .acc-body { max-height: 240px; }
   .acc-body ul { list-style: disc; margin: 16px 0 0 48px; }
-  .acc-body li { font-size: 14px; line-height: 1.55; color: var(--ink); }
-  .acc-body .result { margin: 12px 0 4px 48px; font-size: 14px; font-weight: var(--weight-medium); color: var(--ink); }
+  .acc-body li { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,.85); }
+  .acc-body .result { margin: 12px 0 4px 48px; font-size: 14px; font-weight: var(--weight-medium); color: rgba(255,255,255,.85); }
 
   .flow { position: relative; }
   .viz-state { display: none; }
@@ -379,41 +402,84 @@
   @keyframes cardPulse { 0% { transform: scale(1); } 40% { transform: scale(1.05); } 100% { transform: scale(1); } }
   #flow.go .viz-state[data-mode="3"].active .rc-btn { animation: cardPulse 600ms var(--spring-pop) 2s; }
 
-  /* ══ Who it's for — persona rows (homepage pattern) ══ */
-  .persona-row { display: grid; grid-template-columns: 1fr 2fr; gap: 48px; align-items: baseline; padding: 44px 0; border-top: 1px solid var(--color-background-grey); }
-  .persona-row:last-of-type { border-bottom: 1px solid var(--color-background-grey); }
-  .persona-row .who { font-size: 15px; font-weight: var(--weight-medium); color: var(--ink-3); }
-  .persona-row .what { font-size: clamp(20px, 2.1vw, 30px); font-weight: var(--weight-medium); letter-spacing: -0.02em; line-height: 1.35; max-width: 32ch; color: var(--ink); }
-  .persona-row .what em { font-style: normal; font-weight: var(--weight-semibold); }
-
-  /* ══ Quote — spotlight (shared with homepage) ══ */
-  .quote { padding-top: 128px; padding-bottom: 128px; }
-  .quote blockquote {
-    margin-top: 56px;
-    font-size: clamp(32px, 4.2vw, 68px);
-    font-weight: var(--weight-semibold);
-    letter-spacing: var(--track-display);
-    line-height: 1.15;
-    color: var(--ink);
-    max-width: 22ch;
+  /* ══ Platform block — horizontal accordion on accent ══ */
+  .platform-section { background: var(--accent); padding: 128px var(--margin); }
+  .platform-acc {
+    display: flex; gap: 0; height: 456px;
   }
-  .quote blockquote .qm { color: var(--accent-text); }
-  .quote blockquote .frag { display: block; opacity: 0; transform: translateY(20px); }
-  .quote blockquote.in .frag:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) 0s forwards; }
-  .quote blockquote.in .frag:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .15s forwards; }
-  .quote blockquote.in .frag:nth-child(3) { animation: fadeUp var(--t-default) var(--ease-out) .3s forwards; }
-  .quote .attr { margin-top: 48px; font-size: var(--size-p-md); font-weight: var(--weight-semibold); color: var(--ink); opacity: 0; transform: translateY(20px); }
-  .quote .attr.in { animation: fadeUp var(--t-default) var(--ease-out) .5s both; }
-  .quote .attr span { display: block; margin-top: 4px; color: var(--ink-3); font-weight: var(--weight-regular); font-size: var(--size-p-sm); }
+  .plat-item {
+    position: relative; background: #E19600; color: var(--white);
+    clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 40px, 100% 100%, 40px 100%, 0 calc(100% - 40px));
+    cursor: pointer; overflow: hidden;
+    display: flex; flex-direction: column; padding: 0;
+    flex: 0 0 204px;
+    transition: flex 600ms var(--ease-out-cubic);
+  }
+  .plat-item.open { flex: 1 1 0; }
+  .plat-icon { padding: 48px 48px 0; flex-shrink: 0; }
+  .plat-item:not(.open) .plat-icon { padding: 32px 0 0; text-align: center; }
+  .plat-content {
+    padding: 0 48px 48px; margin-top: auto;
+    opacity: 0; pointer-events: none;
+    transition: opacity 300ms var(--ease-out);
+  }
+  .plat-item.open .plat-content { opacity: 1; pointer-events: auto; transition-delay: .25s; }
+  .plat-content h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; color: var(--ink); margin-bottom: 12px; }
+  .plat-content p { font-size: 16px; font-weight: 400; line-height: 1.45; color: rgba(0,0,0,.75); margin-bottom: 16px; }
+  .plat-tags { font-size: 13px; color: rgba(0,0,0,.55); }
+  .plat-label {
+    position: absolute; top: 55%; left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    font-size: 20px; font-weight: 600; color: var(--ink);
+    white-space: nowrap;
+  }
+  .plat-item.open .plat-label { display: none; }
+
+  /* ══ Testimonial editorial slider ══ */
+  .testi-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 48px; }
+  .testi-head h2 { max-width: none; font-size: 48px; }
+  .testi-nav { display: flex; gap: 8px; }
+  .testi-arrow {
+    width: 56px; height: 56px; border-radius: 50%; border: 1.5px solid var(--ink);
+    background: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    color: var(--ink); transition: background var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out);
+  }
+  .testi-arrow:hover { background: var(--ink); color: var(--white); }
+  .testi-arrow.prev { border-color: #ccc; color: #ccc; }
+  .testi-slider { overflow: hidden; }
+  .testi-slide { display: none; grid-template-columns: 1fr 520px; gap: 0; min-height: 640px; }
+  .testi-slide.active { display: grid; animation: fadeUp 400ms var(--ease-out); }
+  .testi-logo-box { font-size:20px; font-weight:600; letter-spacing:0.02em; color:var(--white); border:1.5px solid var(--white); padding:6px 14px; border-radius:4px; display:inline-block; }
+  .testi-card {
+    background: #1E4FB3;
+    clip-path: polygon(0 156px, 156px 0, 100% 0, 100% calc(100% - 156px), calc(100% - 156px) 100%, 0 100%);
+    padding: 88px 80px; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
+  }
+  .testi-logo { margin-bottom: auto; align-self: flex-end; }
+  .testi-card h3 { font-size: 56px; font-weight: 600; letter-spacing: -2.24px; line-height: 1; color: var(--white); opacity: 0.9; }
+  .testi-card p { font-size: 16px; font-weight: 400; line-height: 1.45; color: var(--white); max-width: 56ch; }
+  .testi-attr { margin-top: 32px; display: flex; flex-direction: column; gap: 4px; }
+  .testi-attr .name { font-size: 18px; font-weight: 600; line-height: 1.45; color: var(--white); }
+  .testi-attr .role { font-size: 16px; font-weight: 400; line-height: 1.45; color: #F6F6F6; }
+  .testi-img { overflow: hidden; }
+  .testi-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .testi-dots { display: flex; justify-content: center; gap: 16px; margin-top: 32px; }
+  .testi-dots .dot { width: 8px; height: 8px; border-radius: 2px; background: #ccc; cursor: pointer; }
+  .testi-dots .dot.active { background: var(--ink); }
 
   /* ══ Closing — always the page colour ══ */
-  .closing { background: var(--accent); padding-top: 96px; padding-bottom: 96px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-  .closing h2 { font-size: clamp(34px, 4.4vw, 72px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.1; max-width: 22ch; color: var(--ink); }
-  .closing h2 .w { display: inline-block; opacity: 0; transform: translateY(20px); }
+  .closing {
+    min-height: 56vh;
+    background: var(--accent); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .closing h1 { font-size: 72px; font-weight: 600; letter-spacing: -2.88px; line-height: 1; color: var(--ink); position: relative; z-index: 1; }
+  .closing h1 .w { display: inline-block; opacity: 0; transform: translateY(20px); }
   .closing .reveal.in .w:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) 0s forwards; }
   .closing .reveal.in .w:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .15s forwards; }
-  .closing .cta { margin-top: 12px; opacity: 0; transform: translateY(20px); }
-  .closing .reveal.in .cta { animation: fadeUp var(--t-default) var(--ease-out) .4s both; }
+  .closing .cta { margin-top: 48px; position: relative; z-index: 1; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .cta { animation: fadeUp var(--t-default) var(--ease-out) .5s forwards; }
+  .closing .reveal { opacity: 1; transform: none; }
 
   /* ══ Footer — shared ══ */
   footer { background: var(--white); border-top: 1px solid var(--color-background-grey); padding: 72px var(--margin) 24px; }
@@ -441,8 +507,9 @@
   }
   @media (max-width: 960px) {
     nav .links { display: none; }
-    .caps, .band, .approach-cols, .pv-split, .quads, .rep-grid, .flow-grid, .persona-row, .f-grid { grid-template-columns: 1fr; }
-    .pv-split .pv-tag, .pv-split .pv-entry { grid-area: auto !important; }
+    .caps, .band, .approach-cols, .pv-group, .quads, .rep-grid, .flow-grid, .f-grid { grid-template-columns: 1fr; }
+    .dc-cards-row { flex-direction: column; }
+    .testi-slide.active { grid-template-columns: 1fr; }
     .caps .cap { grid-area: auto !important; }
     .caps .cap:nth-child(1) { order: 3; } /* item 3 */
     .caps .cap:nth-child(2) { order: 1; } /* item 1 */
@@ -453,7 +520,6 @@
     .flow svg.wires { display: none; }
   }
 </style>
-<link rel="stylesheet" href="scaler-site.css">
 </head>
 <body>
 
@@ -470,8 +536,8 @@
       </button>
       <div class="menu">
         <a href="sfdr.html">SFDR</a>
-        <a href="https://scalerglobal.com/benchmarking">Benchmarking</a>
-        <a href="https://scalerglobal.com/espm">ESPM</a>
+        <a href="benchmarking.html">Benchmarking</a>
+        <a href="espm.html">ESPM</a>
       </div>
     </div>
   </div>
@@ -493,15 +559,7 @@
   </div>
 
   <div class="caps" id="caps">
-    <div class="cap" style="--i:2; grid-area: 1 / 2;">
-      <div class="num">3</div>
-      <div>
-        <h3>Automated data ingestion</h3>
-        <p>Utility sync, bill scrape, surveys, and APIs — every source handled automatically.</p>
-        <div class="tags">Utility sync · Bill scrape · Data requests · Estimation</div>
-      </div>
-    </div>
-    <div class="cap" style="--i:0; grid-area: 2 / 1;">
+    <div class="cap" style="--i:0; grid-area: 1 / 2;">
       <div class="num">1</div>
       <div>
         <h3>Intelligence</h3>
@@ -509,20 +567,28 @@
         <div class="tags">Lumi AI · Investor DDQ · IC-ready charts</div>
       </div>
     </div>
-    <div class="cap" style="--i:3; grid-area: 2 / 2;">
-      <div class="num">4</div>
-      <div>
-        <h3>Reporting</h3>
-        <p>One engine. Every framework — GRESB, CSRD, SFDR, GRI, and more.</p>
-        <div class="tags">GHG accounting · Multi-framework · Roadmaps &amp; scenarios</div>
-      </div>
-    </div>
-    <div class="cap" style="--i:1; grid-area: 3 / 1;">
+    <div class="cap" style="--i:1; grid-area: 2 / 1;">
       <div class="num">2</div>
       <div>
         <h3>Investment operations</h3>
         <p>Price carbon risk, manage retrofits, and flag underperformers.</p>
         <div class="tags">Due diligence · Opex efficiency · Decarb roadmaps · CapEx / ROI</div>
+      </div>
+    </div>
+    <div class="cap" style="--i:2; grid-area: 2 / 2;">
+      <div class="num">3</div>
+      <div>
+        <h3>Automated data ingestion</h3>
+        <p>Utility sync, bill scrape, surveys, and APIs — every source handled automatically.</p>
+        <div class="tags">Utility sync · Bill scrape · Data requests · Estimation</div>
+      </div>
+    </div>
+    <div class="cap" style="--i:3; grid-area: 3 / 1;">
+      <div class="num">4</div>
+      <div>
+        <h3>Reporting</h3>
+        <p>One engine. Every framework — GRESB, CSRD, SFDR, GRI, and more.</p>
+        <div class="tags">GHG accounting · Multi-framework · Roadmaps &amp; scenarios</div>
       </div>
     </div>
     <div class="cap" style="--i:4; grid-area: 3 / 2;">
@@ -539,10 +605,10 @@
 <!-- ══ Stat band — black ══ -->
 <div class="stat-band">
   <div class="band" id="band">
-    <div class="b-stat" style="--i:0"><div class="bar"><i></i></div><div class="b-num"><span class="count" data-target="60">0</span>%</div><div class="b-label">Time back from data work</div></div>
-    <div class="b-stat" style="--i:1"><div class="bar"><i></i></div><div class="b-num"><span class="count" data-target="40">0</span>%</div><div class="b-label">Cost efficiency</div></div>
-    <div class="b-stat" style="--i:2"><div class="bar"><i></i></div><div class="b-num">2–4 hrs</div><div class="b-label">To answer an LP DDQ</div></div>
-    <div class="b-stat" style="--i:3"><div class="bar"><i></i></div><div class="b-num">8 weeks</div><div class="b-label">To first report</div></div>
+    <div class="b-stat" style="--i:0"><div class="bar"></div><div><div class="b-num"><span class="count" data-target="60">0</span>%</div><div class="b-label">Time back from data work</div></div></div>
+    <div class="b-stat" style="--i:1"><div class="bar"></div><div><div class="b-num"><span class="count" data-target="40">0</span>%</div><div class="b-label">Cost efficiency</div></div></div>
+    <div class="b-stat" style="--i:2"><div class="bar"></div><div><div class="b-num">2-4 hrs</div><div class="b-label">To answer an LP DDQ</div></div></div>
+    <div class="b-stat" style="--i:3"><div class="bar"></div><div><div class="b-num">8 weeks</div><div class="b-label">To first report</div></div></div>
   </div>
 </div>
 
@@ -618,17 +684,50 @@
   </div>
 </section>
 
-<!-- ══ Protect value and drive performance — editorial, on black ══ -->
-<section class="dark pv">
+<!-- ══ Data collection from any source ══ -->
+<section class="white" style="background:#fff">
   <div class="section-head reveal">
-    <h2>Protect value and drive performance</h2>
+    <h2>Data collection from any source</h2>
+    <p class="sub">Automate collection so your team works on what the data means, not chasing it.</p>
+  </div>
+  <div class="dc-cards-row">
+    <div class="dc-card reveal">
+      <div class="dc-tag">Auto-import</div>
+      <h3>Automate ingestion</h3>
+      <p>Direct APIs to utilities and meters. PDF bill scrape where APIs don't exist. PMS and PCA connections included.</p>
+      <p class="dc-result">First data: Week one</p>
+    </div>
+    <div class="dc-card reveal">
+      <div class="dc-tag">Data requests</div>
+      <h3>Audit-proof requests</h3>
+      <p>Tailored surveys per PM or tenant. Auto-reminders with live tracking. Full audit trail for CSRD.</p>
+      <p class="dc-result">Cuts: ~60% of the back-and-forth</p>
+    </div>
+    <div class="dc-card reveal">
+      <div class="dc-tag">Bulk upload</div>
+      <h3>Easy bulk templates</h3>
+      <p>Scaler-formatted Excel templates. Row-level validation with inline flags. Estimation fills gaps automatically.</p>
+      <p class="dc-result">Covers: Energy, water, waste, travel</p>
+    </div>
+    <div class="dc-card reveal">
+      <div class="dc-tag">Lumi AI</div>
+      <h3>AI data insights</h3>
+      <p>Spike, drop, and unit-error detection. Coverage and gap detection across meters. Alerts while there's time to fix.</p>
+      <p class="dc-result">Governance: Every value versioned</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Protect value and drive performance ══ -->
+<section class="light">
+  <div class="section-head reveal">
+    <h2>Protect value<br>and drive performance</h2>
     <p class="sub">Mitigate risk and improve performance from the same asset data.</p>
   </div>
-  <div class="pv-split" id="pvSplit">
-    <div class="pv-tag" style="grid-area: 1 / 1;">Drive performance</div>
-    <div class="pv-tag" style="grid-area: 1 / 2;">Protect value</div>
-    <div class="pv-entry" style="--d:.1s; grid-area: 2 / 1;">
-      <div class="a-eyebrow">CapEx &amp; ROI</div>
+  <div class="pv-group reveal" id="pvDrive">
+    <div class="pv-row-label">Drive performance</div>
+    <div class="pv-card">
+      <div class="pv-tag">CapEx &amp; ROI</div>
       <h3>Manage CapEx &amp; ROI</h3>
       <ul>
         <li>Due diligence analysis</li>
@@ -636,21 +735,9 @@
         <li>Project management for execution</li>
       </ul>
       <p class="pv-result">For: Acquisition and asset teams</p>
-      <div class="pv-metric"><b><span class="count" data-target="18">0</span></b><span class="u">tonnes CO2/year reduced</span><span class="pv-delta">↓ 12.6%</span></div>
     </div>
-    <div class="pv-entry" style="--d:.25s; grid-area: 2 / 2;">
-      <div class="a-eyebrow">Transition risk</div>
-      <h3>Assess transition risk</h3>
-      <ul>
-        <li>Decarbonization roadmaps</li>
-        <li>CRREM, EPBD, BPS, NABERS pathways</li>
-        <li>Physical climate risk</li>
-      </ul>
-      <p class="pv-result">Per asset: Every pathway modelled</p>
-      <div class="pv-metric"><b><span class="count" data-target="83">0</span>%</b><span class="u">of assets on a net zero pathway</span><span class="pv-delta">↑ 4.1%</span></div>
-    </div>
-    <div class="pv-entry" style="--d:.4s; grid-area: 3 / 1;">
-      <div class="a-eyebrow">Opex</div>
+    <div class="pv-card">
+      <div class="pv-tag">Opex</div>
       <h3>Improve Opex efficiency</h3>
       <ul>
         <li>Flag underperformers in real time</li>
@@ -658,10 +745,22 @@
         <li>Inform hold and dispose decisions</li>
       </ul>
       <p class="pv-result">Turns: Utility data into savings</p>
-      <div class="pv-metric"><b>$<span class="count" data-target="45000">0</span></b><span class="u">annual OpEx savings</span><span class="pv-delta">↑ 5.8%</span></div>
     </div>
-    <div class="pv-entry" style="--d:.55s; grid-area: 3 / 2;">
-      <div class="a-eyebrow">Compliance</div>
+  </div>
+  <div class="pv-group reveal" id="pvProtect">
+    <div class="pv-row-label">Protect value</div>
+    <div class="pv-card">
+      <div class="pv-tag">Transition risk</div>
+      <h3>Assess transition risk</h3>
+      <ul>
+        <li>Decarbonization roadmaps</li>
+        <li>CRREM, EPBD, BPS, NABERS pathways</li>
+        <li>Physical climate risk</li>
+      </ul>
+      <p class="pv-result">Per asset: Every pathway modelled</p>
+    </div>
+    <div class="pv-card">
+      <div class="pv-tag">Compliance</div>
       <h3>Reduce penalties</h3>
       <ul>
         <li>Building performance standard tracking</li>
@@ -669,122 +768,6 @@
         <li>Fines modelled before they hit</li>
       </ul>
       <p class="pv-result">Covers: BPS, EPBD, local rules</p>
-      <div class="pv-metric"><b><span class="count" data-target="125">0</span></b><span class="u">active assets</span><span class="chip warn">4 at stranding risk</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ Data collection from any source ══ -->
-<section class="light">
-  <div class="section-head reveal">
-    <h2>Data collection from any source</h2>
-    <p class="sub">Automate collection so your team works on what the data means, not chasing it.</p>
-  </div>
-  <div class="quads">
-    <div class="quad" data-anim>
-      <div class="a-eyebrow">Auto-import</div>
-      <h3>Automate ingestion</h3>
-      <ul>
-        <li>Direct APIs to utilities and meters</li>
-        <li>PDF bill scrape where APIs don't exist</li>
-        <li>PMS and PCA connections included</li>
-      </ul>
-      <p class="result">First data: Week one</p>
-      <div class="cards">
-        <div class="mini-card" style="--j:0">
-          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M9.3 1 3 9h4l-.9 6L13 7H8.7l.6-6Z"/></svg>Auto-import</div>
-          <div class="mc-metric">
-            <span class="mc-val"><span class="count" data-target="847">0</span></span>
-            <span class="mc-lbl">readings · last 30d</span>
-            <span class="delta-up">↑ 5.8%</span>
-          </div>
-        </div>
-        <div class="mini-card" style="--j:1">
-          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 1h6l3 3v11H4V1Zm5 1v3h3"/></svg>PDF Scrape</div>
-          <div class="mc-note">Bills, PCAs, documents</div>
-        </div>
-      </div>
-    </div>
-    <div class="quad" data-anim>
-      <div class="a-eyebrow">Data requests</div>
-      <h3>Audit-proof requests</h3>
-      <ul>
-        <li>Tailored surveys per PM or tenant</li>
-        <li>Auto-reminders with live tracking</li>
-        <li>Full audit trail for CSRD</li>
-      </ul>
-      <p class="result">Cuts: ~60% of the back-and-forth</p>
-      <div class="cards">
-        <div class="mini-card" style="--j:0">
-          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 3h14v10H1V3Zm1 1.5 6 4 6-4"/></svg>Data requests</div>
-          <div class="mc-metric">
-            <span class="mc-val"><span class="count" data-target="82">0</span>%</span>
-            <span class="mc-lbl">Response rate</span>
-            <span class="chip warn">5 auto-reminders</span>
-          </div>
-        </div>
-        <div class="mini-card" style="--j:1">
-          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M15 1 1 7l5 2 2 5 7-13Z"/></svg>Send request</div>
-          <div class="mc-note">Auto-reminder on</div>
-        </div>
-      </div>
-    </div>
-    <div class="quad" data-anim>
-      <div class="a-eyebrow">Bulk upload</div>
-      <h3>Easy bulk templates</h3>
-      <ul>
-        <li>Scaler-formatted Excel templates</li>
-        <li>Row-level validation with inline flags</li>
-        <li>Estimation fills gaps automatically</li>
-      </ul>
-      <p class="result">Covers: Energy, water, waste, travel</p>
-      <div class="cards">
-        <div class="mini-card" style="--j:0">
-          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1 3 6h3v5h4V6h3L8 1ZM2 13h12v2H2v-2Z"/></svg>Bulk upload</div>
-          <div>
-            <div class="mc-metric">
-              <span class="mc-val"><span class="count" data-target="98">0</span>%</span>
-              <span class="mc-lbl">Validated</span>
-              <span class="mc-count" style="color:var(--waste-green)">244 / 247</span>
-            </div>
-            <div class="mc-track"><div class="mc-fill" style="width:98%; background:var(--esg-green)"></div></div>
-          </div>
-        </div>
-        <div class="mini-card" style="--j:1">
-          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 1h6l3 3v11H4V1Z"/></svg>Template</div>
-          <div class="mc-rows">
-            <div class="mc-row"><span class="dot" style="background:var(--esg-green)"></span><b>85</b><span>Gaps filled</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="quad" data-anim>
-      <div class="a-eyebrow">Lumi AI</div>
-      <h3>AI data insights</h3>
-      <ul>
-        <li>Spike, drop, and unit-error detection</li>
-        <li>Coverage and gap detection across meters</li>
-        <li>Alerts while there's time to fix</li>
-      </ul>
-      <p class="result">Governance: Every value versioned</p>
-      <div class="cards">
-        <div class="mini-card" style="--j:0">
-          <div class="mc-head"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 4 4"/></svg>Detect</div>
-          <div class="mc-metric" style="gap:10px;">
-            <span style="font-size:11px; color:var(--ink-3);">Energy</span><b style="font-size:16px;">92</b>
-            <svg class="squig" viewBox="0 0 34 14"><path d="M2 10 H8 L12 4 L18 7 L24 3 H29" stroke="#E23704"/><circle cx="31" cy="3" r="2.2" fill="#E23704"/></svg>
-            <span style="font-size:11px; color:var(--ink-3);">GHG</span><b style="font-size:16px;">45</b>
-            <svg class="squig" viewBox="0 0 34 14"><path d="M2 9 L8 9 L12 4 L18 6 L24 6 H29" stroke="#FEC40A"/><circle cx="31" cy="6" r="2.2" fill="#FEC40A"/></svg>
-          </div>
-        </div>
-        <div class="mini-card" style="--j:1">
-          <div class="mc-head"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1 15 14H1L8 1Zm-.75 5h1.5v4h-1.5V6Zm0 5h1.5v1.5h-1.5V11Z"/></svg>Alerts</div>
-          <div class="mc-rows">
-            <div class="mc-row"><span class="dot" style="background:var(--accent)"></span><b>12</b><span>Assets underperforming</span></div>
-            <div class="mc-row"><span class="dot" style="background:var(--energy-red)"></span><b>4</b><span>Stranding risks</span></div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -980,46 +963,105 @@
   </div>
 </section>
 
-<!-- ══ Who it's for ══ -->
-<section class="white">
+<!-- ══ Who it's for — horizontal accordion ══ -->
+<section class="platform-section">
   <div class="section-head reveal">
-    <p class="eyebrow">Who it's for</p>
-    <h2>The most accessible tools for real estate teams.</h2>
+    <h2 style="color:#000">The most accessible tools for real estate teams</h2>
     <p class="sub">From the analyst reviewing live meters to the fund manager presenting to LPs.</p>
   </div>
-  <div class="persona-row reveal">
-    <div class="who">Sustainability &amp; reporting</div>
-    <div class="what">Collect once, generate <em>every report</em>, and manage decarb roadmaps from one portal.</div>
-  </div>
-  <div class="persona-row reveal">
-    <div class="who">Asset &amp; fund managers</div>
-    <div class="what">Portfolio performance, retrofit ROI, and transition risk in <em>one view</em>.</div>
-  </div>
-  <div class="persona-row reveal">
-    <div class="who">Property managers</div>
-    <div class="what">Live meters, tenant requests, and <em>building-level alerts</em>, without the spreadsheet chase.</div>
-  </div>
-  <div class="persona-row reveal">
-    <div class="who">Finance &amp; marketing</div>
-    <div class="what">Investor-grade numbers and stories, straight from the source — <em>LP reporting</em> and DDQs in hours.</div>
+  <div class="platform-acc" id="platformAcc">
+    <div class="plat-item open" data-plat="0">
+      <div class="plat-icon"><svg width="40" height="40" viewBox="0 0 128 128" fill="none"><path d="M128 32V64H96L128 96V128H32L0 96V64H32L0 32V0H96L128 32Z" fill="black"/></svg></div>
+      <div class="plat-content">
+        <h3>Sustainability &amp; Reporting</h3>
+        <p>Collect once, generate every report, and manage decarb roadmaps from one portal.</p>
+        <div class="plat-tags">Collection portal · All reports · Roadmaps · Certifications</div>
+      </div>
+      <span class="plat-label">Sustainability &amp; Reporting</span>
+    </div>
+    <div class="plat-item" data-plat="1">
+      <div class="plat-icon"><svg width="40" height="40" viewBox="0 0 128 128" fill="none"><path d="M128 32V64H96L128 96V128H32L0 96V64H32L0 32V0H96L128 32Z" fill="black"/></svg></div>
+      <div class="plat-content">
+        <h3>Asset &amp; Fund Managers</h3>
+        <p>Portfolio performance, retrofit ROI, and transition risk in one view.</p>
+        <div class="plat-tags">Portfolio analytics · CRREM pathways · Benchmarking · NOI optimization</div>
+      </div>
+      <span class="plat-label">Asset &amp; Fund Managers</span>
+    </div>
+    <div class="plat-item" data-plat="2">
+      <div class="plat-icon"><svg width="40" height="40" viewBox="0 0 128 128" fill="none"><path d="M128 32V64H96L128 96V128H32L0 96V64H32L0 32V0H96L128 32Z" fill="black"/></svg></div>
+      <div class="plat-content">
+        <h3>Property Managers</h3>
+        <p>Live meters, tenant requests, and building-level alerts, without the spreadsheet chase.</p>
+        <div class="plat-tags">Dashboards · Alerts · Meter connections · Tenant data</div>
+      </div>
+      <span class="plat-label">Property Managers</span>
+    </div>
+    <div class="plat-item" data-plat="3">
+      <div class="plat-icon"><svg width="40" height="40" viewBox="0 0 128 128" fill="none"><path d="M128 32V64H96L128 96V128H32L0 96V64H32L0 32V0H96L128 32Z" fill="black"/></svg></div>
+      <div class="plat-content">
+        <h3>Finance &amp; Marketing</h3>
+        <p>Investor-grade numbers and stories, straight from the source. LP reporting and DDQs in hours.</p>
+        <div class="plat-tags">GRESB · SFDR · CSRD · GRI · ESG scoring</div>
+      </div>
+      <span class="plat-label">Finance &amp; Marketing</span>
+    </div>
   </div>
 </section>
 
-<!-- ══ Quote — spotlight ══ -->
-<section class="light quote">
-  <p class="eyebrow reveal">Proven results from industry leaders</p>
-  <blockquote class="reveal">
-    <span class="frag"><span class="qm">"</span>The team helped us meet</span>
-    <span class="frag">tight deadlines and strengthened</span>
-    <span class="frag">the quality of our reporting.<span class="qm">"</span></span>
-  </blockquote>
-  <p class="attr reveal">Bozena Jankowska <span>Global Head of Responsible Investment, Slate Asset Management</span></p>
+<!-- ══ Testimonial editorial slider ══ -->
+<section class="white" style="background:#fff">
+  <div class="testi-head reveal">
+    <h2>Proven results from industry leaders</h2>
+    <div class="testi-nav">
+      <button class="testi-arrow prev" aria-label="Previous"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <button class="testi-arrow next" aria-label="Next"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+  <div class="testi-slider" id="testiSlider">
+    <div class="testi-slide active">
+      <div class="testi-card">
+        <div class="testi-logo"><img src="assets/slate-logo-white.png" alt="Slate Asset Management" style="height:56px; width:auto;"></div>
+        <h3>The team helped us meet tight deadlines and strengthened the quality of our reporting.</h3>
+        <div class="testi-attr">
+          <div class="name">Bozena Jankowska</div>
+          <div class="role">Global Head of Responsible Investment | Slate Asset Management</div>
+        </div>
+      </div>
+      <div class="testi-img"><img src="assets/testimonial-1.png" alt="Jamestown case study"></div>
+    </div>
+    <div class="testi-slide">
+      <div class="testi-card">
+        <div class="testi-logo"><span class="testi-logo-box">a.s.r.</span></div>
+        <h3>Scaler has enabled us to develop effective decarbonisation roadmaps for all assets in our portfolios.</h3>
+        <div class="testi-attr">
+          <div class="name">a.s.r. real estate</div>
+          <div class="role">ESG &amp; Sustainability Team</div>
+        </div>
+      </div>
+      <div class="testi-img"><img src="assets/testimonial-1.png" alt="a.s.r. case study"></div>
+    </div>
+    <div class="testi-slide">
+      <div class="testi-card">
+        <div class="testi-logo"><span class="testi-logo-box">Patrizia</span></div>
+        <h3>The platform's automated meter connections and AI-powered gap filling transformed our reporting workflow.</h3>
+        <div class="testi-attr">
+          <div class="name">Patrizia</div>
+          <div class="role">Sustainability &amp; Reporting</div>
+        </div>
+      </div>
+      <div class="testi-img"><img src="assets/testimonial-1.png" alt="Patrizia case study"></div>
+    </div>
+  </div>
+  <div class="testi-dots" id="testiDots">
+    <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+  </div>
 </section>
 
 <!-- ══ Closing — page colour ══ -->
 <section class="closing">
   <div class="reveal">
-    <h2><span class="w">One intelligence system for every layer</span> <span class="w">of your real estate portfolio.</span></h2>
+    <h1><span class="w">One intelligence system for every layer</span> <span class="w">of your real estate portfolio.</span></h1>
     <div class="cta"><button class="pill">Schedule a demo <span class="arr">→</span></button></div>
   </div>
 </section>
@@ -1111,7 +1153,7 @@
       io.unobserve(e.target);
     });
   }, { threshold: 0.2 });
-  document.querySelectorAll('.reveal, #caps, #band, #approach, #pvSplit, .quad[data-anim], #repGrid').forEach(el => io.observe(el));
+  document.querySelectorAll('.reveal, #caps, #band, #approach, .pv-group, .quad[data-anim], #repGrid').forEach(el => io.observe(el));
 
   // AI edits count-up
   const approach = document.getElementById('approach');
@@ -1194,6 +1236,33 @@
       runFlowCounts(i + 1);
     });
   });
+
+  // Platform horizontal accordion
+  const platItems = [...document.querySelectorAll('.plat-item')];
+  platItems.forEach(item => {
+    item.addEventListener('click', () => {
+      platItems.forEach(p => p.classList.toggle('open', p === item));
+    });
+  });
+
+  // Testimonial carousel
+  const slides = [...document.querySelectorAll('.testi-slide')];
+  const dots = [...document.querySelectorAll('#testiDots .dot')];
+  const prevBtn = document.querySelector('.testi-arrow.prev');
+  const nextBtn = document.querySelector('.testi-arrow.next');
+  let current = 0;
+  function goToSlide(i) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (i + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    prevBtn.style.borderColor = current === 0 ? '#ccc' : '';
+    prevBtn.style.color = current === 0 ? '#ccc' : '';
+  }
+  prevBtn.addEventListener('click', () => goToSlide(current - 1));
+  nextBtn.addEventListener('click', () => goToSlide(current + 1));
+  dots.forEach((d, i) => d.addEventListener('click', () => goToSlide(i)));
 
 </script>
 </body>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ESPM — Scaler Global</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="scaler-site.css">
+<style>
+  :root {
+    --accent: #1E4FB3;
+    --accent-dark: #163C8A;
+    --accent-text: #1E4FB3;
+  }
+
+  h2 { font-size: 48px; font-weight: 600; letter-spacing: -1.44px; line-height: 1; color: var(--ink); }
+  h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); }
+  .section-head h2 { font-size: 48px; font-weight: 600; letter-spacing: -1.44px; line-height: 1; max-width: 20ch; color: var(--ink); }
+  .section-head .sub { margin-top: 16px; font-size: 20px; font-weight: 500; letter-spacing: -0.6px; line-height: 1; color: var(--ink); max-width: 52ch; }
+
+  /* ══ Hero ══ */
+  .hero {
+    background: var(--accent);
+    padding: 140px 48px 88px;
+    overflow: hidden;
+  }
+  .hero-top {
+    display: grid; grid-template-columns: 1.4fr 1fr;
+    gap: 88px; align-items: flex-end;
+    max-width: 1440px; margin: 0 auto; padding: 0 80px;
+  }
+  .hero h1 { font-size: 72px; font-weight: 600; letter-spacing: -2.88px; line-height: 1; color: var(--white); padding-bottom: 48px; }
+  .hero h1 .line { display: block; opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  .hero h1 .line:nth-child(1) { animation-delay: .15s; }
+  .hero h1 .line:nth-child(2) { animation-delay: .3s; }
+  .hero h1 .line:nth-child(3) { animation-delay: .45s; }
+  p.lede { font-size: 20px !important; font-weight: 500 !important; line-height: 1 !important; letter-spacing: -0.6px !important; color: rgba(255,255,255,.85) !important; }
+  .hero-side { max-width: 440px; }
+  .hero-side .cta { margin-top: 20px; }
+  .fade-up { opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+
+  .hero-illustration {
+    max-width: 1344px; margin: 88px auto 0;
+    padding: 0 48px;
+    position: relative;
+  }
+  .hero-illustration::before {
+    content: ''; position: absolute;
+    top: 48px; left: 0; right: 0; bottom: 96px;
+    background: var(--accent-dark);
+    clip-path: polygon(160px 0, 100% 0, 100% calc(100% - 160px), calc(100% - 160px) 100%, 0 100%, 0 160px);
+  }
+  .hero-illustration img {
+    max-width: 1030px; width: 100%; height: auto; display: block;
+    position: relative; margin: 0 auto;
+  }
+
+  /* ══ Testimonial — single editorial block ══ */
+  .testi-block { display: grid; grid-template-columns: 1fr 520px; gap: 0; min-height: 640px; }
+  .testi-card {
+    background: #FD8F01;
+    clip-path: polygon(0 156px, 156px 0, 100% 0, 100% calc(100% - 156px), calc(100% - 156px) 100%, 0 100%);
+    padding: 88px 80px; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
+  }
+  .testi-card h3 { font-size: 56px; font-weight: 600; letter-spacing: -2.24px; line-height: 1; color: var(--ink); opacity: 0.9; margin-bottom: 32px; }
+  .testi-card p { font-size: 16px; line-height: 1.45; color: var(--ink); opacity: 0.85; max-width: 52ch; }
+  .testi-attr { margin-top: 32px; display: flex; flex-direction: column; gap: 4px; }
+  .testi-attr .name { font-size: 18px; font-weight: 600; line-height: 1.45; color: var(--ink); }
+  .testi-attr .role { font-size: 16px; font-weight: 400; line-height: 1.45; color: rgba(0,0,0,.65); }
+  .testi-img { overflow: hidden; position: relative; background: var(--accent); }
+  .testi-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .testi-img::before { content: ''; position: absolute; top: 0; left: 0; width: 156px; height: 156px; background: var(--bg); clip-path: polygon(0 0, 0 100%, 100% 0); z-index: 1; }
+  .testi-img::after { content: ''; position: absolute; bottom: 0; right: 0; width: 156px; height: 156px; background: var(--bg); clip-path: polygon(100% 100%, 100% 0, 0 100%); z-index: 1; }
+
+  /* ══ Essentials — 6 blue cards ══ */
+  .ess-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .ess-card {
+    background: var(--accent);
+    clip-path: polygon(0 0, calc(100% - 56px) 0, 100% 56px, 100% 100%, 0 100%);
+    padding: 40px 28px;
+    display: flex; flex-direction: column; gap: 16px;
+    opacity: 0; transform: translateY(20px);
+  }
+  .ess-card.reveal.in { opacity: 1; transform: none; }
+  .ess-card:nth-child(1) { transition-delay: 0s; }
+  .ess-card:nth-child(2) { transition-delay: .08s; }
+  .ess-card:nth-child(3) { transition-delay: .16s; }
+  .ess-card:nth-child(4) { transition-delay: .24s; }
+  .ess-card:nth-child(5) { transition-delay: .32s; }
+  .ess-card:nth-child(6) { transition-delay: .4s; }
+  .ess-card h3 { color: var(--white); opacity: 0.9; }
+  .ess-card p { font-size: 14px; line-height: 1.45; color: rgba(255,255,255,.8); }
+
+  /* ══ Steps — numbered with companion cards ══ */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: grid; grid-template-columns: 1fr 240px; gap: 48px; align-items: start;
+    padding: 48px 0; border-top: 1px solid var(--ink);
+  }
+  .step:last-child { border-bottom: 1px solid var(--ink); }
+  .step-content { display: flex; gap: 16px; align-items: flex-start; }
+  .step .s-num {
+    width: 40px; height: 40px; border: 1.5px solid var(--ink); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 600; flex-shrink: 0;
+  }
+  .step-text h3 { margin-bottom: 12px; }
+  .step-text p { font-size: 16px; line-height: 1.45; color: var(--ink-2); }
+  .step-text ol { margin-top: 8px; padding-left: 20px; }
+  .step-text li { font-size: 16px; line-height: 1.55; color: var(--ink-2); margin-bottom: 4px; }
+  .step-card {
+    background: var(--white); border-radius: 12px; padding: 24px;
+    box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 12px;
+    opacity: 0; transform: translateX(12px);
+  }
+  .step.reveal.in .step-card { animation: fadeInX 500ms var(--ease-out-cubic) .2s forwards; }
+  .step-card .sc-head { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; color: var(--ink); }
+  .step-card .sc-head svg { width: 20px; height: 20px; }
+  .step-card .sc-detail { font-size: 13px; color: var(--ink-2); line-height: 1.4; }
+  .step-card .sc-btn {
+    display: inline-block; padding: 6px 16px; border-radius: 9999px;
+    background: var(--accent); color: var(--white); font-size: 13px; font-weight: 600;
+    width: fit-content;
+  }
+
+  /* ══ FAQ — accordion ══ */
+  .faq-list { border-top: 1px solid var(--ink); }
+  .faq-item { border-bottom: 1px solid var(--ink); }
+  .faq-q {
+    display: flex; justify-content: space-between; align-items: center; gap: 24px;
+    padding: 24px 0; cursor: pointer;
+    font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1.2; color: var(--ink);
+  }
+  .faq-q .faq-icon { width: 24px; height: 24px; flex-shrink: 0; transition: transform var(--t-base) var(--ease-out); }
+  .faq-item.open .faq-q .faq-icon { transform: rotate(45deg); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height var(--t-default) var(--ease-in-out); }
+  .faq-item.open .faq-a { max-height: 300px; }
+  .faq-a p { padding: 0 0 24px; font-size: 16px; line-height: 1.45; color: var(--ink-2); max-width: 64ch; }
+
+  /* ══ Closing ══ */
+  .closing {
+    min-height: 56vh;
+    background: var(--accent); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .closing h1 { font-size: 72px; font-weight: 600; letter-spacing: -2.88px; line-height: 1; color: var(--white); position: relative; z-index: 1; }
+  .closing h1 .w { display: block; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .w:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) 0s forwards; }
+  .closing .reveal.in .w:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .15s forwards; }
+  .closing .cta { margin-top: 48px; position: relative; z-index: 1; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .cta { animation: fadeUp var(--t-default) var(--ease-out) .5s forwards; }
+  .closing .reveal { opacity: 1; transform: none; }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity var(--t-default) var(--ease-out), transform var(--t-default) var(--ease-out); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .hero-top, .testi-block, .f-grid { grid-template-columns: 1fr; }
+    .ess-cards { grid-template-columns: 1fr; }
+    .step { grid-template-columns: 72px 1fr; }
+    .step .s-num { font-size: 64px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html"><img src="assets/logo-full-dark.svg" alt="Scaler"></a>
+  <div class="links">
+    <a href="solutions.html">Solutions</a>
+    <a href="partnerships.html">Partnerships</a>
+    <a href="articles.html">Articles</a>
+    <a href="about.html">About Us</a>
+    <div class="drop">
+      <button>Resources
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <div class="menu">
+        <a href="sfdr.html">SFDR</a>
+        <a href="benchmarking.html">Benchmarking</a>
+        <a class="active" href="espm.html">ESPM</a>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <a class="login" href="https://app.scalerglobal.com">Login</a>
+    <button class="pill">Schedule a demo</button>
+  </div>
+</nav>
+
+<!-- ══ Hero ══ -->
+<header class="hero">
+  <div class="hero-top">
+    <div>
+      <h1><span class="line">ENERGY STAR</span><span class="line">Portfolio Manager</span></h1>
+    </div>
+    <div class="hero-side">
+      <p class="lede fade-up" style="animation-delay:.6s">Scaler is a proud partner of ENERGY STAR Portfolio Manager. Maintain a reliable backup of your ESPM data with free ESPM data backup and access to our Collection Portal, ensuring your information remains secure and easily accessible.</p>
+      <div class="cta fade-up" style="animation-delay:.75s">
+        <button class="pill">Get started today <span class="arr">→</span></button>
+      </div>
+    </div>
+  </div>
+  <div class="hero-illustration fade-up" style="animation-delay:.9s">
+    <img src="assets/animation.svg" alt="Scaler ESPM dashboard" width="1081" height="715">
+  </div>
+</header>
+
+<!-- ══ Testimonial ══ -->
+<section class="light">
+  <div class="testi-block reveal">
+    <div class="testi-card">
+      <h3>Move Forward<br>with Confidence</h3>
+      <p>We're proud partners of ENERGY STAR Portfolio Manager and committed to supporting the real estate community through whatever changes may come. Scaler clients can move forward with confidence knowing their data is protected, and we have solutions to any challenges.</p>
+      <div class="testi-attr">
+        <div class="name">Yetsuh Frank</div>
+        <div class="role">Head of North America | Scaler</div>
+      </div>
+    </div>
+    <div class="testi-img"><img src="assets/espm-buildings.png" alt="Move forward with confidence"></div>
+  </div>
+</section>
+
+<!-- ══ The Essentials ══ -->
+<section class="white" style="background:#fff">
+  <div class="section-head reveal">
+    <h2>The Essentials</h2>
+    <p class="sub">Everything you need to know about your ESPM data with Scaler.</p>
+  </div>
+  <div class="ess-cards">
+    <div class="ess-card reveal">
+      <h3>Platform Availability</h3>
+      <p>ESPM remains active. Users can continue to use ESPM for benchmarking, reporting, and compliance needs.</p>
+    </div>
+    <div class="ess-card reveal">
+      <h3>Automated Daily Backups</h3>
+      <p>Daily, secure backups of your ESPM data are available via Scaler's Collection Portal.</p>
+    </div>
+    <div class="ess-card reveal">
+      <h3>Continuous Data Access</h3>
+      <p>Your data is always accessible, with a secure and uninterrupted flow from ESPM to Scaler.</p>
+    </div>
+    <div class="ess-card reveal">
+      <h3>Free Backup Service</h3>
+      <p>Free ESPM backup is available to all, with no Scaler subscription required.</p>
+    </div>
+    <div class="ess-card reveal">
+      <h3>Contingency Planning</h3>
+      <p>While ESPM is secure through 2025, it's best practice to contingency plan. Our team is available to help you prepare for any scenario.</p>
+    </div>
+    <div class="ess-card reveal">
+      <h3>API-Based Integration</h3>
+      <p>Begin direct integration using seamless Scaler API connections to pull your data straight from the source.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Get Started ══ -->
+<section class="light">
+  <div class="section-head reveal">
+    <h2>Get Started Today</h2>
+    <p class="sub">Follow the steps below to get started. If you have any questions, reach out to info@scalerglobal.com.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-content">
+        <div class="s-num">1</div>
+        <div class="step-text">
+          <h3>Get Access to the Scaler Collection Portal</h3>
+          <p>Email us at info@scalerglobal.com to request access. Scaler supports flexible integration with ENERGY STAR Portfolio Manager, including both push and pull data capabilities at your preferred frequency.</p>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="sc-head"><img src="assets/logo-mark-dark.svg" alt="" style="height:20px; width:20px;">Scaler</div>
+        <div class="sc-btn">Request Access</div>
+      </div>
+    </div>
+    <div class="step reveal">
+      <div class="step-content">
+        <div class="s-num">2</div>
+        <div class="step-text">
+          <h3>Add Scaler as a Contact on ESPM</h3>
+          <ol>
+            <li>Log into your ENERGY STAR Portfolio Manager account.</li>
+            <li>Click "Contacts" (top-right of the screen).</li>
+            <li>Click "Add New Contacts" and search username ScalerGlobal.</li>
+            <li>When Scaler appears, click "Connect" and send the connection request.</li>
+          </ol>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="sc-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Add New Contacts</div>
+        <div class="sc-detail">ScalerGlobal<br>(info@scalerglobal.com)</div>
+        <div class="sc-btn">Connect</div>
+      </div>
+    </div>
+    <div class="step reveal">
+      <div class="step-content">
+        <div class="s-num">3</div>
+        <div class="step-text">
+          <h3>Share Your ESPM Data with Scaler</h3>
+          <p>Once accepted, share all desired properties with "Exchange Data" access (Full Access or Read Only) with Scaler. To share multiple properties at once, use the Custom Bulk Sharing page.</p>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="sc-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Exchange Data</div>
+        <div class="sc-detail">Select all</div>
+        <div class="sc-btn">Share</div>
+      </div>
+    </div>
+    <div class="step reveal">
+      <div class="step-content">
+        <div class="s-num">4</div>
+        <div class="step-text">
+          <h3>Access Live Data and Plan for Continuity</h3>
+          <p>Once connected, Scaler automatically backs up your ESPM data daily, securely storing it in the Collection Portal. Plan ahead with custom continuity strategies and seamlessly integrate data through direct API connections.</p>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="sc-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg>Scaler Collection Portal</div>
+        <div class="sc-detail">Plan &middot; Integrate &middot; Centralize</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="white" style="background:#fff">
+  <div class="section-head reveal">
+    <h2>Frequently Asked Questions</h2>
+  </div>
+  <div class="faq-list" id="faqList">
+    <div class="faq-item open">
+      <div class="faq-q">Should I back up my ESPM data?<svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="faq-a"><p>Yes. While ESPM is continuing under the EPA, having an independent backup protects against accidental loss, access issues, or workflow disruptions. As an official ESPM Partner, Scaler provides a secure, automated backup solution.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How often does Scaler backup ESPM data?<svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="faq-a"><p>Daily, via the Scaler Data Collection Portal.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What is the backup process?<svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="faq-a"><p>Email info@scalerglobal.com to get started. Scaler provides an NDA and walks you through sharing ESPM assets. Once shared, the team syncs your meters and grants access to the Collection Portal.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How much does it cost?<svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="faq-a"><p>Backup, storage, and access are free.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Do I have access to my data?<svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="faq-a"><p>You own your data and retain full access via the collection portal. You can export data anytime.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can Scaler support integration to source data?<svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="faq-a"><p>Yes. Scaler offers direct API integrations to third-party data providers, utility providers, and via the Scaler API. Utility data tools include bill scraping and automated utility syncing.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Closing ══ -->
+<section class="closing">
+  <div class="reveal">
+    <h1><span class="w">Backed Up</span><span class="w">with Scaler.</span></h1>
+    <div class="cta"><button class="pill inverse">Get started <span class="arr">→</span></button></div>
+  </div>
+</section>
+
+<!-- ══ Footer ══ -->
+<footer>
+  <div class="f-grid">
+    <div class="f-mark">
+      <img src="assets/shape-01.svg" alt="">
+      <span class="word">scaler</span>
+    </div>
+    <div class="f-links">
+      <div class="f-group"><div class="k">Products</div><a href="#">Data &amp; Analytics</a><a href="#">Roadmaps &amp; Targets</a><a href="#">Reporting &amp; Compliance</a></div>
+      <div class="f-group"><div class="k">Solutions</div><a href="solutions.html">Small teams</a><a href="solutions.html">Professionals</a><a href="solutions.html">Enterprise customers</a></div>
+      <div class="f-group"><div class="k">Pricing</div><a href="#">Pricing</a><a href="#">Book a demo</a></div>
+      <div class="f-group"><div class="k">Company</div><a href="about.html">About</a><a href="https://jobs.ashbyhq.com/scaler">Careers</a><a href="#">Contact</a></div>
+      <div class="f-group"><div class="k">Resources</div><a href="#">Webinar series</a><a href="#">Customer stories</a><a href="articles.html">Blog</a></div>
+      <div class="f-group"><div class="k">Social</div><a href="https://www.linkedin.com/company/scaler-global">Linkedin</a><a href="#">Twitter</a></div>
+    </div>
+    <div class="f-offices">
+      <div class="office"><div class="city">New York</div><div class="addr">133 West 25th Street Suite 4W, 4th Floor<br>New York, NY 10001<br>United States</div></div>
+      <div class="office"><div class="city">Amsterdam</div><div class="addr">Fred. Roeskestraat 109<br>1076 EE Amsterdam<br>The Netherlands</div></div>
+      <div class="office"><div class="city">Sydney</div><div class="addr">Darling Park<br>201 Sussex St, Sydney NSW 2000<br>Australia</div></div>
+    </div>
+  </div>
+  <div class="legal">
+    <span>Copyright &copy; Scaler Global Inc. 2026</span>
+    <span><a href="https://scalerglobal.com/privacy-statement">Privacy Statement</a><a href="https://scalerglobal.com/terms-and-conditions">Terms &amp; Conditions</a></span>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const navEl = document.querySelector('nav');
+  addEventListener('scroll', () => navEl.classList.toggle('scrolled', scrollY > 8), { passive: true });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

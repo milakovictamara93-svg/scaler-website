@@ -5,13 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Partnerships — Scaler Global</title>
 <link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="scaler-site.css">
 <style>
   :root {
-    --accent: #FD8F01;               /* engagement orange — the Partnerships page colour */
-    --accent-text: #B96A02;          /* darkened orange — the only orange that carries text */
+    --accent: #FD8F01;
+    --accent-text: #B96A02;
+    --tech-purple: #6961E4;
   }
 
-  /* ══ Hero — full engagement orange, with the partner-flow scene ══ */
+  /* ══ Hero ══ */
   .hero {
     min-height: 100vh;
     background: var(--accent);
@@ -20,9 +22,20 @@
     padding: 140px var(--margin) 96px;
     overflow: hidden;
   }
-  .hero .lede { margin-top: 28px; max-width: 46ch; font-size: var(--size-p-lg); line-height: var(--lh-paragraph); color: rgba(0,0,0,.8); }
+  .hero h1 { font-size: 72px; font-weight: 600; letter-spacing: -2.88px; line-height: 1; color: #000; }
+  .hero h1 .line { display: block; opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  .hero h1 .line:nth-child(1) { animation-delay: .15s; }
+  .hero h1 .line:nth-child(2) { animation-delay: .3s; }
+  p.lede { font-size: 20px !important; font-weight: 500 !important; line-height: 1 !important; letter-spacing: -0.6px !important; color: #000 !important; }
+  .hero .lede { margin-top: 28px; max-width: 46ch; }
   .hero .cta { margin-top: 36px; }
+  .fade-up { opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  h2 { font-size: 48px; font-weight: 600; letter-spacing: -1.44px; line-height: 1; color: var(--ink); }
+  h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); }
+  .section-head h2 { font-size: 48px; font-weight: 600; letter-spacing: -1.44px; line-height: 1; max-width: 20ch; color: var(--ink); }
+  .section-head .sub { margin-top: 16px; font-size: 20px; font-weight: 500; letter-spacing: -0.6px; line-height: 1; color: var(--ink); max-width: 52ch; }
 
+  /* ══ Scene — partner flow animation ══ */
   .scene-wrap { width: 100%; max-width: 700px; justify-self: end; }
   .scene { position: relative; width: 700px; height: 400px; transform-origin: top left; }
   .scene svg.connectors { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
@@ -70,67 +83,115 @@
   .scene.play .packet { animation: packetIntro .3s linear 1.9s forwards, packetFlow 2s linear 1.9s infinite; }
   .scene.play .hub-badge { animation: popIn 600ms var(--spring-pop) 3s forwards; }
 
-  /* ══ Value of partnership — 2×2 columns ══ */
-  .quads { display: grid; grid-template-columns: 1fr 1fr; gap: 64px clamp(48px, 6vw, 96px); }
-  .quad { position: relative; padding-left: 24px; }
-  .quad::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--color-background-grey); }
-  .quad::after { content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 24px; background: var(--accent); }
-  .quad h3 { font-size: 24px; font-weight: var(--weight-semibold); letter-spacing: -0.48px; line-height: 1.15; color: var(--ink); opacity: .9; }
-  .quad p { margin-top: 14px; font-size: 16px; line-height: 1.5; color: var(--ink-2); max-width: 46ch; }
+  /* ══ Value cards — orange cards with corner cut ══ */
+  .value-cards { display: flex; gap: 24px; }
+  .val-card {
+    flex: 1 1 0; min-width: 0; position: relative;
+    background: var(--tech-purple);
+    clip-path: polygon(0 0, calc(100% - 56px) 0, 100% 56px, 100% 100%, 0 100%);
+    padding: 40px 28px;
+    display: flex; flex-direction: column; gap: 16px;
+    opacity: 0; transform: translateY(20px);
+  }
+  .val-card.reveal.in { opacity: 1; transform: none; }
+  .val-card:nth-child(1) { transition-delay: 0s; }
+  .val-card:nth-child(2) { transition-delay: .1s; }
+  .val-card:nth-child(3) { transition-delay: .15s; }
+  .val-card:nth-child(4) { transition-delay: .2s; }
+  .val-card .v-tag { font-size: 16px; font-weight: 600; line-height: 1.45; color: rgba(255,255,255,.7); }
+  .val-card h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--white); opacity: 0.9; }
+  .val-card p { font-size: 14px; line-height: 1.45; color: var(--white); opacity: 0.8; }
 
-  /* ══ Partner categories — accordion + swapping illustrations
-     (the One-click investor-grade reports pattern, new content) ══ */
+  /* ══ Partner categories — accordion + partner list ══ */
   .rep-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(40px, 5vw, 88px); align-items: center; }
   .acc-block {
     background: var(--accent);
     clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 40px, 100% 100%, 40px 100%, 0 calc(100% - 40px));
-    padding: 44px 48px; margin-bottom: 0;
-    cursor: pointer;
+    padding: 44px 48px; cursor: pointer;
     opacity: 0; transform: translateX(-12px);
   }
   .rep-grid.in .acc-block { animation: fadeInX 500ms var(--ease-out-cubic) forwards; animation-delay: calc(var(--i) * 150ms); }
   .acc-head { display: flex; gap: 16px; align-items: flex-start; }
   .acc-num {
-    width: 32px; height: 32px; border: 1.5px solid var(--ink); border-radius: 50%;
+    width: 40px; height: 40px; border: 1.5px solid var(--ink); border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: var(--weight-semibold); flex-shrink: 0;
+    font-size: 16px; font-weight: var(--weight-semibold); flex-shrink: 0;
     transition: background var(--t-base) var(--ease-out), color var(--t-base) var(--ease-out);
   }
   .acc-block.open .acc-num { background: var(--ink); color: var(--accent); border-color: var(--ink); }
-  .acc-title { font-size: 19px; font-weight: var(--weight-semibold); letter-spacing: -0.02em; line-height: 1.25; color: var(--ink); }
+  .acc-title { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); padding-top: 6px; }
   .acc-body { max-height: 0; overflow: hidden; transition: max-height var(--t-default) var(--ease-in-out); }
-  .acc-copy { margin: 16px 0 4px 48px; font-size: 15px; line-height: 1.55; color: var(--ink); opacity: 0; transform: translateX(-8px); transition: opacity var(--t-base) var(--ease-out) .15s, transform var(--t-base) var(--ease-out) .15s; }
+  .acc-copy { margin: 16px 0 4px 56px; font-size: 16px; line-height: 1.45; color: var(--ink); opacity: 0; transform: translateX(-8px); transition: opacity var(--t-base) var(--ease-out) .15s, transform var(--t-base) var(--ease-out) .15s; }
   .acc-block.open .acc-copy { opacity: 1; transform: none; }
   .acc-block.open .acc-body { max-height: 280px; }
 
-  /* text-based partner index — swaps per accordion track */
-  .partner-list { border-top: 1px solid var(--color-background-grey); }
+  /* partner index */
+  .partner-list { border-top: 1px solid var(--ink); }
   .plist { display: none; }
   .plist.active { display: grid; grid-template-columns: 1fr; }
   .plist.active[data-mode="1"] { grid-template-columns: 1fr 1fr; column-gap: 48px; }
   .p-name {
-    padding: 24px 0; border-bottom: 1px solid var(--color-background-grey);
-    font-size: clamp(20px, 1.8vw, 28px); font-weight: var(--weight-medium);
-    letter-spacing: -0.02em; color: var(--ink);
+    padding: 24px 0; border-bottom: 1px solid var(--ink);
+    font-size: 24px; font-weight: 500;
+    letter-spacing: -0.72px; color: var(--ink);
     opacity: 0; transform: translateY(20px);
     transition: color var(--t-fast) var(--ease-out);
   }
   .plist.active .p-name { animation: fadeUp var(--t-default) var(--ease-out) forwards; animation-delay: calc(var(--i) * 80ms + .1s); }
   .p-name:hover { color: var(--accent-text); }
 
-  /* ══ Closing — page colour ══ */
-  .closing { background: var(--accent); padding-top: 96px; padding-bottom: 96px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-  .closing h2 { font-size: clamp(34px, 4.4vw, 72px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); line-height: 1.1; max-width: 22ch; color: var(--ink); }
-  .closing h2 .w { display: inline-block; opacity: 0; transform: translateY(20px); }
+  /* ══ Testimonial — blue card slider (reused from solutions) ══ */
+  .testi-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 48px; }
+  .testi-head h2 { max-width: none; font-size: 48px; }
+  .testi-nav { display: flex; gap: 8px; }
+  .testi-arrow {
+    width: 56px; height: 56px; border-radius: 50%; border: 1.5px solid var(--ink);
+    background: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    color: var(--ink); transition: background var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out);
+  }
+  .testi-arrow:hover { background: var(--ink); color: var(--white); }
+  .testi-arrow.prev { border-color: #ccc; color: #ccc; }
+  .testi-slider { overflow: hidden; }
+  .testi-slide { display: none; grid-template-columns: 1fr 520px; gap: 0; min-height: 640px; }
+  .testi-slide.active { display: grid; animation: fadeUp 400ms var(--ease-out); }
+  .testi-card {
+    background: var(--tech-purple);
+    clip-path: polygon(0 156px, 156px 0, 100% 0, 100% calc(100% - 156px), calc(100% - 156px) 100%, 0 100%);
+    padding: 88px 80px; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
+  }
+  .testi-logo { margin-bottom: auto; align-self: flex-end; }
+  .testi-logo img { height: 56px; width: auto; }
+  .testi-card h3 { font-size: 56px; font-weight: 600; letter-spacing: -2.24px; line-height: 1; color: var(--white); opacity: 0.9; }
+  .testi-attr { margin-top: 32px; display: flex; flex-direction: column; gap: 4px; }
+  .testi-attr .name { font-size: 18px; font-weight: 600; line-height: 1.45; color: var(--white); }
+  .testi-attr .role { font-size: 16px; font-weight: 400; line-height: 1.45; color: #F6F6F6; }
+  .testi-img { overflow: hidden; position: relative; }
+  .testi-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .testi-img::before { content: ''; position: absolute; top: 0; left: 0; width: 156px; height: 156px; background: var(--bg); clip-path: polygon(0 0, 0 100%, 100% 0); z-index: 1; }
+  .testi-img::after { content: ''; position: absolute; bottom: 0; right: 0; width: 156px; height: 156px; background: var(--bg); clip-path: polygon(100% 100%, 100% 0, 0 100%); z-index: 1; }
+  .testi-dots { display: flex; justify-content: center; gap: 16px; margin-top: 32px; }
+  .testi-dots .dot { width: 8px; height: 8px; border-radius: 2px; background: #ccc; cursor: pointer; }
+  .testi-dots .dot.active { background: var(--ink); }
+
+  /* ══ Closing ══ */
+  .closing {
+    min-height: 56vh;
+    background: var(--accent); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .closing h1 { font-size: 72px; font-weight: 600; letter-spacing: -2.88px; line-height: 1; color: var(--ink); position: relative; z-index: 1; }
+  .closing h1 .w { display: inline-block; opacity: 0; transform: translateY(20px); }
   .closing .reveal.in .w:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) 0s forwards; }
   .closing .reveal.in .w:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .15s forwards; }
-  .closing .sub-line { margin-top: 20px; font-size: var(--size-p-lg); color: rgba(0,0,0,.75); opacity: 0; transform: translateY(20px); }
-  .closing .reveal.in .sub-line { animation: fadeUp var(--t-default) var(--ease-out) .3s both; }
-  .closing .cta { margin-top: 24px; opacity: 0; transform: translateY(20px); }
-  .closing .reveal.in .cta { animation: fadeUp var(--t-default) var(--ease-out) .45s both; }
+  .closing .cta { margin-top: 48px; position: relative; z-index: 1; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .cta { animation: fadeUp var(--t-default) var(--ease-out) .5s forwards; }
+  .closing .reveal { opacity: 1; transform: none; }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity var(--t-default) var(--ease-out), transform var(--t-default) var(--ease-out); }
+  .reveal.in { opacity: 1; transform: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    .reveal, .fade-up, .acc-block, .int-row, .int-total, .std-row, .out-card, .p-body, .p-card .rc-a, .chip, .closing .w, .closing .sub-line, .closing .cta { opacity: 1 !important; transform: none !important; }
+    .reveal, .fade-up, .acc-block, .p-name, .source-card, .hub, .hub-badge, .val-card, .closing .w, .closing .cta { opacity: 1 !important; transform: none !important; }
     *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
   }
   @media (max-width: 1200px) {
@@ -139,12 +200,13 @@
     .scene-wrap .scene { height: 300px; }
   }
   @media (max-width: 960px) {
-    .hero, .quads, .rep-grid { grid-template-columns: 1fr; }
+    .hero-top, .rep-grid, .f-grid { grid-template-columns: 1fr; }
+    .value-cards { flex-direction: column; }
+    .testi-slide.active { grid-template-columns: 1fr; }
     .scene-wrap { justify-self: start; }
     .scene { transform: scale(.6); height: 250px; }
   }
 </style>
-<link rel="stylesheet" href="scaler-site.css">
 </head>
 <body>
 
@@ -161,8 +223,8 @@
       </button>
       <div class="menu">
         <a href="sfdr.html">SFDR</a>
-        <a href="https://scalerglobal.com/benchmarking">Benchmarking</a>
-        <a href="https://scalerglobal.com/espm">ESPM</a>
+        <a href="benchmarking.html">Benchmarking</a>
+        <a href="espm.html">ESPM</a>
       </div>
     </div>
   </div>
@@ -172,7 +234,7 @@
   </div>
 </nav>
 
-<!-- ══ Hero — engagement orange ══ -->
+<!-- ══ Hero ══ -->
 <header class="hero">
   <div>
     <h1>
@@ -196,31 +258,16 @@
         <path class="packet" d="M 250 320 H 300 C 322.09 320, 340 302.09, 340 280 V 240 C 340 217.91, 357.91 200, 380 200 H 440" stroke-dasharray="16 278" stroke-dashoffset="294"/>
       </svg>
       <article class="source-card card-a">
-        <div class="icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6.375c0 2.278-4.03 4.125-9 4.125S3 8.653 3 6.375 7.03 2.25 12 2.25 21 4.097 21 6.375Z"/><path d="M12 12.75c2.685 0 5.19-.463 7.078-1.288.85-.373 1.522-.81 1.922-1.274V12.5c0 2.278-4.03 4.125-9 4.125S3 14.778 3 12.5v-2.312c.4.463 1.072.9 1.922 1.274 1.888.825 4.393 1.288 7.078 1.288Z"/><path d="M12 18.75c2.685 0 5.19-.462 7.078-1.288.85-.372 1.522-.81 1.922-1.274v2.187c0 2.278-4.03 4.125-9 4.125S3 20.653 3 18.375v-2.187c.4.463 1.072.9 1.922 1.274 1.888.825 4.393 1.288 7.078 1.288Z"/></svg>
-        </div>
-        <div>
-          <div class="label">Data &amp; Intelligence</div>
-          <div class="value">Meters, benchmarks, APIs</div>
-        </div>
+        <div class="icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6.375c0 2.278-4.03 4.125-9 4.125S3 8.653 3 6.375 7.03 2.25 12 2.25 21 4.097 21 6.375Z"/><path d="M12 12.75c2.685 0 5.19-.463 7.078-1.288.85-.373 1.522-.81 1.922-1.274V12.5c0 2.278-4.03 4.125-9 4.125S3 14.778 3 12.5v-2.312c.4.463 1.072.9 1.922 1.274 1.888.825 4.393 1.288 7.078 1.288Z"/><path d="M12 18.75c2.685 0 5.19-.462 7.078-1.288.85-.372 1.522-.81 1.922-1.274v2.187c0 2.278-4.03 4.125-9 4.125S3 20.653 3 18.375v-2.187c.4.463 1.072.9 1.922 1.274 1.888.825 4.393 1.288 7.078 1.288Z"/></svg></div>
+        <div><div class="label">Data &amp; Intelligence</div><div class="value">Meters, benchmarks, APIs</div></div>
       </article>
       <article class="source-card card-b">
-        <div class="icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"/></svg>
-        </div>
-        <div>
-          <div class="label">Advisory &amp; Consulting</div>
-          <div class="value">ESG strategy, assurance</div>
-        </div>
+        <div class="icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"/></svg></div>
+        <div><div class="label">Advisory &amp; Consulting</div><div class="value">ESG strategy, assurance</div></div>
       </article>
       <article class="source-card card-c">
-        <div class="icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5H15v-18a.75.75 0 0 0 0-1.5H3ZM6.75 19.5v-2.25a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75ZM16.5 6.75v15h5.25a.75.75 0 0 0 0-1.5h-.75V8.25a.75.75 0 0 0 0-1.5H16.5Z"/></svg>
-        </div>
-        <div>
-          <div class="label">Industry</div>
-          <div class="value">Standards, certifications</div>
-        </div>
+        <div class="icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5H15v-18a.75.75 0 0 0 0-1.5H3ZM6.75 19.5v-2.25a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75ZM16.5 6.75v15h5.25a.75.75 0 0 0 0-1.5h-.75V8.25a.75.75 0 0 0 0-1.5H16.5Z"/></svg></div>
+        <div><div class="label">Industry</div><div class="value">Standards, certifications</div></div>
       </article>
       <article class="hub">
         <img src="assets/logo-mark-dark.svg" alt="">
@@ -232,44 +279,48 @@
   </div>
 </header>
 
-<!-- ══ The value of partnership ══ -->
+<!-- ══ The value of partnership — orange cards ══ -->
 <section class="light">
   <div class="section-head reveal">
-    <p class="eyebrow">The value of partnership</p>
-    <h2>Shared challenges, collective action.</h2>
+    <h2>Shared challenges,<br>collective action.</h2>
+    <p class="sub">The value of partnership.</p>
   </div>
-  <div class="quads">
-    <div class="quad reveal">
+  <div class="value-cards">
+    <div class="val-card reveal">
+      <div class="v-tag">Impact</div>
       <h3>Collective impact</h3>
-      <p>Partnerships expand our reach across the real estate sector — solutions that unite operational excellence, regulatory compliance, and measurable climate benefit.</p>
+      <p>Partnerships expand our reach across the real estate sector. Solutions that unite operational excellence, regulatory compliance, and measurable climate benefit.</p>
     </div>
-    <div class="quad reveal">
+    <div class="val-card reveal">
+      <div class="v-tag">Community</div>
       <h3>Community of change-makers</h3>
       <p>A network of aligned partners turns shared challenges into collective action and real progress.</p>
     </div>
-    <div class="quad reveal">
+    <div class="val-card reveal">
+      <div class="v-tag">Innovation</div>
       <h3>Innovation engine</h3>
       <p>Collaboration means faster deployment of new technologies, streamlined data reporting, and future-proof ESG strategies.</p>
     </div>
-    <div class="quad reveal">
+    <div class="val-card reveal">
+      <div class="v-tag">Data</div>
       <h3>Data synergy</h3>
-      <p>Integrated partnerships let clients collect, connect, and leverage high-quality data directly in the Scaler platform — smoother workflows, stronger insights.</p>
+      <p>Integrated partnerships let clients collect, connect, and leverage high-quality data directly in the Scaler platform.</p>
     </div>
   </div>
 </section>
 
-<!-- ══ Partner categories — accordion + swapping illustrations ══ -->
-<section class="white">
+<!-- ══ How to partner — accordion + partner list ══ -->
+<section class="white" style="background:#fff">
   <div class="section-head reveal">
-    <p class="eyebrow">How to partner with us</p>
     <h2>Three ways in.</h2>
+    <p class="sub">How to partner with us.</p>
   </div>
   <div class="rep-grid" id="repGrid">
     <div>
       <div class="acc-block open" style="--i:0">
         <div class="acc-head"><span class="acc-num">1</span><span class="acc-title">Data &amp; Intelligence</span></div>
         <div class="acc-body">
-          <p class="acc-copy">These partnerships empower clients with the full range of data and technology needed for intelligent asset management. This includes core utility data, physical climate risk data, and other specialized datasets. We also collaborate with likeminded SaaS providers that enhance analytics and reporting.</p>
+          <p class="acc-copy">These partnerships empower clients with the full range of data and technology needed for intelligent asset management. This includes core utility data, physical climate risk data, and other specialized datasets.</p>
         </div>
       </div>
       <div class="acc-block" style="--i:1">
@@ -312,16 +363,64 @@
   </div>
 </section>
 
-<!-- ══ Closing — page colour ══ -->
+<!-- ══ Testimonial ══ -->
+<section class="light">
+  <div class="testi-head reveal">
+    <h2>Proven results from our partners</h2>
+    <div class="testi-nav">
+      <button class="testi-arrow prev" aria-label="Previous"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <button class="testi-arrow next" aria-label="Next"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+  <div class="testi-slider" id="testiSlider">
+    <div class="testi-slide active">
+      <div class="testi-card">
+        <div class="testi-logo"><img src="assets/slate-logo-white.png" alt="Slate Asset Management"></div>
+        <h3>The team helped us meet tight deadlines and strengthened the quality of our reporting.</h3>
+        <div class="testi-attr">
+          <div class="name">Bozena Jankowska</div>
+          <div class="role">Global Head of Responsible Investment | Slate Asset Management</div>
+        </div>
+      </div>
+      <div class="testi-img"><img src="assets/testimonial-1.png" alt="Slate case study"></div>
+    </div>
+    <div class="testi-slide">
+      <div class="testi-card">
+        <div class="testi-logo"><span style="font-size:20px; font-weight:600; color:#fff; border:1.5px solid #fff; padding:6px 14px; border-radius:4px;">Verdani</span></div>
+        <h3>Scaler's platform gave us a single source of truth across our entire advisory portfolio.</h3>
+        <div class="testi-attr">
+          <div class="name">Verdani Partners</div>
+          <div class="role">ESG Advisory Partner</div>
+        </div>
+      </div>
+      <div class="testi-img"><img src="assets/testimonial-1.png" alt="Verdani case study"></div>
+    </div>
+    <div class="testi-slide">
+      <div class="testi-card">
+        <div class="testi-logo"><span style="font-size:20px; font-weight:600; color:#fff; border:1.5px solid #fff; padding:6px 14px; border-radius:4px;">Smart Vatten</span></div>
+        <h3>Automated water data flowing directly into Scaler eliminated weeks of manual collection.</h3>
+        <div class="testi-attr">
+          <div class="name">Smart Vatten</div>
+          <div class="role">Data &amp; Intelligence Partner</div>
+        </div>
+      </div>
+      <div class="testi-img"><img src="assets/testimonial-1.png" alt="Smart Vatten case study"></div>
+    </div>
+  </div>
+  <div class="testi-dots" id="testiDots">
+    <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+  </div>
+</section>
+
+<!-- ══ Closing ══ -->
 <section class="closing">
   <div class="reveal">
-    <h2><span class="w">Become</span> <span class="w">a partner.</span></h2>
-    <p class="sub-line">Get in touch with us.</p>
+    <h1><span class="w">Become</span> <span class="w">a partner.</span></h1>
     <div class="cta"><button class="pill">Get in touch <span class="arr">→</span></button></div>
   </div>
 </section>
 
-<!-- ══ Footer — shared ══ -->
+<!-- ══ Footer ══ -->
 <footer>
   <div class="f-grid">
     <div class="f-mark">
@@ -380,24 +479,12 @@
     </div>
   </div>
   <div class="legal">
-    <span>Copyright © Scaler Global Inc. 2026</span>
+    <span>Copyright &copy; Scaler Global Inc. 2026</span>
     <span><a href="https://scalerglobal.com/privacy-statement">Privacy Statement</a><a href="https://scalerglobal.com/terms-and-conditions">Terms &amp; Conditions</a></span>
   </div>
 </footer>
 
 <script>
-  function countUp(el, end, decimals = 0, duration = 1500) {
-    const start = performance.now();
-    function tick(now) {
-      const p = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      const value = eased * end;
-      el.textContent = decimals ? value.toFixed(decimals) : Math.round(value).toLocaleString('en-US');
-      if (p < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
@@ -410,7 +497,7 @@
   const navEl = document.querySelector('nav');
   addEventListener('scroll', () => navEl.classList.toggle('scrolled', scrollY > 8), { passive: true });
 
-  // hero scene replay on click / R
+  // hero scene replay
   const scene = document.getElementById('scene');
   function playScene() {
     scene.classList.remove('play');
@@ -418,11 +505,8 @@
     scene.classList.add('play');
   }
   scene.addEventListener('click', playScene);
-  document.addEventListener('keydown', e => {
-    if ((e.key === 'r' || e.key === 'R') && !e.metaKey && !e.ctrlKey) playScene();
-  });
 
-  // accordion swaps the partner index on the left
+  // accordion swaps partner list
   const accBlocks = [...document.querySelectorAll('.acc-block')];
   const plists = [...document.querySelectorAll('.plist')];
   accBlocks.forEach((b, i) => {
@@ -431,6 +515,25 @@
       plists.forEach(v => v.classList.toggle('active', +v.dataset.mode === i + 1));
     });
   });
+
+  // Testimonial carousel
+  const slides = [...document.querySelectorAll('.testi-slide')];
+  const dots = [...document.querySelectorAll('#testiDots .dot')];
+  const prevBtn = document.querySelector('.testi-arrow.prev');
+  const nextBtn = document.querySelector('.testi-arrow.next');
+  let current = 0;
+  function goToSlide(i) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (i + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    prevBtn.style.borderColor = current === 0 ? '#ccc' : '';
+    prevBtn.style.color = current === 0 ? '#ccc' : '';
+  }
+  if (prevBtn) prevBtn.addEventListener('click', () => goToSlide(current - 1));
+  if (nextBtn) nextBtn.addEventListener('click', () => goToSlide(current + 1));
+  dots.forEach((d, i) => d.addEventListener('click', () => goToSlide(i)));
 </script>
 </body>
 </html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benchmarking — Scaler Global</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="scaler-site.css">
+<style>
+  :root {
+    --accent: #037E50;
+    --accent-dark: #025C3A;
+    --accent-text: #025C3A;
+  }
+
+  h2 { font-size: 48px; font-weight: 600; letter-spacing: -1.44px; line-height: 1; color: var(--ink); }
+  h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); }
+  .section-head h2 { font-size: 48px; font-weight: 600; letter-spacing: -1.44px; line-height: 1; max-width: 20ch; color: var(--ink); }
+  .section-head .sub { margin-top: 16px; font-size: 20px; font-weight: 500; letter-spacing: -0.6px; line-height: 1; color: var(--ink); max-width: 52ch; }
+
+  /* ══ Hero ══ */
+  .hero {
+    background: var(--accent);
+    padding: 140px 48px 88px;
+    overflow: hidden;
+  }
+  .hero-top {
+    display: grid; grid-template-columns: 1.4fr 1fr;
+    gap: 80px; align-items: flex-end;
+    max-width: 1440px; margin: 0 auto; padding: 0 80px;
+  }
+  .hero h1 { font-size: 72px; font-weight: 600; letter-spacing: -2.16px; line-height: 1; color: var(--white); padding-bottom: 48px; }
+  .hero h1 .line { display: block; opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  .hero h1 .line:nth-child(1) { animation-delay: .15s; }
+  .hero h1 .line:nth-child(2) { animation-delay: .3s; }
+  .hero h1 .line:nth-child(3) { animation-delay: .45s; }
+  p.lede { font-size: 20px !important; font-weight: 500 !important; line-height: 1 !important; letter-spacing: -0.6px !important; color: var(--white) !important; }
+  .hero-side { max-width: 400px; }
+  .hero-side .cta { margin-top: 24px; }
+  .fade-up { opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+
+  .hero-illustration {
+    max-width: 1344px; margin: 80px auto 0;
+    padding: 0 48px;
+    position: relative;
+  }
+  .hero-illustration::before {
+    content: ''; position: absolute;
+    top: 48px; left: 0; right: 0; bottom: 96px;
+    background: var(--accent-dark);
+    clip-path: polygon(160px 0, 100% 0, 100% calc(100% - 160px), calc(100% - 160px) 100%, 0 100%, 0 160px);
+  }
+  .hero-illustration img {
+    max-width: 960px; width: 100%; height: auto; display: block;
+    position: relative; margin: 0 auto;
+  }
+
+  /* ══ Benefits list (about us core values pattern) ══ */
+  .benefit-index { }
+  .benefit-row {
+    display: flex; gap: 16px; align-items: center;
+    padding: 16px 0; border-top: 1px solid var(--ink);
+    opacity: 0; transform: translateX(-12px);
+  }
+  .benefit-row:last-child { border-bottom: 1px solid var(--ink); }
+  .benefit-index.in .benefit-row { animation: fadeInX var(--t-default) var(--ease-out-cubic) forwards; animation-delay: calc(var(--i) * 80ms); }
+  .benefit-row img { height: 48px; width: 48px; flex-shrink: 0; }
+  .benefit-row .bt { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); }
+
+  /* ══ Protect value — row label + cards (solutions pattern) ══ */
+  .pv-group { display: grid; grid-template-columns: 180px 1fr 1fr; gap: 0 72px; margin-bottom: 56px; align-items: start; }
+  .pv-group:last-child { margin-bottom: 0; }
+  .pv-row-label { font-size: 15px; font-weight: var(--weight-medium); color: var(--ink-3); padding-top: 4px; }
+  .pv-card { border-top: 1px solid var(--ink); padding-top: 24px; display: flex; flex-direction: column; gap: 16px; }
+  .pv-card .pv-tag { font-size: 16px; font-weight: 600; line-height: 1.45; color: var(--accent-text); }
+  .pv-card h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); opacity: 0.9; }
+  .pv-card p { font-size: 16px; font-weight: 400; line-height: 1.45; color: var(--ink); opacity: 0.9; }
+  .pv-card .pv-result { font-size: 16px; font-weight: 500; line-height: 1.45; color: var(--ink); opacity: 0.9; }
+
+  /* ══ Approach — accordion + visual (homepage pattern) ══ */
+  .rep-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: clamp(40px, 5vw, 88px); align-items: center; }
+  .acc-block {
+    background: var(--accent);
+    clip-path: polygon(0 0, calc(100% - 48px) 0, 100% 48px, 100% 100%, 48px 100%, 0 calc(100% - 48px));
+    padding: 48px 32px; cursor: pointer;
+    opacity: 0; transform: translateX(-12px);
+  }
+  .rep-grid.in .acc-block { animation: fadeInX 500ms var(--ease-out-cubic) forwards; animation-delay: calc(var(--i) * 150ms); }
+  .acc-head { display: flex; gap: 16px; align-items: center; }
+  .acc-num {
+    width: 40px; height: 40px; border: 2px solid var(--white); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 600; flex-shrink: 0; color: var(--white);
+    transition: background var(--t-base) var(--ease-out), color var(--t-base) var(--ease-out);
+  }
+  .acc-block.open .acc-num { background: var(--white); color: var(--accent); }
+  .acc-title { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--white); opacity: 0.9; }
+  .acc-body { max-height: 0; overflow: hidden; transition: max-height var(--t-default) var(--ease-in-out); }
+  .acc-body p { margin: 16px 0 4px 56px; font-size: 16px; line-height: 1.45; color: rgba(255,255,255,.85); opacity: 0; transform: translateX(-8px); transition: opacity var(--t-base) var(--ease-out) .15s, transform var(--t-base) var(--ease-out) .15s; }
+  .acc-block.open .acc-body p { opacity: 0.9; transform: none; }
+  .acc-block.open .acc-body { max-height: 320px; }
+
+  .flow { position: relative; }
+  .viz-state { display: none; }
+  .viz-state.active { display: block; animation: fadeUp 400ms var(--ease-out); }
+
+  /* ── viz shared ── */
+  .viz-card { background: var(--white); border-radius: 12px; padding: 24px 28px; box-shadow: var(--shadow-card); max-width: 420px; margin: 0 auto; }
+  .viz-card-head { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 20px; }
+
+  /* ── viz 1: report frameworks ── */
+  .fw-rows { display: flex; flex-direction: column; gap: 14px; }
+  .fw-row { display: flex; align-items: center; gap: 12px; opacity: 0; transform: translateX(-12px); }
+  .fw-name { font-size: 14px; font-weight: 600; color: var(--ink); min-width: 56px; }
+  .fw-bar { flex: 1; height: 8px; background: #EDEEF1; border-radius: 4px; overflow: hidden; }
+  .fw-bar i { display: block; height: 100%; background: var(--accent); border-radius: 4px; transform: scaleX(0); transform-origin: left; }
+  .fw-val { font-size: 14px; font-weight: 600; color: var(--ink); min-width: 36px; text-align: right; }
+  #approachFlow.go .viz-state[data-mode="1"].active .fw-row:nth-child(1) { animation: fadeInX 500ms var(--ease-out-cubic) .1s forwards; }
+  #approachFlow.go .viz-state[data-mode="1"].active .fw-row:nth-child(2) { animation: fadeInX 500ms var(--ease-out-cubic) .2s forwards; }
+  #approachFlow.go .viz-state[data-mode="1"].active .fw-row:nth-child(3) { animation: fadeInX 500ms var(--ease-out-cubic) .3s forwards; }
+  #approachFlow.go .viz-state[data-mode="1"].active .fw-row:nth-child(4) { animation: fadeInX 500ms var(--ease-out-cubic) .4s forwards; }
+  #approachFlow.go .viz-state[data-mode="1"].active .fw-row:nth-child(5) { animation: fadeInX 500ms var(--ease-out-cubic) .5s forwards; }
+  #approachFlow.go .viz-state[data-mode="1"].active .fw-bar i { animation: scaleXGrow 1s var(--ease-out-expo) .7s forwards; }
+
+  /* ── viz 2: ESG score card ── */
+  .esg-score { font-size: 64px; font-weight: 600; letter-spacing: -1.92px; line-height: 1; color: var(--ink); margin-top: 8px; }
+  .esg-label { font-size: 14px; color: var(--ink-3); margin-top: 4px; }
+  .esg-bar { height: 6px; background: #EDEEF1; border-radius: 3px; margin-top: 16px; }
+  .esg-bar i { display: block; height: 100%; background: var(--accent); border-radius: 3px; transform: scaleX(0); transform-origin: left; }
+  .esg-domains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #EDEEF1; }
+  .esg-dom .dl { font-size: 12px; color: var(--ink-3); }
+  .esg-dom .dv { font-size: 20px; font-weight: 600; color: var(--ink); margin-top: 4px; }
+  .esg-dom { opacity: 0; transform: translateY(12px); }
+  #approachFlow.go .viz-state[data-mode="2"].active .esg-score { opacity: 0; animation: fadeUp var(--t-default) var(--ease-out) .1s forwards; }
+  #approachFlow.go .viz-state[data-mode="2"].active .esg-bar i { animation: scaleXGrow var(--t-deliberate) var(--ease-out-expo) .3s forwards; }
+  #approachFlow.go .viz-state[data-mode="2"].active .esg-dom:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) .5s forwards; }
+  #approachFlow.go .viz-state[data-mode="2"].active .esg-dom:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .6s forwards; }
+  #approachFlow.go .viz-state[data-mode="2"].active .esg-dom:nth-child(3) { animation: fadeUp var(--t-default) var(--ease-out) .7s forwards; }
+
+  /* ── viz 3: performance tracker ── */
+  .perf-rows { display: flex; flex-direction: column; gap: 16px; }
+  .perf-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: var(--bg); border-radius: 8px; font-size: 14px; color: var(--ink); opacity: 0; transform: translateX(-12px); }
+  .perf-tag { padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; }
+  .perf-tag.on-track { background: rgba(86,197,90,.15); color: #037E50; }
+  .perf-tag.at-risk { background: rgba(226,55,4,.12); color: #E23704; }
+  .perf-tag.improving { background: rgba(42,168,223,.12); color: #1878A8; }
+  #approachFlow.go .viz-state[data-mode="3"].active .perf-row:nth-child(1) { animation: fadeInX 500ms var(--ease-out-cubic) .1s forwards; }
+  #approachFlow.go .viz-state[data-mode="3"].active .perf-row:nth-child(2) { animation: fadeInX 500ms var(--ease-out-cubic) .2s forwards; }
+  #approachFlow.go .viz-state[data-mode="3"].active .perf-row:nth-child(3) { animation: fadeInX 500ms var(--ease-out-cubic) .3s forwards; }
+  #approachFlow.go .viz-state[data-mode="3"].active .perf-row:nth-child(4) { animation: fadeInX 500ms var(--ease-out-cubic) .4s forwards; }
+  #approachFlow.go .viz-state[data-mode="3"].active .perf-row:nth-child(5) { animation: fadeInX 500ms var(--ease-out-cubic) .5s forwards; }
+
+  /* ══ Masterclass ══ */
+  .mc-grid { display: flex; gap: 80px; align-items: flex-end; }
+  .mc-left { width: 448px; flex-shrink: 0; display: flex; flex-direction: column; justify-content: space-between; align-self: stretch; }
+  .mc-speaker { display: flex; gap: 24px; align-items: center; padding: 16px 0; border-top: 1px solid var(--ink); }
+  .mc-speaker img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
+  .mc-speaker .sp-name { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; color: var(--ink); }
+  .mc-speaker .sp-role { font-size: 16px; font-weight: 400; line-height: 1.4; color: var(--ink); opacity: 0.9; margin-top: 8px; }
+  .mc-video {
+    flex: 1; min-width: 0; height: 459px; background: #D9D9D9;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .mc-video svg { width: 100px; height: 100px; color: var(--white); opacity: .8; }
+
+  /* ══ Closing ══ */
+  .closing {
+    min-height: 56vh;
+    background: var(--accent); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .closing h1 { font-size: 72px; font-weight: 600; letter-spacing: -2.88px; line-height: 1; color: var(--white); position: relative; z-index: 1; }
+  .closing h1 .w { display: block; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .w:nth-child(1) { animation: fadeUp var(--t-default) var(--ease-out) 0s forwards; }
+  .closing .reveal.in .w:nth-child(2) { animation: fadeUp var(--t-default) var(--ease-out) .15s forwards; }
+  .closing .reveal.in .w:nth-child(3) { animation: fadeUp var(--t-default) var(--ease-out) .3s forwards; }
+  .closing .cta { margin-top: 48px; position: relative; z-index: 1; opacity: 0; transform: translateY(20px); }
+  .closing .reveal.in .cta { animation: fadeUp var(--t-default) var(--ease-out) .5s forwards; }
+  .closing .reveal { opacity: 1; transform: none; }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity var(--t-default) var(--ease-out), transform var(--t-default) var(--ease-out); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .hero-top, .rep-grid, .pv-group, .f-grid { grid-template-columns: 1fr; }
+    .mc-grid { flex-direction: column; }
+    .mc-left { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html"><img src="assets/logo-full-dark.svg" alt="Scaler"></a>
+  <div class="links">
+    <a href="solutions.html">Solutions</a>
+    <a href="partnerships.html">Partnerships</a>
+    <a href="articles.html">Articles</a>
+    <a href="about.html">About Us</a>
+    <div class="drop">
+      <button>Resources
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <div class="menu">
+        <a href="sfdr.html">SFDR</a>
+        <a class="active" href="benchmarking.html">Benchmarking</a>
+        <a href="espm.html">ESPM</a>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <a class="login" href="https://app.scalerglobal.com">Login</a>
+    <button class="pill">Schedule a demo</button>
+  </div>
+</nav>
+
+<!-- ══ Hero ══ -->
+<header class="hero">
+  <div class="hero-top">
+    <div>
+      <h1><span class="line">Simplify ESG</span><span class="line">Benchmarking,</span><span class="line">Across the Board</span></h1>
+    </div>
+    <div class="hero-side">
+      <p class="lede fade-up" style="animation-delay:.6s">Scaler is a powerful ESG data management tool designed to support a wide range of sustainability frameworks and benchmarks. Whether you're reporting for SFDR, GRI, GRESB or internal ESG performance reviews, Scaler helps you collect and analyze the right data without the hassle.</p>
+      <div class="cta fade-up" style="animation-delay:.75s">
+        <button class="pill">Get started today <span class="arr">→</span></button>
+      </div>
+    </div>
+  </div>
+  <div class="hero-illustration fade-up" style="animation-delay:.9s">
+    <img src="assets/benchmark-dashboard.png" alt="Scaler benchmarking dashboard" width="962" height="624">
+  </div>
+</header>
+
+<!-- ══ Benefits ══ -->
+<section class="light">
+  <div class="section-head reveal">
+    <h2 style="max-width:none;">Data collection via Scaler means you can<br>stop using error-prone spreadsheets<br>and work smarter:</h2>
+  </div>
+  <div class="benefit-index" id="benefitIndex">
+    <div class="benefit-row" style="--i:0"><img src="assets/logo-mark-dark.svg" alt=""><span class="bt">Don't start from scratch, build on reporting year over year.</span></div>
+    <div class="benefit-row" style="--i:1"><img src="assets/logo-mark-dark.svg" alt=""><span class="bt">Collaborate with all team members and stakeholders in one tool everyone can understand.</span></div>
+    <div class="benefit-row" style="--i:2"><img src="assets/logo-mark-dark.svg" alt=""><span class="bt">Collect data year round, identify gaps to work toward full coverage, and take the pressure off reporting season.</span></div>
+    <div class="benefit-row" style="--i:3"><img src="assets/logo-mark-dark.svg" alt=""><span class="bt">Access your full audit trail for data collection and processing.</span></div>
+    <div class="benefit-row" style="--i:4"><img src="assets/logo-mark-dark.svg" alt=""><span class="bt">Collect, store and process data once and uniformly for all reporting requirements.</span></div>
+    <div class="benefit-row" style="--i:5"><img src="assets/logo-mark-dark.svg" alt=""><span class="bt">Identify assets that decrease your score, monitor performance, and gain insights to improve portfolio results.</span></div>
+    <div class="benefit-row" style="--i:6"><img src="assets/logo-mark-dark.svg" alt=""><span class="bt">Track performance against carbon pathways and optimize your retrofit planning.</span></div>
+  </div>
+</section>
+
+<!-- ══ Protect value and drive performance ══ -->
+<section class="white" style="background:#fff">
+  <div class="section-head reveal">
+    <h2>Protect value<br>and drive performance</h2>
+    <p class="sub">Mitigate risk and improve performance from the same asset data.</p>
+  </div>
+  <div class="pv-group reveal">
+    <div class="pv-row-label">Benchmarking Your Performance</div>
+    <div class="pv-card">
+      <div class="pv-tag">ESG Performance</div>
+      <h3>Assess your ESG performance</h3>
+      <p>Scaler allows you to assess your ESG performance against multiple industry benchmarks to ensure transparency, accountability and continuous improvement.</p>
+      <p class="pv-result">For: Acquisition and asset teams</p>
+    </div>
+    <div class="pv-card">
+      <div class="pv-tag">GRESB</div>
+      <h3>Improve Sustainability efforts</h3>
+      <p>Our approach includes a variety of tools and standards to provide a well-rounded picture of our sustainability efforts, amongst them the Global Real Estate Sustainability Benchmark (GRESB).</p>
+      <p class="pv-result">Turns: Utility data into savings</p>
+    </div>
+  </div>
+  <div class="pv-group reveal">
+    <div class="pv-row-label">Participate &amp; Report Without the Stress</div>
+    <div class="pv-card">
+      <div class="pv-tag">Data collection</div>
+      <h3>Survey Tool</h3>
+      <p>Streamline data collection across stakeholders with our custom Survey Tool. Input data from disparate sources directly, via bulk upload or with API integrations.</p>
+      <p class="pv-result">Per asset: Every pathway modelled</p>
+    </div>
+    <div class="pv-card">
+      <div class="pv-tag">Consumption data</div>
+      <h3>Report</h3>
+      <p>With Scaler's collection portal, pinpoint gaps in data coverage and remediate. Validate errors before you submit and automate calculations and data aggregation.</p>
+      <p class="pv-result">Covers: BPS, EPBD, local rules</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Our Unique Approach ══ -->
+<section class="light">
+  <div class="section-head reveal">
+    <h2>Our Unique Approach at Scaler</h2>
+    <p class="sub">3 key problems<br>1 holistic solution</p>
+  </div>
+  <div class="rep-grid" id="approachGrid">
+    <div>
+      <div class="acc-block" style="--i:0">
+        <div class="acc-head"><span class="acc-num">1</span><span class="acc-title">Collect Once Report Often</span></div>
+        <div class="acc-body">
+          <p>Stop duplicating work across frameworks. Scaler collects your data once and maps it to every benchmark and reporting standard you need, from GRESB to SFDR to GRI.</p>
+        </div>
+      </div>
+      <div class="acc-block open" style="--i:1">
+        <div class="acc-head"><span class="acc-num">2</span><span class="acc-title">Asset-level Insights</span></div>
+        <div class="acc-body">
+          <p>Whether you are just starting out or a leader in your sector, identifying where to focus your efforts is the key to improving. Scalers analytic dashboards give you asset-level insights to identify underperforming assets. Easily determine where to focus your efforts, asset by asset. Make a concrete plan based on what will increase your performance the most.</p>
+        </div>
+      </div>
+      <div class="acc-block" style="--i:2">
+        <div class="acc-head"><span class="acc-num">3</span><span class="acc-title">Focus on Performance</span></div>
+        <div class="acc-body">
+          <p>Track your portfolio against CRREM pathways, monitor energy intensity trends, and identify which assets need attention. Turn benchmarking data into a concrete action plan.</p>
+        </div>
+      </div>
+    </div>
+    <div class="flow" id="approachFlow">
+      <!-- 1: Collect Once Report Often - framework completion bars -->
+      <div class="viz-state" data-mode="1">
+        <div class="viz-card">
+          <div class="viz-card-head">Framework Completion</div>
+          <div class="fw-rows">
+            <div class="fw-row"><span class="fw-name">GRESB</span><span class="fw-bar"><i style="width:92%"></i></span><span class="fw-val">92%</span></div>
+            <div class="fw-row"><span class="fw-name">SFDR</span><span class="fw-bar"><i style="width:100%"></i></span><span class="fw-val">100%</span></div>
+            <div class="fw-row"><span class="fw-name">CSRD</span><span class="fw-bar"><i style="width:78%"></i></span><span class="fw-val">78%</span></div>
+            <div class="fw-row"><span class="fw-name">GRI</span><span class="fw-bar"><i style="width:85%"></i></span><span class="fw-val">85%</span></div>
+            <div class="fw-row"><span class="fw-name">INREV</span><span class="fw-bar"><i style="width:96%"></i></span><span class="fw-val">96%</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- 2: Asset-level Insights - ESG score card -->
+      <div class="viz-state active" data-mode="2">
+        <div class="viz-card">
+          <div class="viz-card-head">Scaler ESG Score</div>
+          <div class="esg-score">74.8</div>
+          <div class="esg-label">Portfolio average across 125 assets</div>
+          <div class="esg-bar"><i style="width:74.8%"></i></div>
+          <div class="esg-domains">
+            <div class="esg-dom"><div class="dl">Energy</div><div class="dv">92</div></div>
+            <div class="esg-dom"><div class="dl">GHG</div><div class="dv">68</div></div>
+            <div class="esg-dom"><div class="dl">Water</div><div class="dv">54</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- 3: Focus on Performance - asset tracker -->
+      <div class="viz-state" data-mode="3">
+        <div class="viz-card">
+          <div class="viz-card-head">Performance Tracker</div>
+          <div class="perf-rows">
+            <div class="perf-row"><span>Rathaus, Office</span><span class="perf-tag on-track">On track</span></div>
+            <div class="perf-row"><span>Martin Place, Residential</span><span class="perf-tag at-risk">At risk</span></div>
+            <div class="perf-row"><span>Atomium, Office</span><span class="perf-tag on-track">On track</span></div>
+            <div class="perf-row"><span>City Roots, Industrial</span><span class="perf-tag improving">Improving</span></div>
+            <div class="perf-row"><span>Autograph House, Office</span><span class="perf-tag at-risk">At risk</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Optimized Benchmark Reporting ══ -->
+<section class="white" style="background:#fff">
+  <div class="section-head reveal">
+    <h2>Optimized<br>Benchmark Reporting</h2>
+  </div>
+  <div class="reveal">
+    <img src="assets/benchmark-timeline.svg" alt="Optimized benchmark reporting timeline" style="width:100%; height:auto;">
+  </div>
+</section>
+
+<!-- ══ ESG Masterclass ══ -->
+<section class="light">
+  <div class="mc-grid">
+    <div class="mc-left reveal">
+      <h2>Check Out the<br>ESG Masterclass</h2>
+      <div>
+        <div class="mc-speaker">
+          <img src="assets/speaker-luc.png" alt="Luc van de Boom">
+          <div>
+            <div class="sp-name">Luc van de Boom</div>
+            <div class="sp-role">Co-Founder | Scaler</div>
+          </div>
+        </div>
+        <div class="mc-speaker">
+          <img src="assets/speaker-martijn.png" alt="Martijn Vlasveld">
+          <div>
+            <div class="sp-name">Martijn Vlasveld</div>
+            <div class="sp-role">Managing Director | Head of Sustainability</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mc-video reveal">
+      <svg viewBox="0 0 100 100" fill="currentColor"><polygon points="35,20 75,50 35,80"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Closing ══ -->
+<section class="closing">
+  <div class="reveal">
+    <h1><span class="w" style="display:block">Scale Your Impact.</span><span class="w" style="display:block">Drive Sustainable Decisions.</span><span class="w" style="display:block">Simplify ESG Reporting.</span></h1>
+    <div class="cta"><button class="pill inverse">Schedule a demo <span class="arr">→</span></button></div>
+  </div>
+</section>
+
+<!-- ══ Footer ══ -->
+<footer>
+  <div class="f-grid">
+    <div class="f-mark">
+      <img src="assets/shape-01.svg" alt="">
+      <span class="word">scaler</span>
+    </div>
+    <div class="f-links">
+      <div class="f-group"><div class="k">Products</div><a href="#">Data &amp; Analytics</a><a href="#">Roadmaps &amp; Targets</a><a href="#">Reporting &amp; Compliance</a></div>
+      <div class="f-group"><div class="k">Solutions</div><a href="solutions.html">Small teams</a><a href="solutions.html">Professionals</a><a href="solutions.html">Enterprise customers</a></div>
+      <div class="f-group"><div class="k">Pricing</div><a href="#">Pricing</a><a href="#">Book a demo</a></div>
+      <div class="f-group"><div class="k">Company</div><a href="about.html">About</a><a href="https://jobs.ashbyhq.com/scaler">Careers</a><a href="#">Contact</a></div>
+      <div class="f-group"><div class="k">Resources</div><a href="#">Webinar series</a><a href="#">Customer stories</a><a href="articles.html">Blog</a></div>
+      <div class="f-group"><div class="k">Social</div><a href="https://www.linkedin.com/company/scaler-global">Linkedin</a><a href="#">Twitter</a></div>
+    </div>
+    <div class="f-offices">
+      <div class="office"><div class="city">New York</div><div class="addr">133 West 25th Street Suite 4W, 4th Floor<br>New York, NY 10001<br>United States</div></div>
+      <div class="office"><div class="city">Amsterdam</div><div class="addr">Fred. Roeskestraat 109<br>1076 EE Amsterdam<br>The Netherlands</div></div>
+      <div class="office"><div class="city">Sydney</div><div class="addr">Darling Park<br>201 Sussex St, Sydney NSW 2000<br>Australia</div></div>
+    </div>
+  </div>
+  <div class="legal">
+    <span>Copyright &copy; Scaler Global Inc. 2026</span>
+    <span><a href="https://scalerglobal.com/privacy-statement">Privacy Statement</a><a href="https://scalerglobal.com/terms-and-conditions">Terms &amp; Conditions</a></span>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.reveal, #benefitIndex, #approachGrid, .pv-group').forEach(el => io.observe(el));
+
+  const navEl = document.querySelector('nav');
+  addEventListener('scroll', () => navEl.classList.toggle('scrolled', scrollY > 8), { passive: true });
+
+  // Approach accordion with visual swap + animation replay
+  const approachFlow = document.getElementById('approachFlow');
+  const accBlocks = [...document.querySelectorAll('.acc-block')];
+  const vizStates = [...document.querySelectorAll('#approachFlow .viz-state')];
+
+  function onceVisible(el, threshold, fn) {
+    const o = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      fn(); o.unobserve(el);
+    }), { threshold });
+    o.observe(el);
+  }
+
+  onceVisible(document.getElementById('approachGrid'), 0.2, () => {
+    approachFlow.classList.add('go');
+  });
+
+  accBlocks.forEach((b, i) => {
+    b.addEventListener('click', () => {
+      accBlocks.forEach(x => x.classList.toggle('open', x === b));
+      vizStates.forEach(v => v.classList.toggle('active', +v.dataset.mode === i + 1));
+      approachFlow.classList.remove('go');
+      requestAnimationFrame(() => approachFlow.classList.add('go'));
+    });
+  });
+</script>
+</body>
+</html>
