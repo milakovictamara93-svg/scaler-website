@@ -413,17 +413,18 @@
     cursor: pointer; overflow: hidden;
     display: flex; flex-direction: column; padding: 0;
     flex: 0 0 204px;
-    transition: flex 600ms var(--ease-out-cubic);
+    transition: flex 700ms var(--ease-out-expo);
+    will-change: flex;
   }
   .plat-item.open { flex: 1 1 0; }
   .plat-icon { padding: 48px 48px 0; flex-shrink: 0; }
   .plat-item:not(.open) .plat-icon { padding: 32px 0 0; text-align: center; }
   .plat-content {
     padding: 0 48px 48px; margin-top: auto;
-    opacity: 0; pointer-events: none;
-    transition: opacity 300ms var(--ease-out);
+    opacity: 0; pointer-events: none; white-space: nowrap;
+    transition: opacity 0ms;
   }
-  .plat-item.open .plat-content { opacity: 1; pointer-events: auto; transition-delay: .25s; }
+  .plat-item.open .plat-content { opacity: 1; pointer-events: auto; white-space: normal; transition: opacity 400ms var(--ease-out) .4s; }
   .plat-content h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; color: var(--ink); margin-bottom: 12px; }
   .plat-content p { font-size: 16px; font-weight: 400; line-height: 1.45; color: rgba(0,0,0,.75); margin-bottom: 16px; }
   .plat-tags { font-size: 13px; color: rgba(0,0,0,.55); }
@@ -432,8 +433,9 @@
     transform: translate(-50%, -50%) rotate(90deg);
     font-size: 20px; font-weight: 600; color: var(--ink);
     white-space: nowrap;
+    opacity: 1; transition: opacity 200ms var(--ease-out);
   }
-  .plat-item.open .plat-label { display: none; }
+  .plat-item.open .plat-label { opacity: 0; pointer-events: none; }
 
   /* ══ Testimonial editorial slider ══ */
   .testi-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 48px; }
@@ -1095,7 +1097,7 @@
         <div class="k">Company</div>
         <a href="about.html">About</a>
         <a href="https://jobs.ashbyhq.com/scaler">Careers</a>
-        <a href="#">Contact</a>
+        <a href="contact.html">Contact</a>
       </div>
       <div class="f-group">
         <div class="k">Resources</div>
@@ -1265,5 +1267,6 @@
   dots.forEach((d, i) => d.addEventListener('click', () => goToSlide(i)));
 
 </script>
+<script src="demo-modal.js"></script>
 </body>
 </html>

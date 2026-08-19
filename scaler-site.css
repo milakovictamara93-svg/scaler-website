@@ -151,7 +151,55 @@ footer .legal { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(-
 footer .legal a { margin-left: 32px; }
 footer .legal a:hover { color: var(--ink); }
 
+/* ══ Demo modal ══ */
+.demo-overlay {
+  position: fixed; inset: 0; z-index: 999;
+  background: rgba(12,12,13,.55); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 300ms cubic-bezier(0,0,.58,1);
+}
+.demo-overlay.open { opacity: 1; pointer-events: auto; }
+.demo-modal {
+  background: #fff; border-radius: 16px; padding: 48px;
+  width: 100%; max-width: 520px; position: relative;
+  box-shadow: 0 24px 64px rgba(12,12,13,.2);
+  transform: translateY(20px) scale(.98);
+  transition: transform 300ms cubic-bezier(.34,1.56,.64,1);
+}
+.demo-overlay.open .demo-modal { transform: translateY(0) scale(1); }
+.demo-modal h2 { font-size: 32px; font-weight: 600; letter-spacing: -0.96px; line-height: 1; color: #0C0C0D; margin-bottom: 8px; }
+.demo-modal .dm-sub { font-size: 16px; color: #505867; margin-bottom: 24px; }
+.demo-modal .dm-divider { height: 1px; background: #0C0C0D; margin-bottom: 32px; }
+.demo-modal .dm-close {
+  position: absolute; top: 20px; right: 20px;
+  width: 36px; height: 36px; border-radius: 50%; border: none;
+  background: #F5F5F5; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 200ms;
+}
+.demo-modal .dm-close:hover { background: #E7E7E7; }
+.demo-modal .dm-group { margin-bottom: 20px; }
+.demo-modal .dm-group label { display: block; font-size: 14px; font-weight: 600; color: #0C0C0D; margin-bottom: 6px; }
+.demo-modal .dm-group input,
+.demo-modal .dm-group select {
+  width: 100%; padding: 12px 14px; border: 1px solid #0C0C0D; border-radius: 8px;
+  font-family: inherit; font-size: 15px; color: #0C0C0D; background: #fff;
+  transition: border-color 200ms, box-shadow 200ms;
+}
+.demo-modal .dm-group input:focus,
+.demo-modal .dm-group select:focus { outline: none; border-color: #2AA8DF; box-shadow: 0 0 0 3px rgba(42,168,223,.15); }
+.demo-modal .dm-group input::placeholder { color: #505867; }
+.demo-modal .dm-group select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%230C0C0D' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+.demo-modal .dm-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.demo-modal .dm-submit { width: 100%; margin-top: 8px; }
+.demo-modal .dm-success { display: none; text-align: center; padding: 32px 0; }
+.demo-modal .dm-success.show { display: block; }
+.demo-modal .dm-success h3 { font-size: 24px; font-weight: 600; color: #0C0C0D; margin-bottom: 8px; }
+.demo-modal .dm-success p { font-size: 16px; color: #505867; }
+
 @media (max-width: 960px) {
   nav .links { display: none; }
   .f-grid { grid-template-columns: 1fr; }
+  .demo-modal { margin: 16px; padding: 32px; }
+  .demo-modal .dm-row { grid-template-columns: 1fr; }
 }

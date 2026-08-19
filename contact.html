@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact Us — Scaler Global</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="scaler-site.css">
+<style>
+  :root {
+    --accent: #F48FBE;
+    --accent-text: #C0407A;
+  }
+
+  h2 { font-size: 48px; font-weight: 600; letter-spacing: -1.44px; line-height: 1; color: var(--ink); }
+  h3 { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); }
+
+  /* ══ Hero ══ */
+  .hero {
+    background: var(--accent);
+    padding: 140px var(--margin) 96px;
+  }
+  .hero h1 { font-size: 72px; font-weight: 600; letter-spacing: -2.88px; line-height: 1; color: #000; }
+  .hero h1 .line { display: block; opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+  .hero h1 .line:nth-child(1) { animation-delay: .15s; }
+  .hero h1 .line:nth-child(2) { animation-delay: .3s; }
+  p.lede { font-size: 20px !important; font-weight: 500 !important; line-height: 1 !important; letter-spacing: -0.6px !important; color: #000 !important; }
+  .hero .lede { margin-top: 24px; max-width: 50ch; }
+  .fade-up { opacity: 0; transform: translateY(20px); animation: fadeUp var(--t-default) var(--ease-out) forwards; }
+
+  /* ══ Contact grid ══ */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+
+  /* ══ Form ══ */
+  .form-group { margin-bottom: 24px; }
+  .form-group label {
+    display: block; font-size: 14px; font-weight: 600; color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; padding: 14px 16px;
+    border: 1px solid var(--ink); border-radius: 8px;
+    font-family: inherit; font-size: 16px; color: var(--ink);
+    background: var(--white);
+    transition: border-color var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out);
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(42,168,223,.15);
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: var(--ink-3); }
+  .form-group textarea { resize: vertical; min-height: 140px; }
+  .form-group select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%230C0C0D' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-submit { margin-top: 8px; }
+  .form-note { margin-top: 12px; font-size: 13px; color: var(--ink-3); }
+  .form-success {
+    display: none; padding: 24px; border-radius: 8px;
+    background: rgba(86,197,90,.1); border: 1px solid #56C55A;
+    font-size: 16px; font-weight: 500; color: #037E50;
+  }
+  .form-success.show { display: block; }
+
+  /* ══ Office cards ══ */
+  .office-cards { display: flex; flex-direction: column; gap: 0; }
+  .office-card {
+    padding: 32px 0; border-top: 1px solid var(--ink);
+    display: grid; grid-template-columns: 140px 1fr; gap: 24px;
+  }
+  .office-card:last-child { border-bottom: 1px solid var(--ink); }
+  .office-card .oc-city { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; color: var(--ink); }
+  .office-card .oc-addr { font-size: 14px; line-height: 1.6; color: var(--ink-2); }
+  .office-card .oc-email { display: block; margin-top: 12px; font-size: 14px; font-weight: 500; color: var(--accent-text); }
+  .office-card .oc-email:hover { text-decoration: underline; }
+
+  /* ══ Quick links ══ */
+  .quick-links { margin-top: 48px; }
+  .quick-links h3 { margin-bottom: 20px; }
+  .ql-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 0; border-top: 1px solid var(--ink);
+    font-size: 16px; font-weight: 500; color: var(--ink);
+    transition: color var(--t-fast) var(--ease-out);
+  }
+  .ql-row:last-child { border-bottom: 1px solid var(--ink); }
+  .ql-row:hover { color: var(--accent-text); }
+  .ql-row .arr { transition: transform var(--t-fast) var(--ease-out); }
+  .ql-row:hover .arr { transform: translateX(3px); }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity var(--t-default) var(--ease-out), transform var(--t-default) var(--ease-out); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    .contact-grid, .form-row { grid-template-columns: 1fr; }
+    .office-card { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html"><img src="assets/logo-full-dark.svg" alt="Scaler"></a>
+  <div class="links">
+    <a href="solutions.html">Solutions</a>
+    <a href="partnerships.html">Partnerships</a>
+    <a href="articles.html">Articles</a>
+    <a href="about.html">About Us</a>
+    <div class="drop">
+      <button>Resources
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <div class="menu">
+        <a href="sfdr.html">SFDR</a>
+        <a href="benchmarking.html">Benchmarking</a>
+        <a href="espm.html">ESPM</a>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <a class="login" href="https://app.scalerglobal.com">Login</a>
+    <button class="pill">Schedule a demo</button>
+  </div>
+</nav>
+
+<!-- ══ Hero ══ -->
+<header class="hero">
+  <h1>
+    <span class="line">Get in touch.</span>
+  </h1>
+  <p class="lede fade-up" style="animation-delay:.3s">Have a question about Scaler, want to schedule a demo, or explore a partnership? We'd love to hear from you.</p>
+</header>
+
+<!-- ══ Contact form + offices ══ -->
+<section class="light">
+  <div class="contact-grid">
+    <div class="reveal">
+      <form id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First name</label>
+            <input type="text" id="firstName" placeholder="Jane" required>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last name</label>
+            <input type="text" id="lastName" placeholder="Smith" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Work email</label>
+          <input type="email" id="email" placeholder="jane@company.com" required>
+        </div>
+        <div class="form-group">
+          <label for="company">Company</label>
+          <input type="text" id="company" placeholder="Your company name">
+        </div>
+        <div class="form-group">
+          <label for="topic">Topic</label>
+          <select id="topic">
+            <option value="" disabled selected>Select a topic</option>
+            <option>Schedule a demo</option>
+            <option>Partnership inquiry</option>
+            <option>Product question</option>
+            <option>Pricing</option>
+            <option>Careers</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" placeholder="Tell us how we can help..."></textarea>
+        </div>
+        <div class="form-submit">
+          <button type="submit" class="pill">Send message <span class="arr">→</span></button>
+        </div>
+        <p class="form-note">We'll get back to you within 1 business day.</p>
+      </form>
+      <div class="form-success" id="formSuccess">Thanks for reaching out! We'll be in touch shortly.</div>
+    </div>
+
+    <div class="reveal">
+      <div class="office-cards">
+        <div class="office-card">
+          <div class="oc-city">New York</div>
+          <div>
+            <div class="oc-addr">133 West 25th Street Suite 4W, 4th Floor<br>New York, NY 10001<br>United States</div>
+            <a class="oc-email" href="mailto:info@scalerglobal.com">info@scalerglobal.com</a>
+          </div>
+        </div>
+        <div class="office-card">
+          <div class="oc-city">Amsterdam</div>
+          <div>
+            <div class="oc-addr">Fred. Roeskestraat 109<br>1076 EE Amsterdam<br>The Netherlands</div>
+            <a class="oc-email" href="mailto:info@scalerglobal.com">info@scalerglobal.com</a>
+          </div>
+        </div>
+        <div class="office-card">
+          <div class="oc-city">Sydney</div>
+          <div>
+            <div class="oc-addr">Darling Park<br>201 Sussex St, Sydney NSW 2000<br>Australia</div>
+            <a class="oc-email" href="mailto:info@scalerglobal.com">info@scalerglobal.com</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-links">
+        <h3>Quick links</h3>
+        <a class="ql-row" href="solutions.html">Explore solutions <span class="arr">→</span></a>
+        <a class="ql-row" href="partnerships.html">Become a partner <span class="arr">→</span></a>
+        <a class="ql-row" href="https://jobs.ashbyhq.com/scaler">View open roles <span class="arr">→</span></a>
+        <a class="ql-row" href="articles.html">Read articles <span class="arr">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Footer ══ -->
+<footer>
+  <div class="f-grid">
+    <div class="f-mark">
+      <img src="assets/shape-01.svg" alt="">
+      <span class="word">scaler</span>
+    </div>
+    <div class="f-links">
+      <div class="f-group"><div class="k">Products</div><a href="#">Data &amp; Analytics</a><a href="#">Roadmaps &amp; Targets</a><a href="#">Reporting &amp; Compliance</a></div>
+      <div class="f-group"><div class="k">Solutions</div><a href="solutions.html">Small teams</a><a href="solutions.html">Professionals</a><a href="solutions.html">Enterprise customers</a></div>
+      <div class="f-group"><div class="k">Pricing</div><a href="#">Pricing</a><a href="#">Book a demo</a></div>
+      <div class="f-group"><div class="k">Company</div><a href="about.html">About</a><a href="https://jobs.ashbyhq.com/scaler">Careers</a><a href="contact.html">Contact</a></div>
+      <div class="f-group"><div class="k">Resources</div><a href="#">Webinar series</a><a href="#">Customer stories</a><a href="articles.html">Blog</a></div>
+      <div class="f-group"><div class="k">Social</div><a href="https://www.linkedin.com/company/scaler-global">Linkedin</a><a href="#">Twitter</a></div>
+    </div>
+    <div class="f-offices">
+      <div class="office"><div class="city">New York</div><div class="addr">133 West 25th Street Suite 4W, 4th Floor<br>New York, NY 10001<br>United States</div></div>
+      <div class="office"><div class="city">Amsterdam</div><div class="addr">Fred. Roeskestraat 109<br>1076 EE Amsterdam<br>The Netherlands</div></div>
+      <div class="office"><div class="city">Sydney</div><div class="addr">Darling Park<br>201 Sussex St, Sydney NSW 2000<br>Australia</div></div>
+    </div>
+  </div>
+  <div class="legal">
+    <span>Copyright &copy; Scaler Global Inc. 2026</span>
+    <span><a href="https://scalerglobal.com/privacy-statement">Privacy Statement</a><a href="https://scalerglobal.com/terms-and-conditions">Terms &amp; Conditions</a></span>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const navEl = document.querySelector('nav');
+  addEventListener('scroll', () => navEl.classList.toggle('scrolled', scrollY > 8), { passive: true });
+
+  // Form submit
+  document.getElementById('contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').classList.add('show');
+  });
+</script>
+<script src="demo-modal.js"></script>
+</body>
+</html>
