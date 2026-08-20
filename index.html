@@ -432,7 +432,7 @@
   .testi-arrow:hover { background: var(--ink); color: var(--white); }
   .testi-arrow.prev { border-color: #ccc; color: #ccc; }
   .testi-slider { overflow: hidden; }
-  .testi-slide { display: none; grid-template-columns: 1fr 520px; gap: 0; min-height: 640px; }
+  .testi-slide { display: none; grid-template-columns: 1fr 520px; gap: 0; height: 640px; }
   .testi-slide.active { display: grid; animation: fadeUp 400ms var(--ease-out); }
   .testi-logo-box { font-size:20px; font-weight:600; letter-spacing:0.02em; color:var(--ink); border:1.5px solid var(--ink); padding:6px 14px; border-radius:4px; display:inline-block; }
   .testi-card {
@@ -443,8 +443,10 @@
   .testi-logo { margin-bottom: auto; align-self: flex-end; }
   .testi-card h3 { font-size: 56px; font-weight: 600; letter-spacing: -2.24px; line-height: 1; color: var(--ink); margin-bottom: 24px; opacity: 0.9; }
   .testi-card p { font-size: 18px; font-weight: 400; line-height: 1.5; color: var(--ink); max-width: 56ch; opacity: 0.9; }
-  .testi-img { overflow: hidden; }
+  .testi-img { overflow: hidden; position: relative; }
   .testi-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .testi-img::before { content: ''; position: absolute; top: 0; left: 0; width: 156px; height: 156px; background: var(--white); clip-path: polygon(0 0, 0 100%, 100% 0); z-index: 1; }
+  .testi-img::after { content: ''; position: absolute; bottom: 0; right: 0; width: 156px; height: 156px; background: var(--white); clip-path: polygon(100% 100%, 100% 0, 0 100%); z-index: 1; }
   .testi-dots { display: flex; justify-content: center; gap: 16px; margin-top: 32px; }
   .testi-dots .dot { width: 8px; height: 8px; border-radius: 2px; background: #ccc; }
   .testi-dots .dot.active { background: var(--ink); }
@@ -452,7 +454,7 @@
   /* ══ Articles & Insights ══ */
   .articles-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 48px; }
   .articles-head h2 { margin: 0; }
-  .articles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .articles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .article-card { display: block; text-decoration: none; color: var(--ink); }
   .article-card:hover .article-img img { transform: scale(1.03); }
   .article-img { overflow: hidden; margin-bottom: 24px; aspect-ratio: 1 / 1; }
@@ -802,34 +804,43 @@
   <div class="testi-slider" id="testiSlider">
     <div class="testi-slide active">
       <div class="testi-card">
-        <div class="testi-logo"><span class="testi-logo-box">a.s.r.</span></div>
+        <div class="testi-logo"><img src="assets/logo-asr-black.png" alt="a.s.r." class="tl-img"></div>
         <h3>From Excel<br>to Scaler</h3>
-        <p>Scaler has enabled a.s.r. to develop effective decarbonisation roadmaps for all assets in their portfolios, aligning with capex and opex planning for the coming decades. And without any duplicative work, a.s.r. real estate is fully prepared for GRESB Asset Level Spreadsheets along with Annual Report according to GRI, INREV and PCAF guidelines.</p>
+        <p>Scaler has enabled a.s.r. to develop effective decarbonisation roadmaps for all assets in their portfolios, aligning with capex and opex planning for the coming decades.</p>
         <a href="#" class="pill" style="margin-top:32px">Get started</a>
       </div>
-      <div class="testi-img"><img src="assets/testimonial-1.png" alt="a.s.r. case study"></div>
+      <div class="testi-img"><img src="assets/testi-asr.jpg" alt="a.s.r. case study"></div>
     </div>
     <div class="testi-slide">
       <div class="testi-card">
-        <div class="testi-logo"><span class="testi-logo-box">Patrizia</span></div>
-        <h3>Audit-ready in<br>one pass</h3>
-        <p>Patrizia leverages Scaler to centralize ESG data collection across their global portfolio, eliminating manual spreadsheet work and producing audit-ready GRESB submissions. The platform's automated meter connections and AI-powered gap filling transformed their reporting workflow.</p>
+        <div class="testi-logo"><img src="assets/logo-jamestown-white.png" alt="Jamestown" class="tl-img"></div>
+        <h3>Global CRREM<br>analysis</h3>
+        <p>We adopted Scaler globally for its environmental data management and analytics capabilities, including CRREM analysis. The platform streamlined our reporting across every market.</p>
         <a href="#" class="pill" style="margin-top:32px">Get started</a>
       </div>
-      <div class="testi-img"><img src="assets/testimonial-1.png" alt="Patrizia case study"></div>
+      <div class="testi-img"><img src="assets/testi-jamestown.jpg" alt="Jamestown case study"></div>
     </div>
     <div class="testi-slide">
       <div class="testi-card">
-        <div class="testi-logo"><span class="testi-logo-box">Bouwinvest</span></div>
-        <h3>Data-driven<br>decarbonization</h3>
-        <p>Bouwinvest uses Scaler to track their entire portfolio against CRREM pathways, plan capex-aligned retrofits, and report to stakeholders with confidence. Real-time dashboards replaced quarterly manual reviews, giving the team continuous visibility into performance.</p>
+        <div class="testi-logo"><img src="assets/logo-verdani-white.png" alt="Verdani Partners" class="tl-img"></div>
+        <h3>Selective about<br>our tools</h3>
+        <p>At Verdani, we're selective about the tools we integrate to support our sustainability client services, and Scaler has proven valuable for data management across portfolios.</p>
         <a href="#" class="pill" style="margin-top:32px">Get started</a>
       </div>
-      <div class="testi-img"><img src="assets/testimonial-1.png" alt="Bouwinvest case study"></div>
+      <div class="testi-img"><img src="assets/testi-verdani.jpg" alt="Verdani case study"></div>
+    </div>
+    <div class="testi-slide">
+      <div class="testi-card">
+        <div class="testi-logo"><img src="assets/slate-logo-white.png" alt="Slate Asset Management" class="tl-img"></div>
+        <h3>Valuable partner<br>during reporting</h3>
+        <p>Scaler has been a valuable partner during a particularly busy onboarding and reporting period. The platform is clear and easy to use across our global portfolio.</p>
+        <a href="#" class="pill" style="margin-top:32px">Get started</a>
+      </div>
+      <div class="testi-img"><img src="assets/testi-slate.png" alt="Slate case study"></div>
     </div>
   </div>
   <div class="testi-dots" id="testiDots">
-    <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+    <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
   </div>
 </section>
 

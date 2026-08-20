@@ -102,7 +102,7 @@
   /* ══ How to comply — accordion + swapping built visuals (solutions pattern) ══ */
   .rep-grid { display: grid; grid-template-columns: 1fr 1.25fr; gap: clamp(40px, 5vw, 88px); align-items: center; }
   .acc-block {
-    background: var(--accent);
+    background: #1E4FB3;
     clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 40px, 100% 100%, 40px 100%, 0 calc(100% - 40px));
     padding: 44px 48px; margin-bottom: 0;
     cursor: pointer;
@@ -111,15 +111,15 @@
   .rep-grid.in .acc-block { animation: fadeInX 500ms var(--ease-out-cubic) forwards; animation-delay: calc(var(--i) * 150ms); }
   .acc-head { display: flex; gap: 16px; align-items: flex-start; }
   .acc-num {
-    width: 40px; height: 40px; border: 1.5px solid var(--ink); border-radius: 50%;
+    width: 40px; height: 40px; border: 1.5px solid var(--white); border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 16px; font-weight: var(--weight-semibold); flex-shrink: 0;
+    font-size: 16px; font-weight: var(--weight-semibold); flex-shrink: 0; color: var(--white);
     transition: background var(--t-base) var(--ease-out), color var(--t-base) var(--ease-out);
   }
-  .acc-block.open .acc-num { background: var(--ink); color: var(--accent); border-color: var(--ink); }
-  .acc-title { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--ink); }
+  .acc-block.open .acc-num { background: var(--white); color: #1E4FB3; border-color: var(--white); }
+  .acc-title { font-size: 24px; font-weight: 500; letter-spacing: -0.72px; line-height: 1; color: var(--white); }
   .acc-body { max-height: 0; overflow: hidden; transition: max-height var(--t-default) var(--ease-in-out); }
-  .acc-body p { margin: 16px 0 4px 48px; font-size: 14px; line-height: 1.55; color: var(--ink); opacity: 0; transform: translateX(-8px); transition: opacity var(--t-base) var(--ease-out) .15s, transform var(--t-base) var(--ease-out) .15s; }
+  .acc-body p { margin: 16px 0 4px 48px; font-size: 14px; line-height: 1.55; color: rgba(255,255,255,.85); opacity: 0; transform: translateX(-8px); transition: opacity var(--t-base) var(--ease-out) .15s, transform var(--t-base) var(--ease-out) .15s; }
   .acc-block.open .acc-body p { opacity: 1; transform: none; }
   .acc-block.open .acc-body { max-height: 280px; }
 
@@ -282,7 +282,6 @@
 <section class="light">
   <div class="esg-grid">
     <div class="body-copy reveal">
-      <p class="eyebrow" style="margin-bottom:20px;">Getting ESG data right</p>
       <h2 style="max-width:16ch; margin-bottom:28px;">Transparency, without the greenwash.</h2>
       <p>The Sustainable Finance Disclosure Regulation was introduced as part of the EU Sustainable Finance package to improve transparency and prevent greenwashing in the market for sustainable investment products.</p>
       <p>Qualitative and quantitative metric requirements for the Principal Adverse Impact Statement (PAIs) expose industry-specific challenges around ESG data and the need for robust data management systems and reporting mechanisms.</p>
@@ -326,7 +325,6 @@
 <!-- ══ We do the heavy lifting — three columns ══ -->
 <section class="white">
   <div class="section-head reveal">
-    <p class="eyebrow">We do the heavy lifting</p>
     <h2>Ready to comply, without the scramble.</h2>
     <p class="sub">Our team of experts and purpose-built tools carry your SFDR process end to end.</p>
   </div>
@@ -364,7 +362,6 @@
 <!-- ══ How to comply — accordion + built visuals ══ -->
 <section class="light">
   <div class="section-head reveal">
-    <p class="eyebrow">How to comply</p>
     <h2>Two disclosures. One workflow.</h2>
   </div>
   <div class="rep-grid" id="repGrid">
@@ -413,9 +410,9 @@
 
 <!-- ══ Who needs to report ══ -->
 <section class="white">
-  <div class="section-head reveal">
-    <h2>Who Needs to Report?</h2>
-    <p class="sub">SFDR applies to financial market participants and financial advisors in the EU, including those with EU shareholders and those promoting themselves within the EU.</p>
+  <div class="section-head reveal" style="display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start;">
+    <h2 style="max-width:none;">Who Needs to Report?</h2>
+    <p class="sub" style="margin-top:0; padding-top:4px;">SFDR applies to financial market participants and financial advisors in the EU, including those with EU shareholders and those promoting themselves within the EU.</p>
   </div>
   <div class="persona-row reveal">
     <div class="who">Asset managers</div>

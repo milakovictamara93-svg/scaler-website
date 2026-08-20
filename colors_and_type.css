@@ -288,7 +288,7 @@ h4, .ds-h4 {
 h1, .ds-h1 { font-size: var(--size-h1); font-weight: var(--weight-bold);     line-height: var(--lh-heading); }
 h2, .ds-h2 { font-size: var(--size-h2); font-weight: var(--weight-bold);     line-height: var(--lh-heading); }
 h3, .ds-h3 { font-size: var(--size-h3); font-weight: var(--weight-semibold); line-height: var(--lh-heading); }
-h4, .ds-h4 { font-size: var(--size-h4); font-weight: var(--weight-semibold); line-height: var(--lh-heading); }
+h4, .ds-h4 { font-size: var(--size-h4); font-weight: var(--weight-semibold); line-height: 1.1; }
 
 p, .ds-p, .ds-p-md {
   font-family: var(--font-body);

@@ -75,7 +75,7 @@
   /* ══ Essentials — 6 blue cards ══ */
   .ess-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .ess-card {
-    background: var(--accent);
+    background: #FD8F01;
     clip-path: polygon(0 0, calc(100% - 56px) 0, 100% 56px, 100% 100%, 0 100%);
     padding: 40px 28px;
     display: flex; flex-direction: column; gap: 16px;
@@ -88,8 +88,8 @@
   .ess-card:nth-child(4) { transition-delay: .24s; }
   .ess-card:nth-child(5) { transition-delay: .32s; }
   .ess-card:nth-child(6) { transition-delay: .4s; }
-  .ess-card h3 { color: var(--white); opacity: 0.9; }
-  .ess-card p { font-size: 14px; line-height: 1.45; color: rgba(255,255,255,.8); }
+  .ess-card h3 { color: var(--ink); opacity: 0.9; }
+  .ess-card p { font-size: 14px; line-height: 1.45; color: var(--ink); opacity: 0.85; }
 
   /* ══ Steps — numbered with companion cards ══ */
   .steps { display: flex; flex-direction: column; gap: 0; }
@@ -257,9 +257,9 @@
 
 <!-- ══ Get Started ══ -->
 <section class="light">
-  <div class="section-head reveal">
-    <h2>Get Started Today</h2>
-    <p class="sub">Follow the steps below to get started. If you have any questions, reach out to info@scalerglobal.com.</p>
+  <div class="section-head reveal" style="display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start;">
+    <h2 style="max-width:none;">Get Started Today</h2>
+    <p class="sub" style="margin-top:0; padding-top:4px;">Follow the steps below to get started. If you have any questions, reach out to info@scalerglobal.com.</p>
   </div>
   <div class="steps">
     <div class="step reveal">

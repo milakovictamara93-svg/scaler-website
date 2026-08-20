@@ -449,7 +449,7 @@
   .testi-arrow:hover { background: var(--ink); color: var(--white); }
   .testi-arrow.prev { border-color: #ccc; color: #ccc; }
   .testi-slider { overflow: hidden; }
-  .testi-slide { display: none; grid-template-columns: 1fr 520px; gap: 0; min-height: 640px; }
+  .testi-slide { display: none; grid-template-columns: 1fr 520px; gap: 0; height: 640px; }
   .testi-slide.active { display: grid; animation: fadeUp 400ms var(--ease-out); }
   .testi-logo-box { font-size:20px; font-weight:600; letter-spacing:0.02em; color:var(--white); border:1.5px solid var(--white); padding:6px 14px; border-radius:4px; display:inline-block; }
   .testi-card {
@@ -463,8 +463,10 @@
   .testi-attr { margin-top: 32px; display: flex; flex-direction: column; gap: 4px; }
   .testi-attr .name { font-size: 18px; font-weight: 600; line-height: 1.45; color: var(--white); }
   .testi-attr .role { font-size: 16px; font-weight: 400; line-height: 1.45; color: #F6F6F6; }
-  .testi-img { overflow: hidden; }
+  .testi-img { overflow: hidden; position: relative; }
   .testi-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .testi-img::before { content: ''; position: absolute; top: 0; left: 0; width: 156px; height: 156px; background: var(--white); clip-path: polygon(0 0, 0 100%, 100% 0); z-index: 1; }
+  .testi-img::after { content: ''; position: absolute; bottom: 0; right: 0; width: 156px; height: 156px; background: var(--white); clip-path: polygon(100% 100%, 100% 0, 0 100%); z-index: 1; }
   .testi-dots { display: flex; justify-content: center; gap: 16px; margin-top: 32px; }
   .testi-dots .dot { width: 8px; height: 8px; border-radius: 2px; background: #ccc; cursor: pointer; }
   .testi-dots .dot.active { background: var(--ink); }
@@ -1023,36 +1025,36 @@
   <div class="testi-slider" id="testiSlider">
     <div class="testi-slide active">
       <div class="testi-card">
-        <div class="testi-logo"><img src="assets/slate-logo-white.png" alt="Slate Asset Management" style="height:56px; width:auto;"></div>
+        <div class="testi-logo"><img src="assets/slate-logo-white.png" alt="Slate" class="tl-img"></div>
         <h3>The team helped us meet tight deadlines and strengthened the quality of our reporting.</h3>
         <div class="testi-attr">
           <div class="name">Bozena Jankowska</div>
           <div class="role">Global Head of Responsible Investment | Slate Asset Management</div>
         </div>
       </div>
-      <div class="testi-img"><img src="assets/testimonial-1.png" alt="Jamestown case study"></div>
+      <div class="testi-img"><img src="assets/testi-slate.png" alt="Slate case study"></div>
     </div>
     <div class="testi-slide">
       <div class="testi-card">
-        <div class="testi-logo"><span class="testi-logo-box">a.s.r.</span></div>
-        <h3>Scaler has enabled us to develop effective decarbonisation roadmaps for all assets in our portfolios.</h3>
+        <div class="testi-logo"><img src="assets/logo-jamestown-white.png" alt="Jamestown" class="tl-img"></div>
+        <h3>We adopted Scaler globally for its environmental data management and analytics capabilities.</h3>
         <div class="testi-attr">
-          <div class="name">a.s.r. real estate</div>
-          <div class="role">ESG &amp; Sustainability Team</div>
+          <div class="name">Renee Sheary</div>
+          <div class="role">Vice President | Jamestown</div>
         </div>
       </div>
-      <div class="testi-img"><img src="assets/testimonial-1.png" alt="a.s.r. case study"></div>
+      <div class="testi-img"><img src="assets/testi-jamestown.jpg" alt="Jamestown case study"></div>
     </div>
     <div class="testi-slide">
       <div class="testi-card">
-        <div class="testi-logo"><span class="testi-logo-box">Patrizia</span></div>
-        <h3>The platform's automated meter connections and AI-powered gap filling transformed our reporting workflow.</h3>
+        <div class="testi-logo"><img src="assets/logo-verdani-white.png" alt="Verdani" class="tl-img"></div>
+        <h3>Scaler has proven valuable for data management across our sustainability client services.</h3>
         <div class="testi-attr">
-          <div class="name">Patrizia</div>
-          <div class="role">Sustainability &amp; Reporting</div>
+          <div class="name">Chris Wei</div>
+          <div class="role">VP of Engineering | Verdani Partners</div>
         </div>
       </div>
-      <div class="testi-img"><img src="assets/testimonial-1.png" alt="Patrizia case study"></div>
+      <div class="testi-img"><img src="assets/testi-verdani.jpg" alt="Verdani case study"></div>
     </div>
   </div>
   <div class="testi-dots" id="testiDots">
